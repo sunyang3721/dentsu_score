@@ -7,7 +7,7 @@ class IndexController extends CommonController
 {
     public function index()
     {
-    	$test = M('userinfo');
+    	//$test = M('userinfo');
     	//dump($test);
     }
 }
