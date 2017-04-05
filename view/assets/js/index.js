@@ -79,32 +79,17 @@ $(function() {
 		//disableBodyScroll:true,
 	});
 
-	//部门检索触发
-	select('#bumen dl dd');
-	//作品分类触发
-	select('#fenlei dl dd');
-	//广告主触发
-	select('#guanggao dl dd');
-	//品牌触发
-	select('#pinpai dl dd');
+
 	//创建日期
 	select('#adddate dl dd');
 	//我的作品
 	select('#myhome dl dd');
 
-
 	//检索hover 封装
 	function select(id){
 		$(id).click(function(){
 			$(id).removeClass('selected');
-			$(this).addClass('selected');
-			if(id == '#bumen dl dd'){
-				$('#fenlei dl dd').removeClass('selected').eq(0).addClass('selected');
-				$('#guanggao dl dd').removeClass('selected').eq(0).addClass('selected');
-				$('#pinpai dl dd').removeClass('selected').eq(0).addClass('selected');
-				$('#adddate dl dd').removeClass('selected').eq(0).addClass('selected');
-				$('#myhome dl dd').removeClass('selected').eq(0).addClass('selected');
-			}			
+			$(this).addClass('selected');		
 		});
 	}
 
@@ -117,13 +102,6 @@ $(function() {
 	// 	}
 	// 	$('.soso-type').val(i);
 	// });
-
-	$('#soso-list').click(function(){
-		var posts = $('#from-get').serialize();
-		var key = $('#keywork').val();
-		//console.log(posts);
-		window.open('./search.html?'+posts+'&keyword='+key);
-	})
 
 
 	// 多选标签功能

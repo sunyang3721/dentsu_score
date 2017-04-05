@@ -447,7 +447,7 @@
             <input type="text" class="form-control" id="keywork" placeholder="Search for...">
             <span class="input-group-btn">
              <button class="btn btn-default" id="dropdown">···</button>
-             <button class="btn btn-default" type="button" id="soso-list"><i class="glyphicon glyphicon-search"></i></button>
+             <button class="btn btn-default" id="soso-list" onclick="search_url()"><i class="glyphicon glyphicon-search"></i></button>
            </span>
           </div>
           <ul class="list-unstyled search-auto">
@@ -477,50 +477,25 @@
                   <div id="bumen">
                     <p>部门</p>
                     <dl class="scrollbar-rail">
-                      <dd class="selected">不限</dd>
+                      <dd class="selected departId" data-id="">不限</dd>
                     </dl>
                   </div>
                   <div id="guanggao" style="width: 33%;">
                     <p>广告主</p>
                     <dl class="scrollbar-rail">
-                      <dd class="selected guanggao_btn" data-id="0">不限</dd>
+                      <dd class="selected guanggao_btn" data-id="">不限</dd>
                     </dl>
                   </div>
                   <div id="pinpai" style="width:15%;">
                     <p>品牌</p>
                     <dl class="scrollbar-rail">
-                      <dd class="selected">不限</dd>
+                      <dd class="selected" data-id="">不限</dd>
                     </dl>
                   </div>
                   <div id="fenlei">
                     <p>作品标签</p>
                     <dl class="scrollbar-rail">
-                      <dd class="selected">不限</dd>
-                      <dd>办公用品</dd>
-                      <dd>餐饮业</dd>
-                      <dd>房地产</dd>
-                      <dd>非酒精饮料</dd>
-                      <dd>酒精饮料</dd>
-                      <dd>服装</dd>
-                      <dd>公益与非盈利组织</dd>
-                      <dd>家居与日用品</dd>
-                      <dd>教育</dd>
-                      <dd>金融与法律服务</dd>
-                      <dd>零售与分销</dd>
-                      <dd>旅游与运输</dd>
-                      <dd>美容与健康</dd>
-                      <dd>媒体与出版</dd>
-                      <dd>汽车及相关服务</dd>
-                      <dd>企业宣传</dd>
-                      <dd>食品</dd>
-                      <dd>视听与电子产品</dd>
-                      <dd>糖果与零食</dd>
-                      <dd>网站及服务</dd>
-                      <dd>玩具与游戏</dd>
-                      <dd>文化、娱乐与运动</dd>
-                      <dd>烟草及相关用品</dd>
-                      <dd>医药</dd>
-                      <dd>专业与公共服务</dd>
+                      <dd class="selected biaoqian_btn" data-id="">不限</dd>
                     </dl>
                   </div>
                   <div id="myhome">
