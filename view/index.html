@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>首页</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="./assets/css/index.css" rel="stylesheet">
+    <link rel='stylesheet' href='./assets/unitegallery/css/unite-gallery.css' type='text/css' />
+    <link href="./assets/css/bootstrap-select.css" rel="stylesheet">
+    <link href="./assets/css/scroll.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="./assets/js/plupload.full.min.js"></script>
+    <script type="text/javascript" src="./assets/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="./assets/js/skin.js"></script>
+    <script type="text/javascript" src="./assets/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="./assets/js/index_api.js"></script>
+  </head>
+  <script type="text/javascript">
+      $(function(){
+        var height = $(window).height();  //控制不同显示器显示不同高度
+        $('iframe,.slide-bg').css('height',height+'px');
+        // $('#soso-list').click(function(){
+        //     $('html, body').animate({
+        //       scrollTop: height-50
+        //       }, 500);
+        //     $('.search-auto').hide();
+        //     //window.open('http://www.baidu.com');
+        // })
+      })
+      </script>
+  <body>
+
+  <!-- 上传作品 Modal -->
+    <div class="modal fade bs-example-modal-lg" id="upload" tabindex="-1" role="dialog" aria-labelledby="myupload">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="font-size: 24px;">&times;</span></button>
+            <h4 class="modal-title" id="myupload">上传作品</h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-inline">
+                <div class="form-group">
+                  <label class="lab" for="title">作品名称</label>
+                  <input type="text" class="form-control" id="title" placeholder="作品名称">
+                </div>
+              </div>
+              <div class="form-inline">
+                <div class="form-group">
+                  <label class="lab">获奖名称</label>
+                  <select class="form-control selectpicker" data-live-search="true" name="">
+                    <option>请选择获奖名称</option>
+                    <option>金鸡奖</option>
+                    <option>黄河奖</option>
+                    <option>最佳公益奖</option>
+                    <option>诺贝尔奖</option>
+                    <option>银奖</option>
+                    <option>铜奖</option>
+                    <option>十大最佳平面设计奖</option>
+                    <option>最佳创意奖</option>
+                    <option>感人奖</option>
+                    <option>最佳和平设计奖</option>
+                    <option>最有视觉冲击奖</option>
+                    <option>纪念奖</option>
+                    <option>最佳变态奖</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-inline">
+                <div class="form-group">
+                  <label class="lab" for="exampleInputPassword1">目前部门</label>
+                  <select class="form-control selectpicker" data-live-search="true" name="">
+                    <option>所属部门</option>
+                    <option>北京一本</option>
+                    <option>北京二本</option>
+                    <option>北京APD1</option>
+                    <option>北京APD2</option>
+                    <option>北京APD3</option>
+                    <option>北京CRC</option>
+                    <option>北京CRPC</option>
+                    <option>北京媒介</option>
+                    <option>北京IPC</option>
+                    <option>北京PDC</option>
+                    <option>上海一本</option>
+                    <option>上海二本</option>
+                    <option>上海三本</option>
+                    <option>上海CDC</option>
+                    <option>上海CR</option>
+                    <option>上海CR</option>
+                    <option>广州创意</option>
+                    <option>广州媒介</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-inline">
+                <div class="form-group">
+                  <label class="lab" for="exampleInputPassword1">广告主</label>
+                  <select class="form-control selectpicker" data-live-search="true" name="">
+                    <option>请选择广告主</option>
+                    <option>佳能</option>
+                    <option>丰田</option>
+                    <option>电通</option>
+                    <option>日产</option>
+                    <option>本田</option>
+                    <option>资生堂(中国)投资有限公司</option>
+                    <option>联想</option>
+                    <option>搜狐</option>
+                    <option>乐视</option>
+                    <option>北京比动商贸有限公司</option>
+                    <option>全日本空输株式会社</option>
+                    <option>斯巴鲁汽车（中国）有限公司</option>
+                    <option>石家庄君乐宝乳业有限公司</option>
+                    <option>同仁堂</option>
+                    <option>宁波怡人玩具有限公司</option>
+                    <option>一汽吉林汽车有限公司</option>
+                    <option>中国人寿保险股份有限公司</option>
+                    <option>天津一汽汽车销售有限公司</option>
+                    <option>中国第一汽车股份有限公司</option>
+                    <option>上海电通东派广告有限公司</option>
+                    <option>住友橡胶（中国）有限公司</option>
+                    <option>本田技研</option>
+                    <option>北京少城时代</option>
+                    <option>北京聚思传媒广告有限公司</option>
+                    <option>三菱电机株式会社</option>
+                    <option>环球影业</option>
+                    <option>一汽大众销售有限责任公司</option>
+                    <option>阿里巴巴（中国）有限公司</option>
+                    <option>网易（杭州）网络有限公司</option>
+                    <option>STARWOOD ASIA PACIFIC</option>
+                    <option>上海上影电通影视文化传播有限公司</option>
+                    <option>上海大兵小将文化传媒工作室</option>
+                    <option>广汽本田汽车有限公司</option>
+                    <option>深圳市腾讯计算机系统有限公司</option>
+                    <option>北京首汽汽车修理有限公司</option>
+                    <option>公益财团法人 东京观光团</option>
+                    <option>北京掌聚互动游戏软件公司</option>
+                    <option>成都炎龙科技有限公司</option>
+                    <option>北京天厚文化有限公司</option>
+                    <option>东风雷诺汽车有限公司</option>
+                    <option>广汽本田汽车销售有限公司</option>
+                    <option>上海环胜广告有限公司</option>
+                    <option>钻石嘉美（北京）文化传播有限公司</option>
+                    <option>杭州阿里巴巴音乐科技有限公司</option>
+                    <option>日本经济产业省</option>
+                    <option>广东凯络广告有限公司上海分公司</option>
+                    <option>ラオックス株式会社</option>
+                    <option>香港悦扬传媒有限公司</option>
+                    <option>北京陌陌科技有限公司</option>
+                    <option>中宏人寿保险有限公司</option>
+                    <option>K.K DEAGOSTINI JAPAN</option>
+                    <option>贝立德股份有限公司</option>
+                    <option>格力高</option>
+                    <option>上海华侨城投资发展有限公司</option>
+                    <option>上海林内热能工程有限公司</option>
+                    <option>GNC</option>
+                    <option>百事(中国)有限公司</option>
+                    <option>冲绳观光会议局</option>
+                    <option>东芝</option>
+                    <option>富士施乐株式会社</option>
+                    <option>国土交通省观光厅</option>
+                    <option>宏碁电脑（上海）有限公司</option>
+                    <option>极优（上海）商贸有限公司</option>
+                    <option>卡西欧</option>
+                    <option>历峰商业有限公司</option>
+                    <option>漫丹（中国）化妆品销售有限公司</option>
+                    <option>摩恩（上海）厨卫有限公司</option>
+                    <option>尼康</option>
+                    <option>普利司通</option>
+                    <option>日立</option>
+                    <option>三菱电机株式会社</option>
+                    <option>上海浦东发展银行</option>
+                    <option>上海萱品生物科技有限公司</option>
+                    <option>统一（上海）保健品商贸有限公司</option>
+                    <option>威可楷(中国)投资有限公司</option>
+                    <option>夏普</option>
+                    <option>迅销(中国)商贸有限公司</option>
+                    <option>尤尼克斯（上海）体育用品有限公司</option>
+                    <option>邮便（中国）国际物流有限公司</option>
+                    <option>株式会社理光</option>
+                    <option>顶津</option>
+                    <option>顶益</option>
+                    <option>上海福满家便利有限公司</option>
+                    <option>上海意淩数码科技有限公司</option>
+                    <option>东陶</option>
+                    <option>富士电机（中国）有限公司</option>
+                    <option>好侍食品株式会社</option>
+                    <option>花王</option>
+                    <option>嘉娜宝</option>
+                    <option>美能达</option>
+                    <option>明治乳业（上海）贸易有限公司</option>
+                    <option>三得利</option>
+                    <option>上海大德多林克商贸有限公司</option>
+                    <option>上海欧安派广告传播有限公司</option>
+                    <option>上海特殊陶业有限公司</option>
+                    <option>上海象印家用电器有限公司</option>
+                    <option>上海小林日化有限公司</option>
+                    <option>松下</option>
+                    <option>索尼</option>
+                    <option>维他奶（上海）有限公司</option>
+                    <option>卫材(苏州)贸易有限公司</option>
+                    <option>中国东方航空股份有限公司</option>
+                    <option>华为</option>
+                    <option>长懿新汇（北京）广告有限公司</option>
+                    <option>JAPAN NATIONAL TOURISM ORGANIZATION</option>
+                    <option>野马</option>
+                    <option>广发银行股份有限公司</option>
+                    <option>广东美的制冷设备有限公司</option>
+                    <option>长懿新汇（北京）广告有限公司</option>
+                    <option>深圳华侨城欢乐谷旅游公司</option>
+                    <option>武汉华侨城实业发展有限公司</option>
+                    <option>宇龙计算机通信科技(深圳)有限公司</option>
+                    <option>深圳绿景房地产开发有限公司</option>
+                    <option>广汽菲亚特汽车有限公司</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-inline">
+                <div class="form-group">
+                  <label class="lab" for="exampleInputPassword1">品牌</label>
+                  <select class="form-control selectpicker" data-live-search="true" name="">
+                    <option>请选择品牌</option>
+                    <option>皇冠</option>
+                    <option>卡罗拉</option>
+                    <option>威驰</option>
+                    <option>RAV4</option>
+                    <option>进口车</option>
+                    <option>车展活动</option>
+                    <option>国际车展</option>
+                    <option>普拉多</option>
+                    <option>雷克萨斯</option>
+                    <option>雷凌</option>
+                    <option>致炫</option>
+                    <option>野马</option>
+                    <option>阿里巴巴</option>
+                    <option>丰田</option>
+                    <option>本田</option>
+                    <option>华为</option>
+                    <option>乐视</option>
+                    <option>东风雷诺</option>
+                    <option>斯巴鲁</option>
+                    <option>搜狐</option>
+                    <option>ICP全业务</option>
+                    <option>CSP全业务</option>
+                    <option>CC全业务</option>
+                    <option>BIS全业务</option>
+                    <option>CANON EXPO全业务</option>
+                    <option>BIS-NewBusiness</option>
+                    <option>Media</option>
+                    <option>PR</option>
+                    <option>金牌店</option>
+                    <option>Web</option>
+                    <option>Medical医疗全业务</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-inline">
+                <div class="form-group">
+                  <label class="lab" style="vertical-align: top;">多选标签</label>
+                  <div id="select-tag">
+                    <p>媒体</p>
+                    <ul class="list-inline">
+                      <li><span>办公用品</span></li>
+                      <li><span>餐饮业</span></li>
+                      <li><span>房地产</span></li>
+                      <li><span>视听与电子产品</span></li>
+                      <li><span>糖果与果实</span></li>
+                      <li><span>企业宣传</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>酒精饮料</span></li>
+                      <li><span>服装</span></li>
+                      <li><span>家居与日用品</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>餐饮业</span></li>
+                      <li><span>房地产</span></li>
+                      <li><span>视听与电子产品</span></li>
+                      <li><span>糖果与果实</span></li>
+                      <li><span>企业宣传</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>酒精饮料</span></li>
+                      <li><span>服装</span></li>
+                      <li><span>家居与日用品</span></li>
+                    </ul>
+                   <p>行业</p>
+                    <ul class="list-inline">
+                      <li><span>酒精饮料</span></li>
+                      <li><span>服装</span></li>
+                      <li><span>家居与日用品</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>餐饮业</span></li>
+                      <li><span>房地产</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>餐饮业</span></li>
+                      <li><span>房地产</span></li>
+                      <li><span>视听与电子产品</span></li>
+                      <li><span>糖果与果实</span></li>
+                      <li><span>企业宣传</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>酒精饮料</span></li>
+                      <li><span>服装</span></li>
+                      <li><span>家居与日用品</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>餐饮业</span></li>
+                      <li><span>房地产</span></li>
+                      <li><span>视听与电子产品</span></li>
+                      <li><span>糖果与果实</span></li>
+                      <li><span>企业宣传</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>酒精饮料</span></li>
+                      <li><span>服装</span></li>
+                      <li><span>家居与日用品</span></li>
+                    </ul>
+                    <p>语言</p>
+                    <ul class="list-inline">
+                      <li><span>视听与电子产品</span></li>
+                      <li><span>糖果与果实</span></li>
+                      <li><span>企业宣传</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>餐饮业</span></li>
+                      <li><span>房地产</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>餐饮业</span></li>
+                      <li><span>房地产</span></li>
+                      <li><span>视听与电子产品</span></li>
+                      <li><span>糖果与果实</span></li>
+                      <li><span>企业宣传</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>酒精饮料</span></li>
+                      <li><span>服装</span></li>
+                      <li><span>家居与日用品</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>餐饮业</span></li>
+                      <li><span>房地产</span></li>
+                      <li><span>视听与电子产品</span></li>
+                      <li><span>糖果与果实</span></li>
+                      <li><span>企业宣传</span></li>
+                      <li><span>办公用品</span></li>
+                      <li><span>酒精饮料</span></li>
+                      <li><span>服装</span></li>
+                      <li><span>家居与日用品</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="form-inline">
+                <div class="form-group" id="container">
+                  <label class="lab" for="exampleInputFile">上传封面</label>
+                  <a href="javascript:;" class="a-upload">选择图片
+                      <input type="file" name="file" id="file">
+                  </a><i> 支持上传格式：png、jpg</i>
+                  <div id="clipArea"></div>
+                  <div id="view"></div>
+                  
+                </div>
+                <b class="btn btn-primary" id="clipBtn">确定裁剪</b>
+              </div>
+              <div class="form-inline">
+                <div class="form-group" id="container">
+                  <label class="lab" for="exampleInputFile">上传作品</label>
+                  <botton class="btn btn-default btn-sm" id="pickfiles">选择文件 (多选)</botton> <!-- <botton class="btn btn-primary" id="uploadfiles" >开始上传</botton>  --><i>支持上传格式：png、jpg、mp4、mp3</i>
+                  <p class="error" id="error"></p>
+                  <div id="filelist">
+                    <!-- 上传文件列表 -->
+                  </div>
+                </div>
+              </div>
+              <div class="form-inline">
+                <div class="form-group">
+                  <label class="lab" for="chuangzuo">创作者</label>
+                  <input type="text" class="form-control" id="chuangzuo" placeholder="请填写创作者">
+                </div>
+              </div>
+              <div class="form-inline">
+                <div class="form-group">
+                  <label class="lab" for="exampleInputPassword1">作品简介</label>
+                  <textarea class="form-control" rows="5" style="width:50%;" placeholder="请写作品介绍"></textarea>
+                </div>
+              </div>
+               <p class="error" id="error">错误提示:请上传图片</p>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">完成保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12" style="padding:0px;">
+          <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> 
+               <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+               <a class="navbar-brand" href="index.html"><img src="./assets/img/logo.png" class="logo" />
+               <span style="color:#fff;margin-left:160px;">Creative Media Library</span></a>
+            </div>
+            
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li>
+                   <a href="#"  data-toggle="modal" data-target="#login_show">sunyang@dentsu.com.cn</a>
+                </li>
+                <li class="dropdown">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">切换主题<strong class="caret"></strong></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                       <a href="#" id="skin01">六角动效</a>
+                    </li>
+                    <li>
+                       <a href="#" id="skin02">太空动效</a>
+                    </li>
+                    <li>
+                       <a href="#" id="skin03">闪电动效</a>
+                    </li>
+                    <li>
+                       <a href="#" id="skin04">默认动效</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            
+          </nav>
+        </div>
+      </div>
+      <div class="row slide-bg">
+        <iframe style="width:100%;" src="#"></iframe>
+         <div class="form-search" style="text-align: center;">
+           <img src="./assets/img/logo_bg.png" style="width:200px;" />
+           <div class="input-group input-group-lg">
+           <span class="input-group-btn">
+              <button class="btn btn-default" style="z-index: 500" data-toggle="modal" data-target="#upload" type="button"><i class="glyphicon glyphicon-upload"></i> </button>
+           </span>
+            <input type="text" class="form-control" id="keywork" placeholder="Search for...">
+            <span class="input-group-btn">
+             <button class="btn btn-default" id="dropdown">···</button>
+             <button class="btn btn-default" type="button" id="soso-list"><i class="glyphicon glyphicon-search"></i></button>
+           </span>
+          </div>
+          <ul class="list-unstyled search-auto">
+            <li data-key="北京电通有限公司">
+              北京电通有限公司
+            </li>
+            <li data-key="垫being北京测试">
+              垫being北京测试
+            </li>
+            <li data-key="北京外包php开发网址">
+              北京外包php开发网址
+            </li>
+            <li data-key="北京电通有限公司">
+              北京电通有限公司
+            </li>
+            <li data-key="垫being北京测试">
+              垫being北京测试
+            </li>
+            <li data-key="北京外包php开发网址">
+              北京外包php开发网址
+            </li>
+          </ul>
+          </div>
+          <div class="container fluid_soso">
+            <div class="col-xs-12">
+              <div id="ver_soso">
+                  <div id="bumen">
+                    <p>部门</p>
+                    <dl class="scrollbar-rail">
+                      <dd class="selected">不限</dd>
+                    </dl>
+                  </div>
+                  <div id="guanggao" style="width: 33%;">
+                    <p>广告主</p>
+                    <dl class="scrollbar-rail">
+                      <dd class="selected guanggao_btn" data-id="0">不限</dd>
+                    </dl>
+                  </div>
+                  <div id="pinpai" style="width:15%;">
+                    <p>品牌</p>
+                    <dl class="scrollbar-rail">
+                      <dd class="selected">不限</dd>
+                    </dl>
+                  </div>
+                  <div id="fenlei">
+                    <p>作品标签</p>
+                    <dl class="scrollbar-rail">
+                      <dd class="selected">不限</dd>
+                      <dd>办公用品</dd>
+                      <dd>餐饮业</dd>
+                      <dd>房地产</dd>
+                      <dd>非酒精饮料</dd>
+                      <dd>酒精饮料</dd>
+                      <dd>服装</dd>
+                      <dd>公益与非盈利组织</dd>
+                      <dd>家居与日用品</dd>
+                      <dd>教育</dd>
+                      <dd>金融与法律服务</dd>
+                      <dd>零售与分销</dd>
+                      <dd>旅游与运输</dd>
+                      <dd>美容与健康</dd>
+                      <dd>媒体与出版</dd>
+                      <dd>汽车及相关服务</dd>
+                      <dd>企业宣传</dd>
+                      <dd>食品</dd>
+                      <dd>视听与电子产品</dd>
+                      <dd>糖果与零食</dd>
+                      <dd>网站及服务</dd>
+                      <dd>玩具与游戏</dd>
+                      <dd>文化、娱乐与运动</dd>
+                      <dd>烟草及相关用品</dd>
+                      <dd>医药</dd>
+                      <dd>专业与公共服务</dd>
+                    </dl>
+                  </div>
+                  <div id="myhome">
+                    <p>我的作品</p>
+                    <dl class="scrollbar-rail">
+                      <dd class="selected">不限</dd>
+                      <dd>我的上传</dd>
+                      <dd>我的收藏</dd>
+                    </dl>
+                  </div>
+                  <div id="adddate">
+                    <p>创建日期</p>
+                    <dl class="scrollbar-rail">
+                      <dd class="selected">不限</dd>
+                      <dd>今天</dd>
+                      <dd>一月内</dd>
+                      <dd>三月内</dd>
+                      <dd>半年内</dd>
+                      <dd>一年内</dd>
+                    </dl>
+                  </div>
+              </div>  
+            </div>
+          </div>
+      </div>
+    </div>
+    <form id="from-get">
+      <input type="hidden" class="soso-type" name="type" value="0" />
+    </form>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- 裁剪 -->
+    <script src="./assets/js/corp/iscroll-zoom.js"></script>
+    <script src="./assets/js/corp/hammer.js"></script>
+    <script src="./assets/js/corp/jquery.photoClip.min.js"></script>
+    <script type="text/javascript" src="./assets/js/jquery.scrollbar.js"></script>
+    <script src="./assets/js/index.js"></script>
+  </body>
+</html>
