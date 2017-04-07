@@ -1,7 +1,7 @@
 /*body { padding-top: 50px; }*/
 #ver_soso,.dropdown-menu,.error,li.list-tab,.text,.help-block,.list-inline,.dl-horizontal,.btnupload,.veiw-menu p,.search-auto li,.alert,.btn-default,.btn,.form-group,#myupload,.ajax-newlist li,.dropdown a{font-family:"Microsoft YaHei";}
 /*全局*/
-img,li.list-tab,.lihover,h4,#home .detailview,.glyphicon-tasks,.search-auto li,.thumbnail-title,#filelist .delete-img,.help-block,#ver_soso dl dd,#select-tag ul li span{cursor:pointer;}
+img,li.list-tab,.lihover,h4,#home .detailview:hover,.glyphicon-tasks,.search-auto li,.thumbnail-title,#filelist .delete-img,.help-block,#ver_soso dl dd,#select-tag ul li span{cursor:pointer;}
 /*导航*/
 .navbar-header{padding-left: 40px;}
 .navbar-right{padding-right: 40px;}

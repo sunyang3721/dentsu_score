@@ -1,4 +1,5 @@
 	url = 'http://10.69.136.88:8081/CreativeLib/';
+	pinpai_api('',''); //初始化
 	$.ajax({
 		url:url+'initWorksSelectList.do',
 		dataType:'json',
@@ -33,13 +34,14 @@
 				//品牌触发
 				select('#pinpai dl dd');
 			});
-			pinpai_api('','');
+			
 			//标签分类
 			$.each(data['worksLabelList'],function(key,value){
+				console.log(value['worksLabelList']);
 				var num = value['worksLabelList'].length;
 				for (var i = 0; num >= i; i++) {
 					if(value['worksLabelList'][i] !== undefined){
-						$('#fenlei dl').append('<dd data-id='+value['worksLabelList'][i]['m_labelId']+'>'+value['worksLabelList'][i]['m_labelName']+'</dd>')
+						$('#fenlei dl').append('<dd data-id='+value['worksLabelList'][i]['m_labelCode']+'>'+value['worksLabelList'][i]['m_labelName']+'</dd>')
 					}
 				}
 			})
@@ -53,12 +55,12 @@
 			//---------------------------------------------------------------------------------
 			//广告主关联部门触发
 			$('.departId').click(function(){
-				var id = $(this).attr('data-id');
+				var did = $(this).attr('data-id');
 				$.ajax({
 					url:url+'selectAdvertiserList.do',
 					dataType:'json',
 					type:'POST',
-					data:{departId:id},
+					data:{departId:did},
 					beforeSend:function(){
 						//请求前的处理
 					},
@@ -70,6 +72,8 @@
 						});
 						//广告主触发
 						select('#guanggao dl dd');
+						// 选定部门 对应广告主所有里的品牌展示
+						pinpai_api(did,"");
 						$('.guanggao_btn').click(function(){
 							var id = $(this).attr('data-id');
 							if(id == ''){
@@ -88,7 +92,7 @@
 							select('#pinpai dl dd');
 						})
 					}
-				})
+				});
 			})
 		},
 		complete: function() {
@@ -135,14 +139,12 @@
 			$(id).removeClass('selected');
 			$(this).addClass('selected');
 			if(id == '#bumen dl dd'){
-				$('#fenlei dl dd').removeClass('selected').eq(0).addClass('selected');
+				//$('#fenlei dl dd').removeClass('selected').eq(0).addClass('selected');
 				$('#guanggao dl dd').removeClass('selected').eq(0).addClass('selected');
 				$('#pinpai dl dd').removeClass('selected').eq(0).addClass('selected');
-				$('#adddate dl dd').removeClass('selected').eq(0).addClass('selected');
-				$('#myhome dl dd').removeClass('selected').eq(0).addClass('selected');
-				$('#pinpai dl').empty().append('<dd class="selected" data-id="0">不限</dd>');
-				pinpai_api("","");
-					
+				//$('#adddate dl dd').removeClass('selected').eq(0).addClass('selected');
+				//$('#myhome dl dd').removeClass('selected').eq(0).addClass('selected');
+				//$('#pinpai dl').empty().append('<dd class="selected" data-id="0">不限</dd>');
 			}			
 		});
 	}

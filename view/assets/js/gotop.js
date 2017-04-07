@@ -42,7 +42,7 @@
                 (function() {
                     var top = getScrollTop();
                     if (top > 0) {
-                        window.scrollTo(0, top / 1.2)
+                        window.scrollTo(0, top / 5)
                         setTimeout(arguments.callee, 10);
                     }
                 })();

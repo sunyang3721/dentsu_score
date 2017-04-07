@@ -1,5 +1,5 @@
 $(function() {
-
+	numloadCount = 20; //每页显示20条 全局定义
 	ajaxpost(1);
 	
 	//屏蔽右键
@@ -34,9 +34,9 @@ $(function() {
 		var type = $('#type').val();  // 0 为 列表显示  1 为 缩略图显示
 		loading_page('正在加载中，请稍等......');
 		$.ajax(url+param,{
-			type:'get',
+			type:'post',
 			dataType:'json',
-			data:{pageNum:page,orderFlag:view,loadCount:20},
+			data:{pageNum:page,orderFlag:view,loadCount:numloadCount},
 			success:function(data){
 				switch(type){
 					case '0' :
@@ -248,8 +248,15 @@ $(function() {
 				})
 				break;
 			}
+			//判断数据是所有时，加载更多按钮隐藏
+			var numLength = data['worksInfoList'].length;
+			if(numloadCount > numLength){
+				$('.loading_list').hide();
+				//layer.msg('已全部加载完成', {icon: 1});
+			}else{
+				loading_page();
+			}
 			
-			loading_page();
 		}else{
 			$('.loading_list').hide();
 			layer.msg('已全部加载完成', {icon: 1});
@@ -383,7 +390,13 @@ $(function() {
 				break;
 			}
 			
-			loading_page();
+			//判断数据是所有时，加载更多按钮隐藏
+			var numLength = data['worksInfoList'].length;
+			if(numloadCount > numLength){
+				$('.loading_list').hide();
+			}else{
+				loading_page();
+			}
 		}else{
 			$('.loading_list').hide();
 			layer.msg('已全部加载完成', {icon: 1});
