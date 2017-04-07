@@ -5,19 +5,19 @@ $(function() {
 		$('.mask').fadeOut();
 	})
 
-	//搜索自动提示 事件
-	$('#keywork').keyup(function() {
-		$('.fluid_soso').fadeOut(200);
-		var keywork = $(this).val();
-		//console.log(keywork);
-		if (!keywork) {
-			$('.search-auto').hide();
-		} else {
-			$('.search-auto').show();
-			//用ajax来实现输出 ul li
-			//$.ajax();
-		}
-	})
+	//搜索自动提示 事件 待补充
+	// $('#keywork').keyup(function() {
+	// 	$('.fluid_soso').fadeOut(200);
+	// 	var keywork = $(this).val();
+	// 	//console.log(keywork);
+	// 	if (!keywork) {
+	// 		$('.search-auto').hide();
+	// 	} else {
+	// 		$('.search-auto').show();
+	// 		//用ajax来实现输出 ul li
+	// 		//$.ajax();
+	// 	}
+	// })
 	//自动提示关键词 按键上下事件 跟上面ajax内有相关关联
 	//-----------start----------
 	key_down = 0;

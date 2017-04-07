@@ -36,6 +36,17 @@
         //     $('.search-auto').hide();
         //     //window.open('http://www.baidu.com');
         // })
+         
+        //日期检索
+        $('#adddate dl').append(function(){
+            var mydate = new Date();
+            var html = '<dd data-id='+mydate.Format('YYYY-M-D')+'>今天</dd>';
+                html += '<dd data-id='+mydate.Format('YYYY-M-D','30')+'>一月内</dd>';
+                html += '<dd data-id='+mydate.Format('YYYY-M-D','90')+'>三月内</dd>';
+                html += '<dd data-id='+mydate.Format('YYYY-M-D','183')+'>半年内</dd>';
+                html += '<dd data-id='+mydate.Format('YYYY-M-D','365')+'>一年内</dd>';
+            return html;
+          });
       })
       </script>
   <body>
@@ -501,20 +512,15 @@
                   <div id="myhome">
                     <p>我的作品</p>
                     <dl class="scrollbar-rail">
-                      <dd class="selected">不限</dd>
-                      <dd>我的上传</dd>
-                      <dd>我的收藏</dd>
+                      <dd class="selected" data-id="">不限</dd>
+                      <dd data-id="0">我的上传</dd>
+                      <dd data-id="1">我的收藏</dd>
                     </dl>
                   </div>
                   <div id="adddate">
                     <p>创建日期</p>
                     <dl class="scrollbar-rail">
-                      <dd class="selected">不限</dd>
-                      <dd>今天</dd>
-                      <dd>一月内</dd>
-                      <dd>三月内</dd>
-                      <dd>半年内</dd>
-                      <dd>一年内</dd>
+                      <dd class="selected" data-id="">不限</dd>
                     </dl>
                   </div>
               </div>  
@@ -522,9 +528,6 @@
           </div>
       </div>
     </div>
-    <form id="from-get">
-      <input type="hidden" class="soso-type" name="type" value="0" />
-    </form>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <!-- 裁剪 -->

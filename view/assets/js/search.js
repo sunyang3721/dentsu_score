@@ -28,14 +28,15 @@ $(function() {
 
 	//列表 缩略图 视图输出
 	function ajaxpost(page){
-		var keywork = $('#keywork').val();  // 搜索关键字 默认是空的 
+		var url = 'http://10.69.136.88:8081/CreativeLib/queryWorksInfoList.do';
+		var param = location.search;
 		var view = $('#view').val();  // 0 为 new 排序  1 为 hot 排序
 		var type = $('#type').val();  // 0 为 列表显示  1 为 缩略图显示
 		loading_page('正在加载中，请稍等......');
-		$.ajax('http://www.beijing-dentsu.com.cn/thinkphp/Dentsucn/Index/lists',{
+		$.ajax(url+param,{
 			type:'get',
 			dataType:'json',
-			data:{page:page,order:view},
+			data:{pageNum:page,orderFlag:view,loadCount:1},
 			success:function(data){
 				switch(type){
 					case '0' :
@@ -65,9 +66,58 @@ $(function() {
 
 	//列表视图输出
 	function list_view(data){
-		var user = $('#user').val();  // 0 为 不限 ，1 为 我的上传，2 为 我的收藏 
+		var user = getQueryString("myWorksFlag");  // 空为 不限 ，0 为 我的上传，1 为 我的收藏 
 		if(data.status){
 			switch(user){
+				case '':
+				var html = "";
+				    html += "<li class='list-img frist-height'><\/li>\n";
+				    html += "<li class='list-title frist-height'>标题<\/li>\n";
+				    html += "<li class='list-pinpai frist-height'>品牌<\/li>\n";
+				    html += "<li class='list-guanggao frist-height'>广告主<\/li>\n";
+				    html += "<li class='list-fenlei frist-height'>作品标签<\/li>\n";
+				    html += "<li class='list-user frist-height'>创作者<\/li>\n";
+				    html += "<li class='list-date frist-height'>上传日期<\/li>\n";
+				$('.ajax-newlist').append(html);
+				$.each(data['worksInfoList'],function(key,value){
+						var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+						var strVar = "<ul class='list-inline' data-id="+value['t_worksId']+">";
+						    strVar += "<li class='list-img'>";
+						    strVar += "	<img src="+img+" alt="+value['t_worksName']+" class=\"img-responsive img-rounded detailview\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['t_worksId']+">";
+						    strVar += "<\/li>";
+						    strVar += "<li class='list-title'>";
+						    strVar += "	<p class=\"detailview\" data-toggle=\"modal\" data-target=\"#show-id\"   data-id="+value['t_worksId']+">"+value['t_worksName']+"<\/p>";
+						    strVar += "<p class='text-muted'><i class='glyphicon glyphicon-star'><\/i> "+value['collectionNum']+" <\/p>";
+						    strVar += "<\/li>";
+						    strVar += "<li class='list-pinpai'>";
+						    strVar += "	<p class=\"text-muted\">";
+						    strVar += value['m_brandName'];
+						    strVar += "	<\/p>";
+						    strVar += "<\/li>";
+						    strVar += "<li class='list-guanggao'>"
+						    strVar += "	<p class=\"text-muted\">";
+						    strVar += value['m_advertiserName'];
+						    strVar += "	<\/p>";
+						    strVar += "<\/li>";
+						    strVar += "<li class='list-fenlei'>"
+						    strVar += "	<p class=\"text-muted\">";
+						    strVar += value['worksLabel'];
+						    strVar += "	<\/p>";
+						    strVar += "<\/li>";
+						    strVar += "<li class='list-user'>";
+						    strVar += "	<p class=\"text-muted\">";
+						    strVar += value['t_worksCreater'];
+						    strVar += "	<\/p>";
+						    strVar += "<\/li>";
+						    strVar += "<li class='list-date'>";
+						    strVar += value['t_createTimeStr'];
+						    strVar += "<\/li>";
+						    strVar += "<div class=\"clearfix\">";
+						    strVar += "<\/div>";
+						    strVar += '</ul>';
+					$('.ajax-newlist').append(strVar);
+				});
+				break;
 				case '0':
 				var html = "";
 				    html += "<li class='list-img frist-height'><\/li>\n";
@@ -78,63 +128,14 @@ $(function() {
 				    html += "<li class='list-user frist-height'>创作者<\/li>\n";
 				    html += "<li class='list-date frist-height'>上传日期<\/li>\n";
 				$('.ajax-newlist').append(html);
-				$.each(data['data'],function(key,value){
+				$.each(data['worksInfoList'],function(key,value){
 						var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
-						var strVar = "<ul class='list-inline' data-id="+value['id']+">";
+						var strVar = "<ul class=\"list-inline del"+value['t_worksId']+"\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['t_worksId']+">";
 						    strVar += "<li class='list-img'>";
-						    strVar += "	<img src="+img+" alt="+value['title']+" class=\"img-responsive img-rounded detailview\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['id']+">";
+						    strVar += "	<img src="+img+" alt="+value['t_worksName']+" class=\"img-responsive img-rounded detailview\" >";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-title'>";
-						    strVar += "	<p class=\"detailview\" data-toggle=\"modal\" data-target=\"#show-id\"   data-id="+value['id']+">"+value['title']+"<\/p>";
-						    strVar += "<p class='text-muted'><i class='glyphicon glyphicon-star'><\/i> 20 <\/p>";
-						    strVar += "<\/li>";
-						    strVar += "<li class='list-pinpai'>";
-						    strVar += "	<p class=\"text-muted\">";
-						    strVar += '电通数码';
-						    strVar += "	<\/p>";
-						    strVar += "<\/li>";
-						    strVar += "<li class='list-guanggao'>"
-						    strVar += "	<p class=\"text-muted\">";
-						    strVar += '北京电通广告有限公司';
-						    strVar += "	<\/p>";
-						    strVar += "<\/li>";
-						    strVar += "<li class='list-fenlei'>"
-						    strVar += "	<p class=\"text-muted\">";
-						    strVar += '产品设计';
-						    strVar += "	<\/p>";
-						    strVar += "<\/li>";
-						    strVar += "<li class='list-user'>";
-						    strVar += "	<p class=\"text-muted\">";
-						    strVar += 'yang.sun@dentsu.com.cn';
-						    strVar += "	<\/p>";
-						    strVar += "<\/li>";
-						    strVar += "<li class='list-date'>";
-						    strVar += '2017-03-13';
-						    strVar += "<\/li>";
-						    strVar += "<div class=\"clearfix\">";
-						    strVar += "<\/div>";
-						    strVar += '</ul>';
-					$('.ajax-newlist').append(strVar);
-				});
-				break;
-				case '1':
-				var html = "";
-				    html += "<li class='list-img frist-height'><\/li>\n";
-				    html += "<li class='list-title frist-height'>标题<\/li>\n";
-				    html += "<li class='list-pinpai frist-height'>品牌<\/li>\n";
-				    html += "<li class='list-guanggao frist-height'>广告主<\/li>\n";
-				    html += "<li class='list-fenlei frist-height'>作品标签<\/li>\n";
-				    html += "<li class='list-user frist-height'>创作者<\/li>\n";
-				    html += "<li class='list-date frist-height'>上传日期<\/li>\n";
-				$('.ajax-newlist').append(html);
-				$.each(data['data'],function(key,value){
-						var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
-						var strVar = "<ul class=\"list-inline del"+value['id']+"\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['id']+">";
-						    strVar += "<li class='list-img'>";
-						    strVar += "	<img src="+img+" alt="+value['title']+" class=\"img-responsive img-rounded detailview\" >";
-						    strVar += "<\/li>";
-						    strVar += "<li class='list-title'>";
-						    strVar += "	<p class=\"detailview\">"+value['title']+"<\/p>";
+						    strVar += "	<p class=\"detailview\">"+value['t_worksName']+"<\/p>";
 						    strVar += "<p class='text-muted'><i class='glyphicon glyphicon-star'><\/i> 20 <\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-pinpai'>";
@@ -194,7 +195,7 @@ $(function() {
 					})
 				})
 				break;
-				case '2':  //我的收藏
+				case '1':  //我的收藏
 				var html = "";
 				    html += "<li class='list-img frist-height'><\/li>\n";
 				    html += "<li class='list-title frist-height'>标题<\/li>\n";
@@ -204,7 +205,7 @@ $(function() {
 				    html += "<li class='list-user frist-height'>创作者<\/li>\n";
 				    html += "<li class='list-date frist-height'>上传日期<\/li>\n";
 				$('.ajax-newlist').append(html);
-				$.each(data['data'],function(key,value){
+				$.each(data['worksInfoList'],function(key,value){
 						var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
 						var strVar = "<ul class=\"list-inline start"+value['id']+"\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['id']+">";
 						    strVar += "<li class='list-img'>";
@@ -269,29 +270,29 @@ $(function() {
 
 	//缩略图视图输出
 	function list_img(data){
-		var user = $('#user').val();  // 0 为 默认 ，1 为 我的上传，2 为 我的收藏
+		user = getQueryString("myWorksFlag");  // 空为 不限 ，0 为 我的上传，1 为 我的收藏 
 		if(data.status){
 			switch(user){
-				case '0':
-				$.each(data['data'],function(key,value){
+				case '':
+				$.each(data['worksInfoList'],function(key,value){
 					var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
 					var strVar = "";
 					    strVar += "<div class=\"col-xs-3\">";
 					    strVar += "	<div class=\"thumbnail\">";
 					    //strVar += "		<img src="+value['thumbnail']+" alt="+value['title']+" class='img-responsive'>";
-					    strVar += "		<img src="+img+" alt="+value['title']+" class='img-responsive'>";
-					    strVar += "		<div class=\"caption thumbnail-title detailview\" data-toggle=\"modal\" data-id="+value['id']+" data-target=\"#show-id\">";
+					    strVar += "		<img src="+img+" alt="+value['t_worksName']+" class='img-responsive'>";
+					    strVar += "		<div class=\"caption thumbnail-title detailview\" data-toggle=\"modal\" data-id="+value['t_worksId']+" data-target=\"#show-id\">";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar +=  			value['title'];
+					    strVar +=  			value['t_worksName'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> sunyang";
+					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-time\"><\/i> "+value['postdate'];
+					    strVar += "				<i class=\"glyphicon glyphicon-time\"><\/i> "+value['t_createTimeStr'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-heart\"><\/i> "+value['cid'];
+					    strVar += "				<i class=\"glyphicon glyphicon-heart\"><\/i> "+value['collectionNum'];
 					    strVar += "			<\/p>";
 					    strVar += "		<\/div>";
 					    strVar += "	<\/div>";
@@ -299,8 +300,8 @@ $(function() {
 					$('.ajax-hotlist').append(strVar);
 				})
 				break;
-				case '1':
-				$.each(data['data'],function(key,value){
+				case '0':
+				$.each(data['worksInfoList'],function(key,value){
 					var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
 					var strVar = "";
 					    strVar += "<div class=\"col-xs-3 del-"+value['id']+" \">";
@@ -346,8 +347,8 @@ $(function() {
 					});
 				})
 				break;
-				case '2':
-				$.each(data['data'],function(key,value){
+				case '1':
+				$.each(data['worksInfoList'],function(key,value){
 					var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
 					var strVar = "";
 					    strVar += "<div class=\"col-xs-3 start-"+value['id']+" \">";
@@ -469,6 +470,10 @@ $(function() {
 	gallery('1');
 	jQuery("#gallery").unitegallery();
 
-
+	function getQueryString(name) { 
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+		var r = window.location.search.substr(1).match(reg); 
+		if (r != null) return unescape(r[2]); return null; 
+	} 
 
 })
