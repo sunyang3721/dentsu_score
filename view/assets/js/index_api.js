@@ -105,7 +105,6 @@
 	    if(AddDayCount !== undefined){
 	    	this.setDate(this.getDate()-AddDayCount);
 	    }
-	    console.log(AddDayCount);
 	    var Week = ['日','一','二','三','四','五','六'];  
 	  
 	    str=str.replace(/yyyy|YYYY/,this.getFullYear());   
@@ -172,6 +171,33 @@
 
 	//开始进行搜索并跳转到页面
 	function search_url(){
+		search_over();
+	}
+
+	//回车搜索事件
+	$(document).keydown(function (event) {
+	    if(event.keyCode == 13){
+	    	search_over();
+	    }
+	});
+
+	//查询结果通知
+	function search_over(){
+		$.ajax({
+			url:url+'queryWorksInfoList.do?'+search_join(),
+			dataType:'json',
+			type:'post',
+			success:function(data){
+				if(data['status'] == "200"){
+					window.open('./view/search.html?'+search_join());
+				}else{
+					layer.msg('没有找到您想要的作品', {icon: 0});
+				}
+			}
+		})
+	}
+	//条件参数查询
+	function search_join(){
 		var keyword = $('#keywork').val();
 		var depart_id = $('#bumen dl .selected').attr('data-id');
 		var advert_id = $('#guanggao dl .selected').attr('data-id'); 
@@ -179,12 +205,13 @@
 		var label_list = $('#fenlei dl .selected').attr('data-id');
 		var myworks = $('#myhome dl .selected').attr('data-id');
 		var mydate = new Date();
-		var publishDateEnd = $('#adddate dl .selected').attr('data-id');
-		if(publishDateEnd !==''){
-			var publishDateStart = mydate.Format('YYYY-M-D');
+		var publishDateStart = $('#adddate dl .selected').attr('data-id');
+		if(publishDateStart !==''){
+			var publishDateEnd = mydate.Format('YYYY-M-D');
 		}else{
-			var publishDateStart = '';
+			var publishDateEnd = '';
 		}
-		window.open('./search.html?inputKeyWord='+keyword+'&departId='+depart_id+'&advertId='+advert_id+'&brandId='+brand_id+'&labelCodeList='+label_list+'&myWorksFlag='+myworks+'&publishDateStart='+publishDateStart+'&publishDateEnd='+publishDateEnd);
-		
+
+		var data_param = 'inputKeyWord='+encodeURIComponent(keyword)+'&departId='+depart_id+'&advertId='+advert_id+'&brandId='+brand_id+'&labelCodeList='+label_list+'&myWorksFlag='+myworks+'&publishDateStart='+publishDateStart+'&publishDateEnd='+publishDateEnd;
+		return data_param;
 	}

@@ -36,10 +36,21 @@ $(function() {
 		$.ajax(url+param,{
 			type:'get',
 			dataType:'json',
-			data:{pageNum:page,orderFlag:view,loadCount:1},
+			data:{pageNum:page,orderFlag:view,loadCount:20},
 			success:function(data){
 				switch(type){
 					case '0' :
+					if(page == '1'){
+						var html = "";
+						    html += "<li class='list-img frist-height'><\/li>\n";
+						    html += "<li class='list-title frist-height'>标题<\/li>\n";
+						    html += "<li class='list-pinpai frist-height'>品牌<\/li>\n";
+						    html += "<li class='list-guanggao frist-height'>广告主<\/li>\n";
+						    html += "<li class='list-fenlei frist-height'>作品标签<\/li>\n";
+						    html += "<li class='list-user frist-height'>创作者<\/li>\n";
+						    html += "<li class='list-date frist-height'>上传日期<\/li>\n";
+						$('.ajax-newlist').append(html);
+					}
 					list_view(data);
 					break;
 					case '1' :
@@ -48,7 +59,7 @@ $(function() {
 				}
 				$('.detailview').click(function(){
 					var id = $(this).attr('data-id');  //注意在列表加上data-id属性
-					$('.show-start').attr('data-id',id); //克隆
+					$('.show-start').attr('data-id',id); //克隆收藏控件
 					//作品描述 用对应的id 加载
 					$.ajax('http://www.beijing-dentsu.com.cn/thinkphp/Dentsucn/Index/work',{
 						type:'get',
@@ -66,27 +77,20 @@ $(function() {
 
 	//列表视图输出
 	function list_view(data){
-		var user = getQueryString("myWorksFlag");  // 空为 不限 ，0 为 我的上传，1 为 我的收藏 
-		if(data.status){
+		var user = getQueryString("myWorksFlag");  // 空为 不限 ，0 为 我的上传，1 为 我的收藏
+		var keyword = getQueryString("inputKeyWord"); //关键字; 
+		if(data.status=='200'){
 			switch(user){
-				case '':
-				var html = "";
-				    html += "<li class='list-img frist-height'><\/li>\n";
-				    html += "<li class='list-title frist-height'>标题<\/li>\n";
-				    html += "<li class='list-pinpai frist-height'>品牌<\/li>\n";
-				    html += "<li class='list-guanggao frist-height'>广告主<\/li>\n";
-				    html += "<li class='list-fenlei frist-height'>作品标签<\/li>\n";
-				    html += "<li class='list-user frist-height'>创作者<\/li>\n";
-				    html += "<li class='list-date frist-height'>上传日期<\/li>\n";
-				$('.ajax-newlist').append(html);
+				case '':  //默认
 				$.each(data['worksInfoList'],function(key,value){
-						var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+						//var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+						var img = value['t_worksImagePath'];
 						var strVar = "<ul class='list-inline' data-id="+value['t_worksId']+">";
 						    strVar += "<li class='list-img'>";
 						    strVar += "	<img src="+img+" alt="+value['t_worksName']+" class=\"img-responsive img-rounded detailview\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['t_worksId']+">";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-title'>";
-						    strVar += "	<p class=\"detailview\" data-toggle=\"modal\" data-target=\"#show-id\"   data-id="+value['t_worksId']+">"+value['t_worksName']+"<\/p>";
+						    strVar += "	<p class=\"detailview\" data-toggle=\"modal\" data-target=\"#show-id\"   data-id="+value['t_worksId']+">"+value['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>')+"<\/p>";
 						    strVar += "<p class='text-muted'><i class='glyphicon glyphicon-star'><\/i> "+value['collectionNum']+" <\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-pinpai'>";
@@ -118,54 +122,46 @@ $(function() {
 					$('.ajax-newlist').append(strVar);
 				});
 				break;
-				case '0':
-				var html = "";
-				    html += "<li class='list-img frist-height'><\/li>\n";
-				    html += "<li class='list-title frist-height'>标题<\/li>\n";
-				    html += "<li class='list-pinpai frist-height'>品牌<\/li>\n";
-				    html += "<li class='list-guanggao frist-height'>广告主<\/li>\n";
-				    html += "<li class='list-fenlei frist-height'>作品标签<\/li>\n";
-				    html += "<li class='list-user frist-height'>创作者<\/li>\n";
-				    html += "<li class='list-date frist-height'>上传日期<\/li>\n";
-				$('.ajax-newlist').append(html);
+				case '0': //我的上传
 				$.each(data['worksInfoList'],function(key,value){
-						var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
-						var strVar = "<ul class=\"list-inline del"+value['t_worksId']+"\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['t_worksId']+">";
+						//var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+						var img = value['t_worksImagePath'];
+						var strVar = "<ul class=\"list-inline del"+value['t_worksId']+"\"  data-id="+value['t_worksId']+">";
 						    strVar += "<li class='list-img'>";
-						    strVar += "	<img src="+img+" alt="+value['t_worksName']+" class=\"img-responsive img-rounded detailview\" >";
+						    strVar += "	<img src="+img+" alt="+value['t_worksName']+" class=\"img-responsive img-rounded detailview\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['t_worksId']+">";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-title'>";
-						    strVar += "	<p class=\"detailview\">"+value['t_worksName']+"<\/p>";
-						    strVar += "<p class='text-muted'><i class='glyphicon glyphicon-star'><\/i> 20 <\/p>";
+						    strVar += "	<p class=\"detailview\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['t_worksId']+">"+value['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>')+"<\/p>";
+						    strVar += "<p class='text-muted'><i class='glyphicon glyphicon-star'><\/i> "+value['collectionNum']+" <\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-pinpai'>";
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += '电通数码';
+						    strVar += value['m_brandName'];
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-guanggao'>"
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += '北京电通广告有限公司';
+						    strVar += value['m_advertiserName'];
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-fenlei'>"
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += '产品设计';
+						    strVar += value['worksLabel'];
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-user'>";
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += 'yang.sun@dentsu.com.cn';
+						    strVar += value['t_worksCreater'];
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-date'>";
-						    strVar += '2017-03-13';
+						    strVar += value['t_createTimeStr'];
 						    strVar += "<\/li>";
 						    strVar += "<div class=\"clearfix\">";
 						    strVar += "<\/div>";
 						    strVar += '</ul>';
-						    strVar += "	<p class=\"text text-muted btn-post del"+value['id']+"\">";
-						    strVar += '<span class="update btn-xs btn-primary btn" data-toggle=\"modal\" data-target=\"#user-update\" data-id='+value['id']+'>修改</span> <span class="del btn-xs btn-danger btn" data-id='+value['id']+'>删除</span>';
+						    strVar += "	<p class=\"text text-muted btn-post del"+value['t_worksId']+"\">";
+						    strVar += '<span class="update btn-xs btn-primary btn" data-toggle=\"modal\" data-target=\"#user-update\" data-id='+value['t_worksId']+'>修改</span> <span class="del btn-xs btn-danger btn" data-id='+value['t_worksId']+'>删除</span>';
 						    strVar += "	<\/p>";
 					$('.ajax-newlist').append(strVar);
 				});
@@ -196,53 +192,45 @@ $(function() {
 				})
 				break;
 				case '1':  //我的收藏
-				var html = "";
-				    html += "<li class='list-img frist-height'><\/li>\n";
-				    html += "<li class='list-title frist-height'>标题<\/li>\n";
-				    html += "<li class='list-pinpai frist-height'>品牌<\/li>\n";
-				    html += "<li class='list-guanggao frist-height'>广告主<\/li>\n";
-				    html += "<li class='list-fenlei frist-height'>作品标签<\/li>\n";
-				    html += "<li class='list-user frist-height'>创作者<\/li>\n";
-				    html += "<li class='list-date frist-height'>上传日期<\/li>\n";
-				$('.ajax-newlist').append(html);
 				$.each(data['worksInfoList'],function(key,value){
-						var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
-						var strVar = "<ul class=\"list-inline start"+value['id']+"\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['id']+">";
+						//var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+						var img = value['t_worksImagePath'];
+						var strVar = "<ul class=\"list-inline start"+value['t_worksId']+"\" data-id="+value['t_worksId']+">";
 						    strVar += "<li class='list-img'>";
-						    strVar += "	<img src="+img+" alt="+value['title']+" class=\"img-responsive img-rounded detailview\" >";
+						    strVar += "	<img src="+img+" alt="+value['t_worksName']+" class=\"img-responsive img-rounded detailview\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['t_worksId']+">";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-title'>";
-						    strVar += "	<p class=\"detailview\">"+value['title']+"<\/p>";
+						    strVar += "	<p class=\"detailview\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['t_worksId']+">"+value['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>')+"<\/p>";
 						    //strVar += "<p class='text-muted'><i class='glyphicon glyphicon-star'><\/i> 20 <\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-pinpai'>";
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += '电通数码';
+						    strVar += value['m_brandName'];
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-guanggao'>"
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += '北京电通广告有限公司';
+						    strVar += value['m_advertiserName'];
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-fenlei'>"
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += '产品设计';
+						    strVar += value['worksLabel'];
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-user'>";
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += 'yang.sun@dentsu.com.cn';
+						    strVar += value['t_worksCreater'];
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-date'>";
-						    strVar += '2017-03-13';
+						    strVar += value['t_createTimeStr'];
 						    strVar += "<\/li>";
 						    strVar += "<div class=\"clearfix\">";
 						    strVar += "<\/div>";
 						    strVar += '</ul>';
-						    strVar += "	<p class=\"text-muted start"+value['id']+"\">";
-						    strVar += '<span class="start btn-xs btn-post btn-danger btn" data-id='+value['id']+'>取消收藏</span>';
+						    strVar += "	<p class=\"text-muted start"+value['t_worksId']+"\">";
+						    strVar += '<span class="start btn-xs btn-post btn-danger btn" data-id='+value['t_worksId']+'>取消收藏</span>';
 						    strVar += "	<\/p>";
 					$('.ajax-newlist').append(strVar);
 				});
@@ -264,26 +252,28 @@ $(function() {
 			loading_page();
 		}else{
 			$('.loading_list').hide();
-			alert('没有更多数据了');
+			layer.msg('已全部加载完成', {icon: 1});
 		}
 	}
 
 	//缩略图视图输出
 	function list_img(data){
-		user = getQueryString("myWorksFlag");  // 空为 不限 ，0 为 我的上传，1 为 我的收藏 
-		if(data.status){
+		var user = getQueryString("myWorksFlag");  // 空为 不限 ，0 为 我的上传，1 为 我的收藏 
+		var keyword = getQueryString("inputKeyWord"); //关键字; 
+		if(data.status == '200'){
 			switch(user){
 				case '':
 				$.each(data['worksInfoList'],function(key,value){
-					var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+					//var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+					var img = value['t_worksImagePath'];
 					var strVar = "";
 					    strVar += "<div class=\"col-xs-3\">";
 					    strVar += "	<div class=\"thumbnail\">";
-					    //strVar += "		<img src="+value['thumbnail']+" alt="+value['title']+" class='img-responsive'>";
+					    //strVar += "		<img src="+value['thumbnail']+" alt="+value['t_worksName']+" class='img-responsive'>";
 					    strVar += "		<img src="+img+" alt="+value['t_worksName']+" class='img-responsive'>";
 					    strVar += "		<div class=\"caption thumbnail-title detailview\" data-toggle=\"modal\" data-id="+value['t_worksId']+" data-target=\"#show-id\">";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar +=  			value['t_worksName'];
+					    strVar +=  			value['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>');
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
 					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
@@ -302,29 +292,30 @@ $(function() {
 				break;
 				case '0':
 				$.each(data['worksInfoList'],function(key,value){
-					var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+					//var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+					var img = value['t_worksImagePath'];
 					var strVar = "";
-					    strVar += "<div class=\"col-xs-3 del-"+value['id']+" \">";
+					    strVar += "<div class=\"col-xs-3 del-"+value['t_worksId']+" \">";
 					    strVar += "	<div class=\"thumbnail\">";
-					    //strVar += "		<img src="+value['thumbnail']+" alt="+value['title']+">";
-					    strVar += "		<img src="+img+" alt="+value['title']+">";
-					    strVar += "		<div class=\"caption thumbnail-title detailview\" data-toggle=\"modal\" data-id="+value['id']+" data-target=\"#show-id\">";
+					    //strVar += "		<img src="+value['thumbnail']+" alt="+value['t_worksName']+">";
+					    strVar += "		<img src="+img+" alt="+value['t_worksName']+">";
+					    strVar += "		<div class=\"caption thumbnail-title detailview\" data-toggle=\"modal\" data-id="+value['t_worksId']+" data-target=\"#show-id\">";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar +=  			value['title'];
+					    strVar +=  			value['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>');
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> sunyang";
+					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-time\"><\/i> "+value['postdate'];
+					    strVar += "				<i class=\"glyphicon glyphicon-time\"><\/i> "+value['t_createTimeStr'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-heart\"><\/i> "+value['cid'];
+					    strVar += "				<i class=\"glyphicon glyphicon-heart\"><\/i> "+value['collectionNum'];
 					    strVar += "			<\/p>";
 					    strVar += "		<\/div>";
 					    strVar += "	<\/div>";
 					    strVar += "			<p class=\"text text-center img-button \">";
-					    strVar += '<span class="btn-primary btn update" data-toggle="modal" data-target="#user-update">编辑</span> <span class="btn-danger btn del-event" del='+value['id']+' >删除</span>';
+					    strVar += '<span class="btn-primary btn update" data-toggle="modal" data-target="#user-update">编辑</span> <span class="btn-danger btn del-event" del='+value['t_worksId']+' >删除</span>';
 					    strVar += "			<\/p>";
 					    strVar += "<\/div>";
 					$('.ajax-hotlist').append(strVar);
@@ -351,27 +342,27 @@ $(function() {
 				$.each(data['worksInfoList'],function(key,value){
 					var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
 					var strVar = "";
-					    strVar += "<div class=\"col-xs-3 start-"+value['id']+" \">";
+					    strVar += "<div class=\"col-xs-3 start-"+value['t_worksId']+" \">";
 					    strVar += "	<div class=\"thumbnail\">";
-					   // strVar += "		<img src="+value['thumbnail']+" alt="+value['title']+">";
-					    strVar += "		<img src="+img+" alt="+value['title']+">";
-					    strVar += "		<div class=\"caption thumbnail-title detailview\" data-toggle=\"modal\" data-id="+value['id']+" data-target=\"#show-id\">";
+					   // strVar += "		<img src="+value['thumbnail']+" alt="+value['t_worksName']+">";
+					    strVar += "		<img src="+img+" alt="+value['t_worksName']+">";
+					    strVar += "		<div class=\"caption thumbnail-title detailview\" data-toggle=\"modal\" data-id="+value['t_worksId']+" data-target=\"#show-id\">";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar +=  			value['title'];
+					    strVar +=  			value['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>');
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> yang.sun@dentsu.com.cn";
+					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-time\"><\/i> "+value['postdate'];
+					    strVar += "				<i class=\"glyphicon glyphicon-time\"><\/i> "+value['t_createTimeStr'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-heart\"><\/i> "+value['cid'];
+					    strVar += "				<i class=\"glyphicon glyphicon-heart\"><\/i> "+value['collectionNum'];
 					    strVar += "			<\/p>";
 					    strVar += "		<\/div>";
 					    strVar += "	<\/div>";
 					    strVar += "			<p class=\"text text-center img-button \">";
-					    strVar += ' <span class="btn-danger btn start-event" start='+value['id']+' >取消收藏</span>';
+					    strVar += ' <span class="btn-danger btn start-event" start='+value['t_worksId']+' >取消收藏</span>';
 					    strVar += "			<\/p>";
 					    strVar += "<\/div>";
 					$('.ajax-hotlist').append(strVar);
@@ -395,7 +386,7 @@ $(function() {
 			loading_page();
 		}else{
 			$('.loading_list').hide();
-			alert('没有更多数据了');
+			layer.msg('已全部加载完成', {icon: 1});
 		}
 	}
 
@@ -473,7 +464,7 @@ $(function() {
 	function getQueryString(name) { 
 		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
 		var r = window.location.search.substr(1).match(reg); 
-		if (r != null) return unescape(r[2]); return null; 
+		if (r != null) return decodeURIComponent(r[2]); return null; 
 	} 
 
 })
