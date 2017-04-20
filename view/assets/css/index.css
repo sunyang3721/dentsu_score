@@ -1,5 +1,5 @@
 /*body { padding-top: 50px; }*/
-#ver_soso,.dropdown-menu,.error,li.list-tab,.text,.help-block,.list-inline,.dl-horizontal,.btnupload,.veiw-menu p,.search-auto li,.alert,.btn-default,.btn,.form-group,#myupload,.ajax-newlist li,.dropdown a{font-family:"Microsoft YaHei";}
+#ver_soso,.dropdown-menu,.error,li.list-tab,.text,.help-block,.list-inline,.dl-horizontal,.btnupload,.veiw-menu p,.search-auto li,.alert,.btn-default,.btn,.form-group,#myupload,.ajax-newlist li,.dropdown a,.loadingtext{font-family:"Microsoft YaHei";}
 /*全局*/
 img,li.list-tab,.lihover,h4,#home .detailview:hover,.glyphicon-tasks,.search-auto li,.thumbnail-title,#filelist .delete-img,.help-block,#ver_soso dl dd,#select-tag ul li span{cursor:pointer;}
 /*导航*/
@@ -13,7 +13,7 @@ img,li.list-tab,.lihover,h4,#home .detailview:hover,.glyphicon-tasks,.search-aut
 .btnupload{position: relative;right: 65px;top:65px;float:right;}
 #c{width:100%;height: 490px;margin-top:50px;}
 /*错误提示 upload*/
-.error{text-align: center;color:red;margin-top: 5px;}
+.error{text-align: center;color:red;margin-top: 5px;display: none;}
 /*logo*/
 .logo{width:125px;position: absolute;top:2px;}
 /*主页 搜索*/
@@ -130,10 +130,15 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 #filelist .img-thumbnail{line-height: 100px;margin-left: 10px;position: relative;margin-bottom:5px;}
 #filelist .img-thumbnail b{position: absolute;top:5px;left:0px;text-align:center;background-color: rgba(204, 204, 204, 0.7);width:100%;}
 #filelist .delete-img{position: absolute;top: -6px;z-index:10;color:#fff; right: -5px;border: solid 2px #000;background-color:#000; border-radius: 50px;}
-
+#hiddenFile{display: inline-block;}
 /*多选标签*/
 #select-tag{display: inline-block;padding:5px;border-radius: 5px;border:1px solid #ccc;width:70%;}
 #select-tag p{margin-bottom:0px;}
 #select-tag ul{padding-top:4px;}
 #select-tag ul li{padding-bottom: 9px;position: relative;}
 #select-tag ul li span{border-radius: 3px; background-color: #969696;color:#fff;padding: 4px;font-size: 12px;}
+/*提交状态*/
+.loadingtext{display: none;}
+
+/*列表编辑页面*/
+.oder_img,.oder_mp4{width:100px;padding: 5px;cursor: default;}

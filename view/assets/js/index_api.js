@@ -1,7 +1,6 @@
-	url = 'http://10.69.136.88:8081/CreativeLib/';
 	pinpai_api('',''); //初始化
 	$.ajax({
-		url:url+'initWorksSelectList.do',
+		url:'initWorksSelectList.do',
 		dataType:'json',
 		type:'POST',
 		beforeSend:function(){
@@ -27,17 +26,17 @@
 						pinpai_api(ids,"");
 						return false;
 					}
-					if(value['m_advertiserId'] == id){
-						$('#pinpai dl').append('<dd data-id="'+value['m_brandId']+'">'+value['m_brandName']+'</dd>');
-					}
+					// if(value['m_advertiserId'] == id){
+					// 	$('#pinpai dl').append('<dd data-id="'+value['m_brandId']+'">'+value['m_brandName']+'</dd>');
+					// }
 				});
 				//品牌触发
-				select('#pinpai dl dd');
+				//select_chebox('#pinpai dl dd');
 			});
 			
 			//标签分类
 			$.each(data['worksLabelList'],function(key,value){
-				console.log(value['worksLabelList']);
+				//console.log(value['worksLabelList']);
 				var num = value['worksLabelList'].length;
 				for (var i = 0; num >= i; i++) {
 					if(value['worksLabelList'][i] !== undefined){
@@ -50,14 +49,14 @@
 			//部门检索触发
 			select('#bumen dl dd');
 			//标签检索触发
-			select('#fenlei dl dd');
+			select_chebox('#fenlei dl dd');
 
 			//---------------------------------------------------------------------------------
 			//广告主关联部门触发
 			$('.departId').click(function(){
 				var did = $(this).attr('data-id');
 				$.ajax({
-					url:url+'selectAdvertiserList.do',
+					url:'selectAdvertiserList.do',
 					dataType:'json',
 					type:'POST',
 					data:{departId:did},
@@ -89,7 +88,7 @@
 								}
 							});
 							//品牌触发
-							select('#pinpai dl dd');
+							select_chebox('#pinpai dl dd');
 						})
 					}
 				});
@@ -149,12 +148,34 @@
 		});
 	}
 
+	//检索hover 多选 品牌 和标签 
+	function select_chebox(id){
+		$(id).click(function(){
+			var key = $(this).index();
+			if(key == 0){
+				$(id).removeClass('selected');
+				$(id).eq(0).addClass('selected');
+			}else{
+				$(id).eq(0).removeClass('selected');
+				var classname = $(id).eq(key).hasClass('selected');
+				if(classname){
+					$(id).eq(key).removeClass('selected');
+					var classnames_all = $(id).hasClass('selected');
+					if(!classnames_all){
+						$(id).eq(0).addClass('selected');
+					}
+				}else{
+					$(id).eq(key).addClass('selected');
+				}
+			}
+		})
+	}
 	//品牌列表
 	//departId  部门的ID
 	//  advertId 广告主的ID
 	function pinpai_api(departId,advertId){
 		$.ajax({
-			url:url+"selectBrandsList.do",
+			url:"selectBrandsList.do",
 			data:{departId:departId,advertId:advertId},
 			dataType:'json',
 			type:'POST',
@@ -166,7 +187,7 @@
 				$.each(data['brandsInfoList'],function(key,value){
 					$('#pinpai dl').append('<dd data-id='+value['m_brandId']+'>'+value['m_brandName']+'</dd>')
 				});
-				select('#pinpai dl dd');
+				select_chebox('#pinpai dl dd');
 			}
 		})
 	} 
@@ -186,11 +207,12 @@
 	//查询结果通知
 	function search_over(){
 		$.ajax({
-			url:url+'queryWorksInfoList.do?'+search_join(),
+			url:'queryWorksInfoList.do?'+search_join(),
 			dataType:'json',
 			type:'post',
 			success:function(data){
 				if(data['status'] == "200"){
+					//console.log(search_join());
 					window.open('./view/search.html?'+search_join());
 				}else{
 					layer.msg('没有找到您想要的作品', {icon: 0});
@@ -203,8 +225,20 @@
 		var keyword = $('#keywork').val();
 		var depart_id = $('#bumen dl .selected').attr('data-id');
 		var advert_id = $('#guanggao dl .selected').attr('data-id'); 
-		var brand_id = $('#pinpai dl .selected').attr('data-id');
-		var label_list = $('#fenlei dl .selected').attr('data-id');
+		
+		//多选品牌数组选择结果
+		var brand_id = new Array();
+		$('#pinpai dl .selected').each(function(key){
+			var id = $(this).attr('data-id');
+			brand_id.push(id);
+		});
+
+		//多选标签数组选择结果
+		var label_list = new Array();
+		$('#fenlei dl .selected').each(function(key){
+			var id = $(this).attr('data-id');
+			label_list.push(id);
+		});
 		var myworks = $('#myhome dl .selected').attr('data-id');
 		var mydate = new Date();
 		var publishDateStart = $('#adddate dl .selected').attr('data-id');
