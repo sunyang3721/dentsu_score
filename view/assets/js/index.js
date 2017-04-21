@@ -1,9 +1,24 @@
 $(function() {
+	//判断登陆
+	function check_login(){
+		$.ajaxSetup({   
+		   contentType:"application/x-www-form-urlencoded;charset=utf-8",   
+		   complete:function(XMLHttpRequest,textStatus){ 
+		     var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus"); //通过XMLHttpRequest取得响应头，sessionstatus，  
+		         if(sessionstatus=="timeout"){ 
+		        	//alert("登录超时,请重新登录！");
+					//如果超时就处理 ，指定要跳转的页面  
+					window.location.replace("./userLoginCheck.do");   
+					//location.reload();
+		        }   
+		      }   
+		 })
+	}
 
-	$('.icon-box').click(function() {
-		$('.left-tab').css('left', '-340px');
-		$('.mask').fadeOut();
-	})
+	// $('.icon-box').click(function() {
+	// 	$('.left-tab').css('left', '-340px');
+	// 	$('.mask').fadeOut();
+	// })
 
 	//搜索自动提示 事件 待补充
 	// $('#keywork').keyup(function() {
@@ -194,6 +209,7 @@ $(function() {
 			// var formdata = new FormData();
 			// formdata.append("worksFile", file_array['file']); 
 			//console.log(file_array['file']);
+			check_login();
 			var worksName	   = $('#worksName').val(); //作品名称
 			if(!worksName){
 				$('#error').show().text('作品名称不能为空!');
@@ -234,14 +250,16 @@ $(function() {
 			var option = {
 					data:{
 						labelList:m_labelCode.join(","),
-						worksImage:thumb_base
+						worksImage:thumb_base,
+						resetForm: true  //成功提交后，重置所有表单元素的值 
 					},
 					dataType:'json',
 					success:function(data){
 						if(data.status == "200"){
 							$('loadingtext').hide();
 							alert('上传完成,提交成功');
-							window.location.href = 'view/search.html?&myWorksFlag=0';
+							window.open('view/search.html?&myWorksFlag=0');
+							window.location.reload() ; //刷新
 						}
 					}
 				}

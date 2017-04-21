@@ -21,7 +21,7 @@
 				//对应所属广告主的品牌
 				$('#pinpai dl').empty().append('<dd class="selected" data-id="">不限</dd>');
 				$.each(data['brandsInfoList'],function(key,value){
-					if(id == ''){
+					if(id == ''){   //判断广告主id是空时 就选择对应部门来显示所有品牌
 						var ids = $('#bumen .selected').attr('data-id');
 						pinpai_api(ids,"");
 						return false;

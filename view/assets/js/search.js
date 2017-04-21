@@ -1,4 +1,20 @@
 $(function() {
+	//判断登陆
+	function check_login(){
+		$.ajaxSetup({   
+		   contentType:"application/x-www-form-urlencoded;charset=utf-8",   
+		   complete:function(XMLHttpRequest,textStatus){ 
+		     var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus"); //通过XMLHttpRequest取得响应头，sessionstatus，  
+		         if(sessionstatus=="timeout"){ 
+		        	//alert("登录超时,请重新登录！");
+					//如果超时就处理 ，指定要跳转的页面  
+					window.location.replace("../userLoginCheck.do");   
+					//location.reload();
+		        }   
+		      }   
+		 })
+	}
+
 	numloadCount = 20; //每页显示20条 全局定义
 	ajaxpost(1);
 	$('title').append(function(){
@@ -32,9 +48,22 @@ $(function() {
 		clear_list();
 		ajaxpost(1);
 	})
+	// auth_member();
+	// function auth_member(){
+	// 	//判断权限
+	// 	$.ajax({
+	// 		url:'../queryWorksInfoList.do',
+	// 		dataType:'json',
+	// 		type:'post',
+	// 		success:function(data){
+	// 			console.log(data);
+	// 		}
+	// 	})
+	// }
 
 	//列表 缩略图 视图输出
 	function ajaxpost(page){
+		check_login();
 		var url = '../queryWorksInfoList.do';
 		var param = location.search;
 		var view = $('#view').val();  // 0 为 new 排序  1 为 hot 排序
@@ -115,7 +144,12 @@ $(function() {
 						    strVar += '</ul>';
 						    // start 修改按钮
 						    strVar += "	<p class=\"text text-muted btn-post del"+value['t_worksId']+"\">";
-						    strVar += '<span class="update btn-xs btn-primary btn" data-toggle=\"modal\" data-target=\"#user-update\" data-id='+value['t_worksId']+'>编辑</span> <span class="del btn-xs btn-danger btn" data-id='+value['t_worksId']+'>删除</span>';
+						    if(value['editLimit'] == 1){
+						    	strVar += '<span class="update btn-xs btn-primary btn" data-toggle=\"modal\" data-target=\"#user-update\" data-id='+value['t_worksId']+'>编辑</span>' 
+						    };
+						    if(value['deleteLimit'] == 1){
+						    	strVar += ' <span class="del btn-xs btn-danger btn" data-id='+value['t_worksId']+'>删除</span>';
+						    };
 						    strVar += "	<\/p>";
 						    // end
 					$('.ajax-newlist').append(strVar);
@@ -215,16 +249,26 @@ $(function() {
 				});
 				//取消收藏   未完成待修改
 				$('.start').click(function(){
-					console.log(data['worksInfoList']);
-					// var id = $(this).attr('data-id');
-					// //询问框
-					// layer.confirm('确定取消收藏？', {
-					//   btn: ['确定','取消'] //按钮
-					// }, function(){
-					// 	//进行相应操作之后 执行下面
-					// 	$('.start'+id).fadeOut('300');
-					//   	layer.msg('取消成功', {icon: 1});
-					// });
+					//console.log(data['worksInfoList']);
+					//alert('219 待开发补充');
+					var id = $(this).attr('data-id');
+					//console.log(id);
+					//询问框
+					layer.confirm('确定取消收藏？', {
+					  btn: ['确定','取消'] //按钮
+					}, function(){
+						$.ajax({
+							url:'../collectWorksInfo.do',
+							dataType:'json',
+							type:'post',
+							data:{worksId:id,collectionFlag:1},
+							success:function(data){
+								//进行相应操作之后 执行下面
+								$('.start'+id).fadeOut('300');
+							  	layer.msg('取消成功', {icon: 1});
+							}
+						})
+					});
 				})
 				break;
 			}
@@ -274,9 +318,18 @@ $(function() {
 					    strVar += "		<\/div>";
 					    strVar += "	<\/div>";
 					    // start  编辑按钮
-					    strVar += "			<p class=\"text text-center img-button \">";
-					    strVar += '<span class="btn-primary btn update" data-toggle="modal" data-target="#user-update" data-id='+value['t_worksId']+'>编辑</span> <span class="btn-danger btn del" data-id='+value['t_worksId']+' >删除</span>';
-					    strVar += "			<\/p>";
+					    if(value['editLimit'] == 1 || value['deleteLimit'] == 1){
+					    	strVar += "			<p class=\"text text-center img-button \">";
+					    }
+					    if(value['editLimit'] == 1){
+					    	strVar += '<span class="btn-primary btn update" data-toggle="modal" data-target="#user-update" data-id='+value['t_worksId']+'>编辑</span>';
+					    };
+					    if(value['deleteLimit'] == 1){
+					    	strVar += ' <span class="btn-danger btn del" data-id='+value['t_worksId']+' >删除</span>';
+					    }
+					    if(value['editLimit'] == 1 || value['deleteLimit'] == 1){
+					    	strVar += "<\/p>";
+					    }
 					    // end
 					    strVar += "<\/div>";
 					$('.ajax-hotlist').append(strVar);
@@ -319,7 +372,7 @@ $(function() {
 				break;
 				case '1':
 				$.each(data['worksInfoList'],function(key,value){
-					var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
+					var img = value['t_worksImagePath'];
 					var strVar = "";
 					    strVar += "<div class=\"col-xs-3 start-"+value['t_worksId']+" \">";
 					    strVar += "	<div class=\"thumbnail\">";
@@ -347,16 +400,25 @@ $(function() {
 					$('.ajax-hotlist').append(strVar);
 				})
 
-				//取消收藏
+				//取消收藏  待补充
 				$('.start-event').click(function(){
+					//alert('352 待开发补充');
 					var id = $(this).attr('start');
 					//询问框
 					layer.confirm('确定取消收藏？', {
 					  btn: ['确定','取消'] //按钮
 					}, function(){
-						//进行相应操作之后 执行下面
-						$('.start-'+id).fadeOut('300');
-					  	layer.msg('取消成功', {icon: 1});
+						$.ajax({
+							url:'../collectWorksInfo.do',
+							dataType:'json',
+							type:'post',
+							data:{worksId:id,collectionFlag:1},
+							success:function(data){
+								//进行相应操作之后 执行下面
+								$('.start'+id).fadeOut('300');
+							  	layer.msg('取消成功', {icon: 1});
+							}
+						})
 					});
 				})
 				break;
@@ -376,6 +438,7 @@ $(function() {
 	}
 	// 查看作品页面
 	function info_view(){
+		check_login();
 		$('.detailview').click(function(){
 			var id = $(this).attr('data-id');  //注意在列表加上data-id属性
 			$('.show-start').attr('data-id',id); //克隆收藏控件
@@ -422,7 +485,7 @@ $(function() {
 						$('#gallery').html('').hide();  //关闭之后 清空视频和音频，防止恶意加载流量
 					})
 					//轮播加载 ------end-------
-					//console.log(workinfo['collectionFlag']);
+					console.log(workinfo['collectionFlag']);
 					if(workinfo['collectionFlag'] == 1 ){
 						$('.show-start').removeClass('btn-default').addClass('btn-primary').text('取消收藏');
 					}else{
@@ -432,6 +495,34 @@ $(function() {
 			})
 		})
 	}
+	//收藏触发按钮
+	$('.show-start').click(function(){
+		var id = $(this).attr('data-id');  //注意在列表加上data-id属性
+		var class_btn = $(this).hasClass('btn-default');
+		if(class_btn){
+			$.ajax({
+				url:'../collectWorksInfo.do',
+				dataType:'json',
+				type:'post',
+				data:{worksId:id,collectionFlag:0},
+				success:function(data){
+					layer.msg('收藏成功', {icon: 1});
+					$('.show-start').removeClass('btn-default').addClass('btn-primary').text('取消收藏');
+				}
+			})
+		}else{
+			$.ajax({
+				url:'../collectWorksInfo.do',
+				dataType:'json',
+				type:'post',
+				data:{worksId:id,collectionFlag:1},
+				success:function(data){
+					layer.msg('取消收藏成功', {icon: 1});
+					$('.show-start').addClass('btn-default').removeClass('btn-primary').text('我要收藏');
+				}
+			})
+		}
+	});
 	//轮播 幻灯片
 	function gallery(type,dataFile){
 		if(type == 'mp4'){
@@ -661,7 +752,7 @@ $(function() {
 					$('#filelist').empty(); //作品展示初始化
 					var path_array = new Array();
 					$.each(vinfo['tWorksPathInfoList'],function(key,value){
-						//console.log(value);
+						//console.log(value['t_worksPath']);
 						$('#thumb_img').show();
 						if(value['t_worksType'] == 0){
 							$('#thumb_img img').attr('src',value['t_worksPath']);
@@ -682,7 +773,7 @@ $(function() {
 								}
 							}else{
 								//console.log(value['t_worksPath']);
-								var html = '<img src='+value['t_worksPath']+' class="oder_img path-id" data-id='+value['t_worksPathId']+' />';
+								var html = '<img src='+value['t_worksPath']+' class="oder_img path-id" data-id='+value['t_worksPathId']+' /><i class="glyphicon glyphicon-remove delete-img"></i>';
 								$('#filelist').append(html);
 							}
 						}
@@ -720,6 +811,7 @@ $(function() {
 	}
 	//提交更新保存
 	$('#uploadForm').submit(function(){
+		check_login();
 		var worksName	   = $('#up_worksName').val(); //作品名称
 		if(!worksName){
 			$('#error').show().text('作品名称不能为空!');
@@ -805,9 +897,12 @@ $(function() {
 		var file_name_attr = $('#hiddenFile').get(0).files;
 		if(file_name_attr.length !== 0){
 			$('#hiddenFile').attr('name','worksFile');
-			$('#delFileParas').attr('name','delFileParas');
+			var imglist = $('#hiddenFile').get(0).files;
+			console.log(imglist);
+			//$('#delFileParas').attr('name','delFileParas');
+
 		}else{
-			$('#hiddenFile,#delFileParas').removeAttr('name');
+			//$('#hiddenFile,#delFileParas').removeAttr('name');
 		}
 
 		//console.log(m.length);
@@ -867,35 +962,6 @@ $(function() {
 		clear_list();
 		ajaxpost(1);
 	})
-
-	//收藏触发按钮
-	$('.show-start').click(function(){
-		var id = $(this).attr('data-id');  //注意在列表加上data-id属性
-		var class_btn = $(this).hasClass('btn-default');
-		if(class_btn){
-			$.ajax({
-				url:'../collectWorksInfo.do',
-				dataType:'json',
-				type:'post',
-				data:{worksId:id,collectionFlag:'1'},
-				success:function(data){
-					layer.msg('收藏成功', {icon: 1});
-					$('.show-start').removeClass('btn-default').addClass('btn-primary').text('取消收藏');
-				}
-			})
-		}else{
-			$.ajax({
-				url:'../collectWorksInfo.do',
-				dataType:'json',
-				type:'post',
-				data:{worksId:id,collectionFlag:'0'},
-				success:function(data){
-					layer.msg('取消收藏成功', {icon: 1});
-					$('.show-start').addClass('btn-default').removeClass('btn-primary').text('我要收藏');
-				}
-			})
-		}
-	});
 
 	//加载更多事件触发
 	$('.loading_list').click(function(){
