@@ -1,6 +1,5 @@
 $(function() {
 	//判断登陆
-	function check_login(){
 		$.ajaxSetup({   
 		   contentType:"application/x-www-form-urlencoded;charset=utf-8",   
 		   complete:function(XMLHttpRequest,textStatus){ 
@@ -13,8 +12,13 @@ $(function() {
 		        }   
 		      }   
 		 })
-	}
-
+	$.ajax({
+		url:'../findUserInfo.do',
+		dataType:'json',
+		success:function(data){
+			$('#usermail').text(data['userInfo']['m_userEmail']);
+		}
+	})
 	numloadCount = 20; //每页显示20条 全局定义
 	ajaxpost(1);
 	$('title').append(function(){
@@ -48,22 +52,9 @@ $(function() {
 		clear_list();
 		ajaxpost(1);
 	})
-	// auth_member();
-	// function auth_member(){
-	// 	//判断权限
-	// 	$.ajax({
-	// 		url:'../queryWorksInfoList.do',
-	// 		dataType:'json',
-	// 		type:'post',
-	// 		success:function(data){
-	// 			console.log(data);
-	// 		}
-	// 	})
-	// }
 
 	//列表 缩略图 视图输出
 	function ajaxpost(page){
-		check_login();
 		var url = '../queryWorksInfoList.do';
 		var param = location.search;
 		var view = $('#view').val();  // 0 为 new 排序  1 为 hot 排序
@@ -83,7 +74,7 @@ $(function() {
 						    html += "<li class='list-pinpai frist-height'>品牌<\/li>\n";
 						    html += "<li class='list-guanggao frist-height'>广告主<\/li>\n";
 						    html += "<li class='list-fenlei frist-height'>作品标签<\/li>\n";
-						    html += "<li class='list-user frist-height'>创作者<\/li>\n";
+						    // html += "<li class='list-user frist-height'>创作团队<\/li>\n";
 						    html += "<li class='list-date frist-height'>上传日期<\/li>\n";
 						$('.ajax-newlist').append(html);
 					}
@@ -104,7 +95,7 @@ $(function() {
 		var keyword = getQueryString("inputKeyWord"); //关键字; 
 		if(data.status=='200'){
 			switch(user){
-				case '':  //默认
+				case '' :  //默认
 				$.each(data['worksInfoList'],function(key,value){
 						//var img = 'http://7xpq9h.com1.z0.glb.clouddn.com/'+key+'.jpg-dentsu';
 						var img = value['t_worksImagePath'];
@@ -118,7 +109,7 @@ $(function() {
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-pinpai'>";
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += value['m_brandName'];
+						    strVar += value['m_brandName']?value['m_brandName']:'未填写';
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-guanggao'>"
@@ -128,14 +119,14 @@ $(function() {
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-fenlei'>"
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += value['worksLabel'];
+						    strVar += value['worksLabel']?value['worksLabel']:'<i>未填写</i>';
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
-						    strVar += "<li class='list-user'>";
-						    strVar += "	<p class=\"text-muted\">";
-						    strVar += value['t_worksCreater'];
-						    strVar += "	<\/p>";
-						    strVar += "<\/li>";
+						    // strVar += "<li class='list-user'>";
+						    // strVar += "	<p class=\"text-muted\">";
+						    // strVar += value['t_worksCreater'].replace(/[\r\n]/g,"<br/>");
+						    // strVar += "	<\/p>";
+						    // strVar += "<\/li>";
 						    strVar += "<li class='list-date'>";
 						    strVar += value['t_createTimeStr'];
 						    strVar += "<\/li>";
@@ -171,7 +162,7 @@ $(function() {
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-pinpai'>";
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += value['m_brandName'];
+						     strVar += value['m_brandName']?value['m_brandName']:'未填写';
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-guanggao'>"
@@ -181,23 +172,30 @@ $(function() {
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-fenlei'>"
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += value['worksLabel'];
+						    strVar += value['worksLabel']?value['worksLabel']:'<i>未填写</i>';
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
-						    strVar += "<li class='list-user'>";
-						    strVar += "	<p class=\"text-muted\">";
-						    strVar += value['t_worksCreater'];
-						    strVar += "	<\/p>";
-						    strVar += "<\/li>";
+						    // strVar += "<li class='list-user'>";
+						    // strVar += "	<p class=\"text-muted\">";
+						    // strVar += value['t_worksCreater'];
+						    // strVar += "	<\/p>";
+						    // strVar += "<\/li>";
 						    strVar += "<li class='list-date'>";
 						    strVar += value['t_createTimeStr'];
 						    strVar += "<\/li>";
 						    strVar += "<div class=\"clearfix\">";
 						    strVar += "<\/div>";
 						    strVar += '</ul>';
+						    // start 修改按钮
 						    strVar += "	<p class=\"text text-muted btn-post del"+value['t_worksId']+"\">";
-						    strVar += '<span class="update btn-xs btn-primary btn" data-toggle=\"modal\" data-target=\"#user-update\" data-id='+value['t_worksId']+'>编辑</span> <span class="del btn-xs btn-danger btn" data-id='+value['t_worksId']+'>删除</span>';
+						    if(value['editLimit'] == 1){
+						    	strVar += '<span class="update btn-xs btn-primary btn" data-toggle=\"modal\" data-target=\"#user-update\" data-id='+value['t_worksId']+'>编辑</span>' 
+						    };
+						    if(value['deleteLimit'] == 1){
+						    	strVar += ' <span class="del btn-xs btn-danger btn" data-id='+value['t_worksId']+'>删除</span>';
+						    };
 						    strVar += "	<\/p>";
+						    // end
 					$('.ajax-newlist').append(strVar);
 				});
 				update_view();
@@ -218,7 +216,7 @@ $(function() {
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-pinpai'>";
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += value['m_brandName'];
+						    strVar += value['m_brandName']?value['m_brandName']:'未填写';
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-guanggao'>"
@@ -228,14 +226,14 @@ $(function() {
 						    strVar += "<\/li>";
 						    strVar += "<li class='list-fenlei'>"
 						    strVar += "	<p class=\"text-muted\">";
-						    strVar += value['worksLabel'];
+						    strVar += value['worksLabel']?value['worksLabel']:'<i>未填写</i>';
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
-						    strVar += "<li class='list-user'>";
-						    strVar += "	<p class=\"text-muted\">";
-						    strVar += value['t_worksCreater'];
-						    strVar += "	<\/p>";
-						    strVar += "<\/li>";
+						    // strVar += "<li class='list-user'>";
+						    // strVar += "	<p class=\"text-muted\">";
+						    // strVar += value['t_worksCreater'];
+						    // strVar += "	<\/p>";
+						    // strVar += "<\/li>";
 						    strVar += "<li class='list-date'>";
 						    strVar += value['t_createTimeStr'];
 						    strVar += "<\/li>";
@@ -307,13 +305,13 @@ $(function() {
 					    strVar +=  			value['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>');
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
+					   // strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
 					    strVar += "				<i class=\"glyphicon glyphicon-time\"><\/i> "+value['t_createTimeStr'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-heart\"><\/i> "+value['collectionNum'];
+					    strVar += "				<i class=\"glyphicon glyphicon-star\"><\/i> "+value['collectionNum'];
 					    strVar += "			<\/p>";
 					    strVar += "		<\/div>";
 					    strVar += "	<\/div>";
@@ -351,19 +349,30 @@ $(function() {
 					    strVar +=  			value['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>');
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
+					    //strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
 					    strVar += "				<i class=\"glyphicon glyphicon-time\"><\/i> "+value['t_createTimeStr'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-heart\"><\/i> "+value['collectionNum'];
+					    strVar += "				<i class=\"glyphicon glyphicon-star\"><\/i> "+value['collectionNum'];
 					    strVar += "			<\/p>";
 					    strVar += "		<\/div>";
 					    strVar += "	<\/div>";
-					    strVar += "			<p class=\"text text-center img-button \">";
-					    strVar += '<span class="btn-primary btn update" data-toggle="modal" data-target="#user-update" data-id='+value['t_worksId']+'>编辑</span> <span class="btn-danger btn del" data-id='+value['t_worksId']+' >删除</span>';
-					    strVar += "			<\/p>";
+					    // start  编辑按钮
+					    if(value['editLimit'] == 1 || value['deleteLimit'] == 1){
+					    	strVar += "			<p class=\"text text-center img-button \">";
+					    }
+					    if(value['editLimit'] == 1){
+					    	strVar += '<span class="btn-primary btn update" data-toggle="modal" data-target="#user-update" data-id='+value['t_worksId']+'>编辑</span>';
+					    };
+					    if(value['deleteLimit'] == 1){
+					    	strVar += ' <span class="btn-danger btn del" data-id='+value['t_worksId']+' >删除</span>';
+					    }
+					    if(value['editLimit'] == 1 || value['deleteLimit'] == 1){
+					    	strVar += "<\/p>";
+					    }
+					    // end
 					    strVar += "<\/div>";
 					$('.ajax-hotlist').append(strVar);
 				})
@@ -383,13 +392,13 @@ $(function() {
 					    strVar +=  			value['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>');
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
+					   //strVar += "				<i class=\"glyphicon glyphicon-user\"><\/i> "+value['t_worksCreater'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
 					    strVar += "				<i class=\"glyphicon glyphicon-time\"><\/i> "+value['t_createTimeStr'];
 					    strVar += "			<\/p>";
 					    strVar += "			<p class=\"text text-center\">";
-					    strVar += "				<i class=\"glyphicon glyphicon-heart\"><\/i> "+value['collectionNum'];
+					    strVar += "				<i class=\"glyphicon glyphicon-star\"><\/i> "+value['collectionNum'];
 					    strVar += "			<\/p>";
 					    strVar += "		<\/div>";
 					    strVar += "	<\/div>";
@@ -438,7 +447,6 @@ $(function() {
 	}
 	// 查看作品页面
 	function info_view(){
-		check_login();
 		$('.detailview').click(function(){
 			var id = $(this).attr('data-id');  //注意在列表加上data-id属性
 			$('.show-start').attr('data-id',id); //克隆收藏控件
@@ -451,15 +459,34 @@ $(function() {
 				success:function(data){
 					var workinfo = data['worksInfo'];
 					$('.worksinfo .workname').html(workinfo['t_worksName']); //作品名称
-					$('.worksinfo .awardname').html(workinfo['m_awardName']?workinfo['m_awardName']:'<i>未填写</i>'); //获奖名称
 					$('.worksinfo .deparname').html(workinfo['m_departmentName']?workinfo['m_departmentName']:'<i>未填写</i>'); //所属部门
 					$('.worksinfo .advername').html(workinfo['m_advertiserName']?workinfo['m_advertiserName']:'<i>未填写</i>'); //广告主
 					$('.worksinfo .branname').html(workinfo['m_brandName']?workinfo['m_brandName']:'<i>未填写</i>'); //品牌
 					$('.worksinfo .labels').html(workinfo['worksLabel']?workinfo['worksLabel']:'<i>未填写</i>');  //作品标签
-					$('.worksinfo .wkcreater').html(workinfo['t_worksCreater']?workinfo['t_worksCreater']:'<i>未填写</i>'); //创作者
-					$('.worksinfo .wkdesp').html(workinfo['t_worksDesp']?workinfo['t_worksDesp']:'<i>未填写</i>'); // 作品简介
+					var reCreater = workinfo['t_worksCreater'].replace(/\r\n/g,"<br>");
+					$('.worksinfo .wkcreater').html(reCreater?reCreater:'<i>未填写</i>'); //创作者
+					var reDesp = workinfo['t_worksDesp'].replace(/\r\n/g,"<br>");
+					$('.worksinfo .wkdesp').html(reDesp?reDesp:'<i>未填写</i>'); // 作品简介
 					$('.worksinfo .createrTime').html(workinfo['t_createTimeStr']?workinfo['t_createTimeStr']:'<i>未填写</i>'); //发表时间
-
+					$('.emptys').empty(); 
+					if(workinfo['tWorksAwardInfoList'].length !== 0){
+						var ad_html = '<dt class="emptys">获奖信息</dt><dd class="emptys">';
+						$.each(workinfo['tWorksAwardInfoList'],function(k,v){
+							ad_html += v['m_adFestName']+'， '+v['m_adFestYearName']+'年， '+v['m_adFestAwardName']+'<br/>';
+						});
+						ad_html += '</dd>';
+						$('.worksinfo .createrTime').after(ad_html);
+					}
+					// if(workinfo['m_awardFlag'] == 1){
+					// 	$('.worksinfo .awardFlag').html('已获奖');
+					// 	$('.adFestName').html(workinfo['m_adFestName']);
+					// 	$('.adFestYearName').html(workinfo['m_adFestYearName']);
+					// 	$('.adFestAwardName').html(workinfo['m_adFestAwardName']);
+					// 	$('.awardshow').show();
+					// }else{
+					// 	$('.worksinfo .awardFlag').html('未获奖'); 
+					// 	$('.awardshow').hide();
+					// }
 					//轮播加载 -----start------
 					var slideList = workinfo['tWorksPathInfoList'];
 					$.each(slideList,function(k,v){
@@ -485,7 +512,6 @@ $(function() {
 						$('#gallery').html('').hide();  //关闭之后 清空视频和音频，防止恶意加载流量
 					})
 					//轮播加载 ------end-------
-					console.log(workinfo['collectionFlag']);
 					if(workinfo['collectionFlag'] == 1 ){
 						$('.show-start').removeClass('btn-default').addClass('btn-primary').text('取消收藏');
 					}else{
@@ -569,32 +595,211 @@ $(function() {
 						type:'post',
 						dataType:'json',
 						success:function(awdata){
-							$.each(awdata['awardInfoList'],function(k,v){
-								if(v['m_awardId'] !== vinfo['m_awardId']){
-									$('#awardId').append('<option value ='+v['m_awardId']+'>'+v['m_awardName']+'</option>');
-								}
+							$.each(vinfo['tWorksAwardInfoList'],function(k,v){
+								var adhtmls = '<li class="'+v['m_adFestId']+' ad_id_list"><ul class="list-inline adcheck">' 
+											adhtmls += '<li data-id="'+v['m_adFestId']+'">'+v['m_adFestName']+'</li>';
+											adhtmls += '<li data-id="'+v['m_adFestYearId']+'">'+v['m_adFestYearName']+'</li>';
+											adhtmls += '<li data-id="'+v['m_adFestAwardId']+'">'+v['m_adFestAwardName']+'</li>';
+											adhtmls += '<li data-id="'+v['m_adFestId']+'" class="adremove"><span class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i> 删除</span></li>';
+											adhtmls += '</li></ul>';
+										$('.adList').append(adhtmls);
 							});
-							$('#awardId').selectpicker('refresh'); //刷新获奖名称
-						}
-					})
-					
-					//遍历部门  并选中部门状态
-					$.ajax({
-						url:'../initUploadSelectList.do',
-						dataType:'json',
-						type:'post',
-						data:{},
-						success:function(bumen){
-							//遍历部门关联
+							//删除
+							$('.adremove').on('click',function(){
+								var ad_id = $(this).attr('data-id');
+								$('.'+ad_id).remove();
+							})
+							//广告节获奖
+							$('.addAd').click(function(){
+								var adhtml = "";
+									    adhtml += "<div class=\"form-inline\">\n";
+									    adhtml += "	<div class=\"form-group\">\n";
+									    adhtml += "		<label class=\"lab\"><b>*</b>广告节<\/label>\n";
+									    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestId\" name=\"adFestId\">\n";
+									    adhtml += "			<option value=\"\">请选择广告节<\/option>\n";						    
+									$.each(awdata['advertFestivalList'],function(key,value){
+										 adhtml += "<option value="+value['m_adFestId']+"-"+value['m_adFestName'].replace(' ','+')+">"+value['m_adFestName']+"<\/option>\n";
+									})
+									adhtml += "		<\/select>\n";
+								    adhtml += "	<\/div>\n";
+								    adhtml += "<\/div>\n";
+								    adhtml += "<div class=\"form-inline\">\n";
+								    adhtml += "	<div class=\"form-group\">\n";
+								    adhtml += "		<label class=\"lab\"><b>*</b>广告节年份<\/label>\n";
+								    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestYearId\" name=\"adFestYearId\" >\n";
+								    adhtml += "			<option value=\"\">请选择年份<\/option>\n";
+								    adhtml += "		<\/select>\n";
+								    adhtml += "	<\/div>\n";
+								    adhtml += "<\/div>\n";
+								    adhtml += "<div class=\"form-inline\">\n";
+								    adhtml += "	<div class=\"form-group\">\n";
+								    adhtml += "		<label class=\"lab\"><b>*</b>奖项名称<\/label>\n";
+								    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestAwardId\" name=\"adFestAwardId\" >\n";
+								    adhtml += "			<option value=\"\">请选择奖项名称<\/option>\n";
+								    adhtml += "		<\/select>\n";
+								    adhtml += "	<\/div>\n";
+								    adhtml += "<\/div>\n";
+								    adhtml += "<div class='text-center'><span class='btn btn-default btn-xs adquxiao'>取消</span><span class='btn btn-primary btn-xs adqueding'>确定</span></div>"
+									$('#adFestId-show').empty().append(adhtml);
+									$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
+
+									//广告节触发事件
+									$('#adFestId').on('changed.bs.select',function(){
+										var m_adFestId = $(this).val().split("-",1).toString(); //分割并转字符串类型
+										//console.log(m_adFestId.split("-",1).toString());
+										if(m_adFestId !== ''){
+											$.ajax({
+												url:'../selectAdvertFestivalYearAward.do',
+												dataType:'json',
+												type:'post',
+												data:{adFestId:m_adFestId},
+												success:function(advdata){
+													if(advdata['status'] == 200){
+														//广告年份激活
+														var yearhtml = '';
+														$.each(advdata['advertFestivalYearList'],function(key,value){
+															yearhtml += '<option value="'+value['m_adFestYearId']+'-'+value['m_adFestYearName'].replace(' ','+')+'">'+value['m_adFestYearName']+'</option>';
+														});
+														$('#adFestYearId').empty().append(yearhtml);
+
+														//广告奖项激活
+														var awardhtml = '';
+														$.each(advdata['advertFestivalAwardList'],function(key,value){
+															awardhtml += '<option value="'+value['m_adFestAwardId']+'-'+value['m_adFestAwardName'].replace(' ','+')+'">'+value['m_adFestAwardName']+'</option>';
+														});
+														$('#adFestAwardId').empty().append(awardhtml);
+													}else{
+														$('#adFestYearId').empty().append('<option value="">没有对应的数据</option>');
+														$('#adFestAwardId').empty().append('<option value="">没有对应的数据</option>');
+													}
+													$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
+												}
+											})
+										}else{
+											$('#adFestYearId').empty().append('<option value="">请选择年份</option>');
+											$('#adFestAwardId').empty().append('<option value="">请选择奖项名称</option>');
+										}
+										$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
+									});
+
+									//广告节按钮 取消 确定
+									$('.adquxiao').on('click',function(){
+										$('#adFestId-show').empty();
+									});
+									$('.adqueding').on('click',function(){
+										var adFestId = $('#adFestId').val();
+										if(adFestId == ''){
+											$('#error').show().text('请选择广告节');
+											return false;
+										}
+										var adFestYearId = $('#adFestYearId').val();
+										var adFestAwardId = $('#adFestAwardId').val();
+										var adhtmls = '<li class="'+splits(adFestId,0)+' ad_id_list"><ul class="list-inline adcheck">' 
+											adhtmls += '<li data-id="'+splits(adFestId,0)+'">'+splits(adFestId,1)+'</li>';
+											adhtmls += '<li data-id="'+splits(adFestYearId,0)+'">'+splits(adFestYearId,1)+'</li>';
+											adhtmls += '<li data-id="'+splits(adFestAwardId,0)+'">'+splits(adFestAwardId,1)+'</li>';
+											adhtmls += '<li data-id="'+splits(adFestId,0)+'" class="adremove"><span class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i> 删除</span></li>';
+											adhtmls += '</li></ul>';
+										$('.adList').append(adhtmls);
+										$('#adFestId-show').empty();
+
+										//删除
+										$('.adremove').on('click',function(){
+											var ad_id = $(this).attr('data-id');
+											$('.'+ad_id).remove();
+										})
+									});
+							});
+							function splits(str,indexs){
+								if(indexs == 0){
+									return str.split('-')[0].toString();
+								}
+								if(indexs == 1){
+									return str.split('-')[1].replace('+',' ').toString();
+								}
+							}
+							//读取是否获奖
+							// if(vinfo['m_awardFlag'] == 1){
+							// 	//已获奖 读取选中的状态
+							// 	$('.radio input').eq(1).prop('checked','checked');
+							// 	adFestId_on(awdata,vinfo);
+							// 	adFestId_changed();
+							// }else{
+							// 	$('.radio input').eq(0).prop('checked','checked');
+							// 	adFestId_off();
+							// }
+
+							// //是否获奖触发
+							// $("input[name='awardFlag']").click(function(){
+							// 	var id = $(this).val();
+							// 	if(id == 1){
+							// 		adFestId_on(awdata,vinfo);
+							// 	}else{
+							// 		adFestId_off();
+							// 	}
+
+							// 	//广告节触发事件
+							// 	adFestId_changed();
+							// });
+
+
+
+							// $.each(awdata['awardInfoList'],function(k,v){
+							// 	if(v['m_awardId'] !== vinfo['m_awardId']){
+							// 		$('#awardId').append('<option value ='+v['m_awardId']+'>'+v['m_awardName']+'</option>');
+							// 	}
+							// });
+							// $('#awardId').selectpicker('refresh'); 
+
+							//遍历部门  并选中部门状态 遍历部门关联
 							$('#departmment').empty().append('<option value ='+vinfo['m_departmentId']+'>'+vinfo['m_departmentName']+'</option>')
-							$.each(bumen['departmentList'],function(key,value){
+							$.each(awdata['departmentList'],function(key,value){
 								if(value['m_departmentId'] !== vinfo['m_departmentId']){	
 									$('#departmment').append('<option value ='+value['m_departmentId']+'>'+value['m_departmentName']+'</option>');
 								}
 							});
 							$('#departmment').selectpicker('refresh');
+
+							//console.log(tag);
+							//遍历标签功能
+							$('#select-tag').empty();
+							var labelarr = vinfo['tWorksAndLabelList'];
+							var baohan = new Array();
+							$.each(labelarr,function(key,value){
+								baohan.push(value['m_labelCode']); //获取选中的标签生成数组
+							});
+							$.each(awdata['worksLabelList'],function(key,value){
+								$('#select-tag').append(function(){
+									var html = '<p>'+value['m_labelName']+'</p>';
+										html +='<ul class="list-inline">';
+										$.each(value['worksLabelList'],function(k,v){
+											if(baohan.contains(v['m_labelCode'])){
+												html += '<li><span class="select_label" style="background-color: rgb(92, 184, 92);"  data-id='+v['m_labelCode']+'>'+v['m_labelName']+'</span></li>';
+											}else{
+												html += '<li><span  data-id='+v['m_labelCode']+'>'+v['m_labelName']+'</span></li>';
+											}
+										});
+										html += '</ul>';
+									return html;
+
+								})
+							});
+							//多选标签功能
+							$('#select-tag ul li span').click(function(){
+								var color_bg = $(this).css('background-color');
+								if(color_bg == "rgb(150, 150, 150)"){
+									$(this).css({"background-color":"#5cb85c"});
+									$(this).addClass('select_label');
+								}else{
+									$(this).css({"background-color":"#969696"});
+									$(this).removeClass('select_label');
+								}
+
+							});
 						}
-					});
+					})
+					
+					
 					//指定部门遍历广告主与品牌关联
 					var m_departmentId = vinfo['m_departmentId']; //部门 id
 					$.ajax({
@@ -628,7 +833,7 @@ $(function() {
 									$('#advertiser').append('<option value='+value['m_advertiserId']+'>'+value['m_advertiserName']+'</option>');
 								}
 							});
-							$('#advertiser').selectpicker('refresh'); //广告主刷新
+							$('#advertiser').selectpicker('refresh'); 
 							//品牌初始化 显示全部
 							$.ajax({
 								url:'../selectBrandsList.do',
@@ -699,50 +904,7 @@ $(function() {
 							}
 						});
 					});
-					// 对应标签ID 显示hover
-					$.ajax({
-						url:'../initUploadSelectList.do',
-						dataType:'json',
-						type:'post',
-						success:function(tag){
-							//console.log(tag);
-							//遍历标签功能
-							$('#select-tag').empty();
-							var labelarr = vinfo['tWorksAndLabelList'];
-							var baohan = new Array();
-							$.each(labelarr,function(key,value){
-								baohan.push(value['m_labelCode']); //获取选中的标签生成数组
-							});
-							$.each(tag['worksLabelList'],function(key,value){
-								$('#select-tag').append(function(){
-									var html = '<p>'+value['m_labelName']+'</p>';
-										html +='<ul class="list-inline">';
-										$.each(value['worksLabelList'],function(k,v){
-											if(baohan.contains(v['m_labelCode'])){
-												html += '<li><span class="select_label" style="background-color: rgb(92, 184, 92);"  data-id='+v['m_labelCode']+'>'+v['m_labelName']+'</span></li>';
-											}else{
-												html += '<li><span  data-id='+v['m_labelCode']+'>'+v['m_labelName']+'</span></li>';
-											}
-										});
-										html += '</ul>';
-									return html;
 
-								})
-							});
-							//多选标签功能
-							$('#select-tag ul li span').click(function(){
-								var color_bg = $(this).css('background-color');
-								if(color_bg == "rgb(150, 150, 150)"){
-									$(this).css({"background-color":"#5cb85c"});
-									$(this).addClass('select_label');
-								}else{
-									$(this).css({"background-color":"#969696"});
-									$(this).removeClass('select_label');
-								}
-
-							});
-						}
-					});
 
 					// 封面图片显示
 					$('#clipArea,#clipBtn').hide(); //初始化
@@ -772,8 +934,8 @@ $(function() {
 									$('#filelist').prepend(html_mp3);
 								}
 							}else{
-								//console.log(value['t_worksPath']);
-								var html = '<img src='+value['t_worksPath']+' class="oder_img path-id" data-id='+value['t_worksPathId']+' /><i class="glyphicon glyphicon-remove delete-img"></i>';
+								//console.log(value['t_worksPath']);  <i class="glyphicon glyphicon-remove delete-img"></i>
+								var html = '<img src='+value['t_worksPath']+' class="oder_img path-id" data-id='+value['t_worksPathId']+' />';
 								$('#filelist').append(html);
 							}
 						}
@@ -783,6 +945,146 @@ $(function() {
 			})
 		})
 	}
+	//禁用获奖选项
+	// function adFestId_off(){
+	// 	var adhtmlremove = "";
+	// 	    adhtmlremove += "<div class=\"form-inline\">\n";
+	// 	    adhtmlremove += "	<div class=\"form-group\">\n";
+	// 	    adhtmlremove += "		<label class=\"lab\">广告节<\/label>\n";
+	// 	    adhtmlremove += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestId\" disabled>\n";
+	// 	    adhtmlremove += "			<option value=\"\">请选择广告节<\/option>\n";
+	// 	    adhtmlremove += "		<\/select>\n";
+	// 	    adhtmlremove += "	<\/div>\n";
+	// 	    adhtmlremove += "<\/div>\n";
+	// 	    adhtmlremove += "<div class=\"form-inline\">\n";
+	// 	    adhtmlremove += "	<div class=\"form-group\">\n";
+	// 	    adhtmlremove += "		<label class=\"lab\">广告节年份<\/label>\n";
+	// 	    adhtmlremove += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestYearId\" disabled>\n";
+	// 	    adhtmlremove += "			<option value=\"\">请选择年份<\/option>\n";
+	// 	    adhtmlremove += "		<\/select>\n";
+	// 	    adhtmlremove += "	<\/div>\n";
+	// 	    adhtmlremove += "<\/div>\n";
+	// 	    adhtmlremove += "<div class=\"form-inline\">\n";
+	// 	    adhtmlremove += "	<div class=\"form-group\">\n";
+	// 	    adhtmlremove += "		<label class=\"lab\">奖项名称<\/label>\n";
+	// 	    adhtmlremove += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestAwardId\" disabled>\n";
+	// 	    adhtmlremove += "			<option value=\"\">请选择奖项名称<\/option>\n";
+	// 	    adhtmlremove += "		<\/select>\n";
+	// 	    adhtmlremove += "	<\/div>\n";
+	// 	    adhtmlremove += "<\/div>\n";
+	// 	$('#adFestId-show').empty().append(adhtmlremove);
+	// 	$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
+	// }
+	//启用获奖选项
+	// function adFestId_on(awdata,vinfo){
+	// 	//对应广告节id获取
+	// 	$.ajax({
+	// 		url:'../selectAdvertFestivalYearAward.do',
+	// 		dataType:'json',
+	// 		type:'post',
+	// 		async:false,
+	// 		data:{adFestId:vinfo['m_adFestId']},
+	// 		success:function(adverlist){
+	// 			//console.log(adverlist);
+	// 			 miss = adverlist;  //定义全局 减少调用接口次数
+				
+	// 		}
+	// 	});
+	// 	//是否获奖
+	// 	if(vinfo['m_awardFlag'] == 1){
+	// 		var option = '<option value="'+vinfo['m_adFestId']+'">'+vinfo['m_adFestName']+'</option>';
+	// 		var op_adyear = '<option value="'+vinfo['m_adFestYearId']+'">'+vinfo['m_adFestYearName']+'</option>';
+	// 		$.each(miss['advertFestivalYearList'],function(k,v){
+	// 			if(v['m_adFestYearId'] !== vinfo['m_adFestYearId']){
+	// 				op_adyear += '<option value="'+v['m_adFestYearId']+'">'+v['m_adFestYearName']+'</option>';
+	// 			}
+	// 		})
+	// 		var op_adward = '<option value="'+vinfo['m_adFestAwardId']+'">'+vinfo['m_adFestAwardName']+'</option>';
+	// 		$.each(miss['advertFestivalAwardList'],function(k,v){
+	// 			if(v['m_adFestYearId'] !== vinfo['m_adFestYearId']){
+	// 				op_adward += '<option value="'+v['m_adFestAwardId']+'">'+v['m_adFestAwardName']+'</option>';
+	// 			}
+	// 		})
+	// 	}else{
+	// 		var option = '<option value="">请选择广告节</option>';
+	// 		var op_adyear = '<option value="">请选择年份</option>';
+	// 		var op_adward = '<option value="">请选择奖项名称</option>';
+	// 	}
+
+	// 	var adhtml = "";
+	// 	    adhtml += "<div class=\"form-inline\">\n";
+	// 	    adhtml += "	<div class=\"form-group\">\n";
+	// 	    adhtml += "		<label class=\"lab\">广告节<\/label>\n";
+	// 	    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestId\" name=\"adFestId\">\n";
+	// 	    adhtml += option;						    
+	// 	$.each(awdata['advertFestivalList'],function(key,value){
+	// 		if(value['m_adFestId'] !== vinfo['m_adFestId']){
+	// 		 	adhtml += "<option value="+value['m_adFestId']+">"+value['m_adFestName']+"<\/option>\n";
+	// 		};
+			
+	// 	})
+	// 	adhtml += "		<\/select>\n";
+	//     adhtml += "	<\/div>\n";
+	//     adhtml += "<\/div>\n";
+	//     adhtml += "<div class=\"form-inline\">\n";
+	//     adhtml += "	<div class=\"form-group\">\n";
+	//     adhtml += "		<label class=\"lab\">广告节年份<\/label>\n";
+	//     adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestYearId\" name=\"adFestYearId\" >\n";
+	//     adhtml += op_adyear;
+	//     adhtml += "		<\/select>\n";
+	//     adhtml += "	<\/div>\n";
+	//     adhtml += "<\/div>\n";
+	//     adhtml += "<div class=\"form-inline\">\n";
+	//     adhtml += "	<div class=\"form-group\">\n";
+	//     adhtml += "		<label class=\"lab\">奖项名称<\/label>\n";
+	//     adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestAwardId\" name=\"adFestAwardId\" >\n";
+	//     adhtml += op_adward;
+	//     adhtml += "		<\/select>\n";
+	//     adhtml += "	<\/div>\n";
+	//     adhtml += "<\/div>\n";
+	// 	$('#adFestId-show').empty().append(adhtml);
+	// 	$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
+	// }
+	//广告节触发事件
+	// function adFestId_changed(){
+	// 	$('#adFestId').on('changed.bs.select',function(){
+	// 		var m_adFestId = $(this).val();
+	// 		//console.log(m_adFestId);
+	// 		if(m_adFestId !== ''){
+	// 			$.ajax({
+	// 				url:'../selectAdvertFestivalYearAward.do',
+	// 				dataType:'json',
+	// 				type:'post',
+	// 				data:{adFestId:m_adFestId},
+	// 				success:function(advdata){
+	// 					if(advdata['status'] == 200){
+	// 						//广告年份激活
+	// 						var yearhtml = '';
+	// 						$.each(advdata['advertFestivalYearList'],function(key,value){
+	// 							yearhtml += '<option value="'+value['m_adFestYearId']+'">'+value['m_adFestYearName']+'</option>';
+	// 						});
+	// 						$('#adFestYearId').empty().append(yearhtml);
+
+	// 						//广告奖项激活
+	// 						var awardhtml = '';
+	// 						$.each(advdata['advertFestivalAwardList'],function(key,value){
+	// 							awardhtml += '<option value="'+value['m_adFestAwardId']+'">'+value['m_adFestAwardName']+'</option>';
+	// 						});
+	// 						$('#adFestAwardId').empty().append(awardhtml);
+	// 					}else{
+	// 						$('#adFestYearId').empty().append('<option value="">没有对应的数据</option>');
+	// 						$('#adFestAwardId').empty().append('<option value="">没有对应的数据</option>');
+	// 					}
+	// 					$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
+	// 				}
+	// 			})
+	// 		}else{
+	// 			$('#adFestYearId').empty().append('<option value="">请选择年份</option>');
+	// 			$('#adFestAwardId').empty().append('<option value="">请选择奖项名称</option>');
+	// 		}
+	// 		$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
+	// 	})
+	// }
 	// 删除作品
 	function del_view(){
 		$('.del').click(function(){
@@ -811,7 +1113,16 @@ $(function() {
 	}
 	//提交更新保存
 	$('#uploadForm').submit(function(){
-		check_login();
+		var adArray = new Array();
+		$('.adList .ad_id_list').each(function(){
+			var adFestId = $(this).children().children().eq(0).attr('data-id');
+			var adFestYearId = $(this).children().children().eq(1).attr('data-id');
+			var adFestAwardId = $(this).children().children().eq(2).attr('data-id');
+			for(var i = 0;i< $('.ad_id_list').length;i++){
+				var adString = adFestId+';'+adFestYearId+';'+adFestAwardId;
+			}
+			adArray.push(adString);
+		});
 		var worksName	   = $('#up_worksName').val(); //作品名称
 		if(!worksName){
 			$('#error').show().text('作品名称不能为空!');
@@ -826,6 +1137,13 @@ $(function() {
 			$('#error').show().text('请选择所属部门');
 			return false;
 		}
+		// var awardstatus = $("[name='awardFlag']:checked").val();
+		// if(awardstatus == 1){
+		// 	if($('#adFestId').val() == ''){
+		// 		$('#error').show().text('请选择广告节');
+		// 		return false;
+		// 	}
+		// }
 		var worksimage     = $('#view').css('background-image');
 		if(worksimage == 'none'){
 			var thumb_base = "";
@@ -849,24 +1167,27 @@ $(function() {
 		$('#error').hide(); //隐藏错误提示
 		$('.loadingtext').show(); 
 		$('.btn-dis').attr('disabled','disabled'); //禁止重复提交
-		var wok_id = $('#works_id').val(); //作品id
-		var wok_awardId = $('#awardId').val(); //获奖名称
-		var wok_advertiser = $('#advertiser').val(); //广告主
-		var wok_brandsInfo = $('#brandsInfo').val(); //品牌
-		var wok_worksCreater = $('#worksCreater').val(); //创作者
-		var wok_worksDesp = $('#worksDesp').val(); //作品简介
+		//var wok_id = $('#works_id').val(); //作品id
+		//var wok_awardId = $('#awardId').val(); //获奖名称
+		//var wok_advertiser = $('#advertiser').val(); //广告主
+		//var wok_brandsInfo = $('#brandsInfo').val(); //品牌
+		//var wok_worksCreater = $('#worksCreater').val(); //创作者
+		//var wok_worksDesp = $('#worksDesp').val(); //作品简介
+		console.log(adArray);
 		//检验
 		var option = {
 				data:{
 					// worksName:worksName,
 					// departId:sub_bumen,
 					   labelList:m_labelCode.join(","),
+					   worksAwardList:adArray.join(","),
 					// advertId:wok_advertiser,
 					// awardId:wok_awardId,
 					// brandId:wok_brandsInfo,
 					// worksCreater:wok_worksCreater,
 					// worksDesp:wok_worksDesp,
-					   worksImage:thumb_base,
+					// awardFlag
+					   worksImage:thumb_base
 					  // worksFile:wok_worksFile
 					// worksId:wok_id
 				},
@@ -880,12 +1201,12 @@ $(function() {
 					}
 				}
 			};
-			console.log(option);
+			 console.log(option);
 		$(this).ajaxSubmit(option);
 		return false;
 	})
 
-	//选择作品
+	//选择作品上传资源事件
 	$('#pickfiles').click(function(){
 		return $('#hiddenFile').click();
 	});
@@ -898,11 +1219,11 @@ $(function() {
 		if(file_name_attr.length !== 0){
 			$('#hiddenFile').attr('name','worksFile');
 			var imglist = $('#hiddenFile').get(0).files;
-			console.log(imglist);
-			//$('#delFileParas').attr('name','delFileParas');
+			//console.log(imglist);
+			$('#delFileParas').attr('name','delFileParas');
 
 		}else{
-			//$('#hiddenFile,#delFileParas').removeAttr('name');
+			$('#hiddenFile,#delFileParas').removeAttr('name');
 		}
 
 		//console.log(m.length);

@@ -92,6 +92,15 @@
 						})
 					}
 				});
+			});
+			
+			$('#keywork').focus(function(){
+				//回车搜索事件
+				$(document).keydown(function (event) {
+				    if(event.keyCode == 13){
+				    	search_over();
+				    }
+				});
 			})
 		},
 		complete: function() {
@@ -197,13 +206,6 @@
 		search_over();
 	}
 
-	//回车搜索事件
-	$(document).keydown(function (event) {
-	    if(event.keyCode == 13){
-	    	search_over();
-	    }
-	});
-
 	//查询结果通知
 	function search_over(){
 		$.ajax({
@@ -243,7 +245,7 @@
 		var mydate = new Date();
 		var publishDateStart = $('#adddate dl .selected').attr('data-id');
 		if(publishDateStart !==''){
-			var publishDateEnd = mydate.Format('YYYY-M-D');
+			var publishDateEnd = mydate.Format('YYYY-MM-DD');
 		}else{
 			var publishDateEnd = '';
 		}

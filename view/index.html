@@ -26,6 +26,10 @@
     <script src="view/assets/js/layer.js"></script>
     <script type="text/javascript" src="view/assets/js/index_api.js"></script>
   </head>
+  <style>
+    #usermail{cursor:default;}
+    #usermail:hover{color: #9d9d9d;}
+  </style>
   <script type="text/javascript">
       $(function(){
         var height = $(window).height();  //控制不同显示器显示不同高度
@@ -41,11 +45,11 @@
         //日期检索
         $('#adddate dl').append(function(){
             var mydate = new Date();
-            var html = '<dd data-id='+mydate.Format('YYYY-M-D')+'>今天</dd>';
-                html += '<dd data-id='+mydate.Format('YYYY-M-D','30')+'>一月内</dd>';
-                html += '<dd data-id='+mydate.Format('YYYY-M-D','90')+'>三月内</dd>';
-                html += '<dd data-id='+mydate.Format('YYYY-M-D','183')+'>半年内</dd>';
-                html += '<dd data-id='+mydate.Format('YYYY-M-D','365')+'>一年内</dd>';
+            var html = '<dd data-id='+mydate.Format('YYYY-MM-DD')+'>今天</dd>';
+                html += '<dd data-id='+mydate.Format('YYYY-MM-DD','30')+'>一月内</dd>';
+                html += '<dd data-id='+mydate.Format('YYYY-MM-DD','90')+'>三月内</dd>';
+                html += '<dd data-id='+mydate.Format('YYYY-MM-DD','183')+'>半年内</dd>';
+                html += '<dd data-id='+mydate.Format('YYYY-MM-DD','365')+'>一年内</dd>';
             return html;
           });
       })
@@ -62,23 +66,32 @@
           </div>
           <div class="modal-body">
             <form id="uploadForm" method="post" action="saveWorksInfo.do" enctype="multipart/form-data">
-              <div class="form-inline">
+              <div class="form-inline" style="position: relative;">
                 <div class="form-group">
-                  <label class="lab">作品名称</label>
+                  <div class="vcenter">&nbsp;</div>
+                  <p class="uploadhr">请输入您的作品信息</p>
+                  <label class="lab"><b>*</b>作品名称</label>
                   <input type="text" class="form-control" id="worksName" name="worksName" placeholder="作品名称">
                 </div>
               </div>
               <div class="form-inline">
                 <div class="form-group">
-                  <label class="lab">获奖名称</label>
-                  <select class="form-control selectpicker" data-live-search="true" name="awardId" id="awardId">
-                    <option>请选择获奖名称</option>
-                  </select>
+                  <label class="lab" ><b>*</b>创作团队</label>
+                  <!-- <input type="text" class="form-control" id="worksCreater" name="worksCreater" placeholder="请填写创作者"> -->
+                  <textarea class="form-control" rows="5" style="width:50%;" placeholder="请填写创作团队" id="worksCreater" name="worksCreater"></textarea>
                 </div>
               </div>
               <div class="form-inline">
                 <div class="form-group">
-                  <label class="lab">目前部门</label>
+                  <label class="lab"><b>*</b>作品简介</label>
+                  <textarea class="form-control" rows="5" style="width:50%;" placeholder="请填写作品介绍" id="worksDesp" name="worksDesp"></textarea>
+                </div>
+              </div>
+              <div class="form-inline" style="position: relative;">
+                <div class="form-group">
+                <div class="vcenter">&nbsp;</div>
+                <p class="uploadhr">请选择您的作品分类</p>
+                  <label class="lab"><b>*</b>目前部门</label>
                   <select class="form-control selectpicker" data-live-search="true" id="departmment" name="departId">
                     <option value="">所属部门</option>
                   </select>
@@ -86,7 +99,7 @@
               </div>
               <div class="form-inline">
                 <div class="form-group">
-                  <label class="lab">广告主</label>
+                  <label class="lab"><b>*</b>广告主</label>
                   <select class="form-control selectpicker" data-live-search="true" id="advertiser" name="advertId">
                     <option value="">请选择广告主</option>
                   </select>
@@ -102,15 +115,17 @@
               </div>
               <div class="form-inline">
                 <div class="form-group">
-                  <label class="lab" style="vertical-align: top;">多选标签</label>
+                  <label class="lab" style="vertical-align: top;"><b>*</b>多选标签</label>
                   <div id="select-tag">
                     <!-- ajax 加载 -->
                   </div>
                 </div>
               </div>
-              <div class="form-inline">
+              <div class="form-inline" style="position: relative;">
                 <div class="form-group" id="container">
-                  <label class="lab">上传封面</label>
+                <div class="vcenter">&nbsp;</div>
+                <p class="uploadhr">请上传您的作品文件</p>
+                  <label class="lab"><b>*</b>上传封面</label>
                   <a href="javascript:;" class="a-upload">选择图片
                       <input type="file" name="file" id="file">
                   </a><i> 支持上传格式：png、jpg</i>
@@ -118,11 +133,11 @@
                   <div id="view"></div>
                   
                 </div>
-                <b class="btn btn-primary" id="clipBtn">确定裁剪</b>
+                <span class="btn btn-primary" id="clipBtn">确定裁剪</span>
               </div>
               <div class="form-inline">
                 <div class="form-group" id="container">
-                  <label class="lab" >上传作品</label>
+                  <label class="lab" ><b>*</b>上传作品</label>
                   <botton class="btn btn-default btn-sm" id="pickfiles">选择文件 (多选)<b></b></botton> <!-- <botton class="btn btn-primary" id="uploadfiles" >开始上传</botton>  --><i>支持上传格式：png、jpg、mp4、mp3</i>
                   <input type="file" id="hiddenFile" style="display: none;"  name="worksFile" accept=".jpg,.png,.mp3,.mp4" multiple>
                   <!-- <botton class="btn btn-primary" id="uploadfiles" >开始上传</botton>  -->
@@ -133,17 +148,52 @@
                   </div> -->
                 </div>
               </div>
-              <div class="form-inline">
+              <div class="form-inline" style="position: relative;">
                 <div class="form-group">
-                  <label class="lab" >创作者</label>
-                  <input type="text" class="form-control" id="worksCreater" name="worksCreater" placeholder="请填写创作者">
+                <div class="vcenter">&nbsp;</div>
+                <p class="uploadhr">请输入您的获奖信息</p>
+                  <label class="lab">获奖信息</label>&nbsp;
+                  <div class="btn btn-xs btn-default addAd"><i class="glyphicon glyphicon-plus"></i> 增加</div>
+                  <!-- <div class="radio">
+                    <label>
+                      <input type="radio" name="awardFlag" value="0" checked>
+                      未获奖
+                    </label>
+                    <label>
+                      <input type="radio" name="awardFlag" value="1">
+                      已获奖
+                    </label>
+                  </div> -->
+                  <ul class="adList">
+                    <!-- ajax 加载 -->
+                  </ul>
                 </div>
               </div>
-              <div class="form-inline">
-                <div class="form-group">
-                  <label class="lab">作品简介</label>
-                  <textarea class="form-control" rows="5" style="width:50%;" placeholder="请写作品介绍" id="worksDesp" name="worksDesp"></textarea>
+              <div id="adFestId-show">
+                <!-- <div class="form-inline">
+                  <div class="form-group">
+                    <label class="lab">广告节</label>
+                    <select class="form-control selectpicker" data-live-search="true" id="adFestId" disabled>
+                      <option value="">请选择广告节</option>
+                    </select>
+                  </div>
                 </div>
+                <div class="form-inline">
+                  <div class="form-group">
+                    <label class="lab">广告节年份</label>
+                    <select class="form-control selectpicker" data-live-search="true" id="adFestYearId" disabled>
+                      <option value="">请选择年份</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-inline">
+                  <div class="form-group">
+                    <label class="lab">奖项名称</label>
+                    <select class="form-control selectpicker" data-live-search="true" id="adFestYearId" disabled>
+                      <option value="">请选择奖项</option>
+                    </select>
+                  </div>
+                </div> -->
               </div>
                <p class="error alert alert-danger" id="error"></p>
                <p class="text-center loadingtext" ><img src="view/assets/img/loading.gif" /></p>
@@ -166,14 +216,14 @@
             <div class="navbar-header">
                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> 
                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-               <a class="navbar-brand" href="#"><img src="view/assets/img/logo.png" class="logo" />
+               <a class="navbar-brand" href="http://10.69.136.88:8081/CreativeLib"><img src="view/assets/img/logo.png" class="logo" />
                <span style="color:#fff;margin-left:160px;">Creative Gallery</span></a>
             </div>
             
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav navbar-right">
                 <li>
-                   <a href="#"  data-toggle="modal" data-target="#login_show">sunyang@dentsu.com.cn</a>
+                   <a href="#" id="usermail" data-toggle="modal" data-target="#login_show"></a>
                 </li>
                 <li class="dropdown">
                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">切换主题<strong class="caret"></strong></a>
@@ -208,11 +258,11 @@
            </span>
             <input type="text" class="form-control" id="keywork" placeholder="Search for...">
             <span class="input-group-btn">
-             <button class="btn btn-default" id="dropdown">···</button>
+             <button class="btn btn-default" id="dropdown"><i class="glyphicon glyphicon-option-horizontal"></i></button>
              <button class="btn btn-default" id="soso-list" onclick="search_url()"><i class="glyphicon glyphicon-search"></i></button>
            </span>
           </div>
-          <ul class="list-unstyled search-auto">
+          <!-- <ul class="list-unstyled search-auto">
             <li data-key="北京电通有限公司">
               北京电通有限公司
             </li>
@@ -231,7 +281,7 @@
             <li data-key="北京外包php开发网址">
               北京外包php开发网址
             </li>
-          </ul>
+          </ul> -->
           </div>
           <div class="container fluid_soso">
             <div class="col-xs-12">
@@ -279,6 +329,33 @@
           </div>
       </div>
     </div>
+    <script type="text/javascript">
+      var NV = {};    
+      var UA = navigator.userAgent.toLowerCase();    
+      try    
+      {    
+          NV.name=!-[1,]?'ie':    
+          (UA.indexOf("firefox")>0)?'firefox':    
+          (UA.indexOf("chrome")>0)?'chrome':    
+          window.opera?'opera':    
+          window.openDatabase?'safari':    
+          'unkonw';    
+      }catch(e){};    
+      try    
+      {    
+          NV.version=(NV.name=='ie')?UA.match(/msie ([\d.]+)/)[1]:    
+          (NV.name=='firefox')?UA.match(/firefox\/([\d.]+)/)[1]:    
+          (NV.name=='chrome')?UA.match(/chrome\/([\d.]+)/)[1]:    
+          (NV.name=='opera')?UA.match(/opera.([\d.]+)/)[1]:    
+          (NV.name=='safari')?UA.match(/version\/([\d.]+)/)[1]:    
+          '0';    
+      }catch(e){};     
+      $(function(){
+         if(NV.name == 'safari'){
+            $('.a-upload').css('top','0px');
+         }
+      })
+    </script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <!-- 裁剪 -->
@@ -286,7 +363,7 @@
     <script src="view/assets/js/corp/hammer.js"></script>
     <script src="view/assets/js/corp/jquery.photoClip.min.js"></script>
     <script type="text/javascript" src="view/assets/js/jquery.scrollbar.js"></script>
-    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="view/assets/js/jquery.form.js"></script>
     <script src="view/assets/js/index.js"></script>
   </body>
 </html>

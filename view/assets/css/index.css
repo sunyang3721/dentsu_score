@@ -1,5 +1,5 @@
 /*body { padding-top: 50px; }*/
-#ver_soso,.dropdown-menu,.error,li.list-tab,.text,.help-block,.list-inline,.dl-horizontal,.btnupload,.veiw-menu p,.search-auto li,.alert,.btn-default,.btn,.form-group,#myupload,.ajax-newlist li,.dropdown a,.loadingtext{font-family:"Microsoft YaHei";}
+#ver_soso,.dropdown-menu,.error,li.list-tab,.text,.help-block,.list-inline,.dl-horizontal,.btnupload,.veiw-menu p,.search-auto li,.alert,.btn-default,.btn,.form-group,#myupload,.ajax-newlist li,.dropdown a,.loadingtext,.btnPlay,.uploadhr{font-family:"Microsoft YaHei";}
 /*全局*/
 img,li.list-tab,.lihover,h4,#home .detailview:hover,.glyphicon-tasks,.search-auto li,.thumbnail-title,#filelist .delete-img,.help-block,#ver_soso dl dd,#select-tag ul li span{cursor:pointer;}
 /*导航*/
@@ -40,7 +40,7 @@ p.text{margin:0px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ajax-hotlist .col-xs-3{padding:0px;}
 .thumbnail-title p{font-size: 12px;padding-bottom: 5px;color:#fff;}
 .thumbnail img,.thumbnail-title{transition: 0.3s ease-in-out;}
-.thumbnail .caption{height:301px;width:97.5%;padding-top:25%;opacity:0;filter:alpha(opacity=0);top:3px;}
+.thumbnail .caption{height:301px;width:97.5%;padding-top:40%;opacity:0;filter:alpha(opacity=0);top:3px;}
 .thumbnail .caption:hover{opacity:1;filter:alpha(opacity=100);}
 /*.thumbnail:hover img{-webkit-transform:scale(1.0);transform:scale(1.05);}
 .thumbnail:hover .thumbnail-title{bottom:18px;width:100%;margin-left: -10px;}*/
@@ -57,10 +57,10 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 #home .list-inline img{height:100px;width:100px;}
 #home .list-img{width:10%;}
 #home .list-title{width:20%;}
-#home .list-guanggao{width:17%;}
-#home .list-pinpai{width:8%;}
-#home .list-fenlei{width:15%;}
-#home .list-user{width:20%;}
+#home .list-guanggao{width:20%;}
+#home .list-pinpai{width:20%;}
+#home .list-fenlei{width:20%;}
+#home .list-user{width:15%;}
 #home .list-date{width:10%;}
 
 #profile .list-unstyled >li ,#profile .list-inline li{float: left;border-bottom:1px solid #e8e8e8;padding:5px 2px;}
@@ -72,8 +72,8 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 #profile .list-title{width:20%;}
 #profile .list-guanggao{width:17%;}
 #profile .list-pinpai{width:8%;}
-#profile .list-fenlei{width:15%;}
-#profile .list-user{width:20%;}
+#profile .list-fenlei{width:20%;}
+#profile .list-user{width:15%;}
 #profile .list-date{width:10%;}
 
 .btn-post{width:8%;position: relative;top:-40px;left:10%;}
@@ -83,7 +83,13 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 
 /*h4.detailview{margin-top:0px;margin-bottom: 10px;font-weight: bold; overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 */.detailview:hover{color:#005bac;}
-
+/*上传表单*/
+#uploadForm b{color:red;}
+#uploadForm .vcenter{border-bottom: 1px solid #e2e2e2;position: absolute;width:60%;left:29%;top:-11px;}
+#uploadForm .uploadhr{margin-left: 16%;font-size:10px;color:#afafaf;}
+/*广告节按钮*/
+.adqueding{margin-left: 5px;}
+.adList{margin-left: 16%;}
 /*上传封面*/
 /*.update,.del{color:#428BCA;}
 .update:hover,.del:hover{color:#005bac;}*/
@@ -96,12 +102,12 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 .a-upload:hover{color:#444;background:#eee;border-color:#ccc;text-decoration:none}
 #clipArea,#view{width:300px;height: 500px;display: none;}
 #view{height:300px;margin-left: 25%}
-#clipBtn{display:none;text-align: center;margin: 0px 30%;top: -100px;position: relative;}
+#clipBtn{display:none;text-align: center;margin: 0px 30%;top: -90px;position: relative;}
 /*检索条件*/
 .fluid_soso{position: absolute;top: 47%;width: 100%;margin:62px -15px;display: none;}
 #ver_soso{padding:5px 10px 0px 10px; width:850px;border: 1px solid #dadada;border-radius: 5px; margin:48px auto;background-color: #fff;height:210px;}
-#ver_soso #bumen,#ver_soso #fenlei,#ver_soso #guanggao,#ver_soso #pinpai,#ver_soso #adddate,#ver_soso #myhome{display: inline-block;}
-#ver_soso p{margin-bottom:0px;font-weight: bold;padding:0px 10px}
+#ver_soso #bumen,#ver_soso #fenlei,#ver_soso #guanggao,#ver_soso #pinpai,#ver_soso #adddate,#ver_soso #myhome{display: inline-table;}
+#ver_soso p{margin-bottom:0px;font-weight: bold;padding:0px 10px;border-bottom:1px solid #cecece;}
 #ver_soso dl dd{padding:0 10px;color:#6d6d6d;}
 #ver_soso .selected{background-color: #b70000;color:#fff!important;}
 
@@ -132,7 +138,7 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 #filelist .delete-img{position: absolute;top: -6px;z-index:10;color:#fff; right: -5px;border: solid 2px #000;background-color:#000; border-radius: 50px;}
 #hiddenFile{display: inline-block;}
 /*多选标签*/
-#select-tag{display: inline-block;padding:5px;border-radius: 5px;border:1px solid #ccc;width:70%;}
+#select-tag{display: inline-block;padding:5px;border-radius: 5px;border:1px solid #ccc;width:65%;}
 #select-tag p{margin-bottom:0px;}
 #select-tag ul{padding-top:4px;}
 #select-tag ul li{padding-bottom: 9px;position: relative;}
@@ -142,3 +148,12 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 
 /*列表编辑页面*/
 .oder_img,.oder_mp4{width:100px;padding: 5px;cursor: default;}
+
+/*检索 新增透明*/
+/*#ver_soso{background-color: rgba(255,255,255,0.8) }
+.scrollbar-rail > .scroll-element.scroll-y{background-color: rgba(255,255,255,0);}*/
+
+/*播放器自定义样式 控制按钮*/
+.control{position: relative;top:-26px;background-color: #ffffff;border-left: 1px solid #337AB7;border-right: 1px solid #337AB7;}
+.progressTime{display: inline-table;margin-left:5px;}
+.current_modes,.duration_modes,.progressTime{color:#888;}
