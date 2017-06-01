@@ -17,6 +17,11 @@ $(function() {
 		dataType:'json',
 		success:function(data){
 			$('#usermail').text(data['userInfo']['m_userEmail']);
+			if(data['userInfo']['uploadLimit'] == 1){
+				$('.uploadAdd').removeClass('hide');
+			}else{
+				$('.uploadAdd').remove();
+			}
 		}
 	})
 	// $('.icon-box').click(function() {
@@ -97,7 +102,13 @@ $(function() {
 	$('.scrollbar-rail').scrollbar({
 		//disableBodyScroll:true,
 	});
-
+	//回车键执行
+	$('#keywork').keydown(function (event) {
+	   //console.log(event.keyCode);
+	   if(event.keyCode == 13){
+	   		search_over();
+	   }
+	});
 
 	//创建日期
 	select('#adddate dl dd');
@@ -121,12 +132,38 @@ $(function() {
 			type:'post',
 			data:{},
 			success:function(data){
+				//创作团队 内部
+				var pos="";
+				//制作公司 外部
+				var bos="";
+				$.each(data['creatorPositionList'],function(key,value){
+					if(value['m_positionType'] == 1){
+							pos += "<div class=\"form-inline\">";
+							pos += "	<div class=\"form-group\">";
+							pos += "		<label class=\"lab\" ><\/label>";
+							pos += "		<input type=\"text\" class=\"form-control\" name="+value['m_positionId']+"  placeholder=\"请输入"+value['m_positionName']+"姓名\"> <strong>"+value['m_positionName']+"<\/strong>";
+							pos += "	<\/div>";
+							pos += "<\/div>";
+					}else{
+						bos += "<div class=\"form-inline\">";
+						bos += "	<div class=\"form-group\">";
+						bos += "		<label class=\"lab\" style=\"vertical-align:top\"><\/label>";
+						bos += "		<textarea class=\"form-control\" rows=\"5\" style=\"width:50%;\" placeholder=\"请输入公司名称\" name="+value['m_positionId']+"><\/textarea>";
+						bos += "		<strong style=\"vertical-align:top\"> "+value['m_positionName']+"<\/strong>";
+						bos += "	<\/div>";
+						bos += "<\/div>";
+					}
+				});
+				$('#chuangzuo-ajax').empty().append(pos);
+				$('#chuangzuo-ajax .form-inline').eq(0).find('label').append('<b>*</b> 公司内 创作团队');
+				$('#gongsi-ajax').empty().append(bos);
+				$('#gongsi-ajax .form-inline').eq(0).find('label').append('公司外 制作公司');
 				//广告节获奖
 				$('.addAd').click(function(){
 					var adhtml = "";
 						    adhtml += "<div class=\"form-inline\">\n";
 						    adhtml += "	<div class=\"form-group\">\n";
-						    adhtml += "		<label class=\"lab\"><b>*</b>广告节<\/label>\n";
+						    adhtml += "		<label class=\"lab\">广告节<\/label>\n";
 						    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestId\" name=\"adFestId\">\n";
 						    adhtml += "			<option value=\"\">请选择广告节<\/option>\n";						    
 						$.each(data['advertFestivalList'],function(key,value){
@@ -137,7 +174,7 @@ $(function() {
 					    adhtml += "<\/div>\n";
 					    adhtml += "<div class=\"form-inline\">\n";
 					    adhtml += "	<div class=\"form-group\">\n";
-					    adhtml += "		<label class=\"lab\"><b>*</b>广告节年份<\/label>\n";
+					    adhtml += "		<label class=\"lab\">广告节年份<\/label>\n";
 					    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestYearId\" name=\"adFestYearId\" >\n";
 					    adhtml += "			<option value=\"\">请选择年份<\/option>\n";
 					    adhtml += "		<\/select>\n";
@@ -145,7 +182,7 @@ $(function() {
 					    adhtml += "<\/div>\n";
 					    adhtml += "<div class=\"form-inline\">\n";
 					    adhtml += "	<div class=\"form-group\">\n";
-					    adhtml += "		<label class=\"lab\"><b>*</b>奖项名称<\/label>\n";
+					    adhtml += "		<label class=\"lab\">奖项名称<\/label>\n";
 					    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestAwardId\" name=\"adFestAwardId\" >\n";
 					    adhtml += "			<option value=\"\">请选择奖项名称<\/option>\n";
 					    adhtml += "		<\/select>\n";
@@ -158,7 +195,6 @@ $(function() {
 						//广告节触发事件
 						$('#adFestId').on('changed.bs.select',function(){
 							var m_adFestId = $(this).val().split("-",1).toString(); //分割并转字符串类型
-							//console.log(m_adFestId.split("-",1).toString());
 							if(m_adFestId !== ''){
 								$.ajax({
 									url:'selectAdvertFestivalYearAward.do',
@@ -230,106 +266,6 @@ $(function() {
 						return str.split('-')[1].replace('+',' ').toString();
 					}
 				}
-				// $("input[name='awardFlag']").click(function(){
-				// 	var id = $(this).val();
-				// 	if(id == 1){
-				// 		var adhtml = "";
-				// 		    adhtml += "<div class=\"form-inline\">\n";
-				// 		    adhtml += "	<div class=\"form-group\">\n";
-				// 		    adhtml += "		<label class=\"lab\">广告节<\/label>\n";
-				// 		    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestId\" name=\"adFestId\">\n";
-				// 		    adhtml += "			<option value=\"\">请选择广告节<\/option>\n";						    
-				// 		$.each(data['advertFestivalList'],function(key,value){
-				// 			 adhtml += "<option value="+value['m_adFestId']+">"+value['m_adFestName']+"<\/option>\n";
-				// 		})
-				// 		adhtml += "		<\/select>\n";
-				// 	    adhtml += "	<\/div>\n";
-				// 	    adhtml += "<\/div>\n";
-				// 	    adhtml += "<div class=\"form-inline\">\n";
-				// 	    adhtml += "	<div class=\"form-group\">\n";
-				// 	    adhtml += "		<label class=\"lab\">广告节年份<\/label>\n";
-				// 	    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestYearId\" name=\"adFestYearId\" >\n";
-				// 	    adhtml += "			<option value=\"\">请选择年份<\/option>\n";
-				// 	    adhtml += "		<\/select>\n";
-				// 	    adhtml += "	<\/div>\n";
-				// 	    adhtml += "<\/div>\n";
-				// 	    adhtml += "<div class=\"form-inline\">\n";
-				// 	    adhtml += "	<div class=\"form-group\">\n";
-				// 	    adhtml += "		<label class=\"lab\">奖项名称<\/label>\n";
-				// 	    adhtml += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestAwardId\" name=\"adFestAwardId\" >\n";
-				// 	    adhtml += "			<option value=\"\">请选择奖项名称<\/option>\n";
-				// 	    adhtml += "		<\/select>\n";
-				// 	    adhtml += "	<\/div>\n";
-				// 	    adhtml += "<\/div>\n";
-				// 		$('#adFestId-show').empty().append(adhtml);
-				// 	}else{
-				// 		var adhtmlremove = "";
-				// 		    adhtmlremove += "<div class=\"form-inline\">\n";
-				// 		    adhtmlremove += "	<div class=\"form-group\">\n";
-				// 		    adhtmlremove += "		<label class=\"lab\">广告节<\/label>\n";
-				// 		    adhtmlremove += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestId\" disabled>\n";
-				// 		    adhtmlremove += "			<option value=\"\">请选择广告节<\/option>\n";
-				// 		    adhtmlremove += "		<\/select>\n";
-				// 		    adhtmlremove += "	<\/div>\n";
-				// 		    adhtmlremove += "<\/div>\n";
-				// 		    adhtmlremove += "<div class=\"form-inline\">\n";
-				// 		    adhtmlremove += "	<div class=\"form-group\">\n";
-				// 		    adhtmlremove += "		<label class=\"lab\">广告节年份<\/label>\n";
-				// 		    adhtmlremove += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestYearId\" disabled>\n";
-				// 		    adhtmlremove += "			<option value=\"\">请选择年份<\/option>\n";
-				// 		    adhtmlremove += "		<\/select>\n";
-				// 		    adhtmlremove += "	<\/div>\n";
-				// 		    adhtmlremove += "<\/div>\n";
-				// 		    adhtmlremove += "<div class=\"form-inline\">\n";
-				// 		    adhtmlremove += "	<div class=\"form-group\">\n";
-				// 		    adhtmlremove += "		<label class=\"lab\">奖项名称<\/label>\n";
-				// 		    adhtmlremove += "		<select class=\"form-control selectpicker\" data-live-search=\"true\" id=\"adFestAwardId\" disabled>\n";
-				// 		    adhtmlremove += "			<option value=\"\">请选择奖项名称<\/option>\n";
-				// 		    adhtmlremove += "		<\/select>\n";
-				// 		    adhtmlremove += "	<\/div>\n";
-				// 		    adhtmlremove += "<\/div>\n";
-				// 		$('#adFestId-show').empty().append(adhtmlremove);
-				// 	}
-				// 	$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
-
-				// 	//广告节触发事件
-				// 	$('#adFestId').on('changed.bs.select',function(){
-				// 		var m_adFestId = $(this).val();
-				// 		if(m_adFestId !== ''){
-				// 			$.ajax({
-				// 				url:'selectAdvertFestivalYearAward.do',
-				// 				dataType:'json',
-				// 				type:'post',
-				// 				data:{adFestId:m_adFestId},
-				// 				success:function(advdata){
-				// 					if(advdata['status'] == 200){
-				// 						//广告年份激活
-				// 						var yearhtml = '';
-				// 						$.each(advdata['advertFestivalYearList'],function(key,value){
-				// 							yearhtml += '<option value="'+value['m_adFestYearId']+'">'+value['m_adFestYearName']+'</option>';
-				// 						});
-				// 						$('#adFestYearId').empty().append(yearhtml);
-
-				// 						//广告奖项激活
-				// 						var awardhtml = '';
-				// 						$.each(advdata['advertFestivalAwardList'],function(key,value){
-				// 							awardhtml += '<option value="'+value['m_adFestAwardId']+'">'+value['m_adFestAwardName']+'</option>';
-				// 						});
-				// 						$('#adFestAwardId').empty().append(awardhtml);
-				// 					}else{
-				// 						$('#adFestYearId').empty().append('<option value="">没有对应的数据</option>');
-				// 						$('#adFestAwardId').empty().append('<option value="">没有对应的数据</option>');
-				// 					}
-				// 					$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
-				// 				}
-				// 			})
-				// 		}else{
-				// 			$('#adFestYearId').empty().append('<option value="">请选择年份</option>');
-				// 			$('#adFestAwardId').empty().append('<option value="">请选择奖项名称</option>');
-				// 		}
-				// 		$('#adFestId,#adFestYearId,#adFestAwardId').selectpicker('refresh'); //刷新
-				// 	})
-				// });
 				
 				//遍历部门关联
 				$.each(data['departmentList'],function(key,value){
@@ -432,17 +368,22 @@ $(function() {
 				$('#error').show().text('作品名称不能为空!');
 				return false;
 			}
+			//校验团队名单
+			var ko = 0;
+			$('#chuangzuo-ajax input').each(function(k,v){
+				var cv = $(this).val();
+				if(cv !== ''){
+					ko = 1;
+				}
+			})
+			if(ko == 0){
+				$('#error').show().text('公司内部 创作团队必填其中一个');
+				return false;
+			}
 			if(worksName.length >= 30){
 				$('#error').show().text('作品名称太长了,不可超过15字');
 				return false;
 			}
-			// var awardstatus = $("[name='awardFlag']:checked").val();
-			// if(awardstatus == 1){
-			// 	if($('#adFestId').val() == ''){
-			// 		$('#error').show().text('请选择广告节');
-			// 		return false;
-			// 	}
-			// }
 			var m_departmentId = $('#departmment').val(); //部门 m_departmentId
 			if(!m_departmentId){
 				$('#error').show().text('请选择所属部门');
@@ -463,17 +404,16 @@ $(function() {
 				$('#error').show().text('至少上传一个以上的作品');
 				return false;
 			}
-			var ckCreater = $('#worksCreater').val();
-			if(Trim(ckCreater) == ''){
-				$('#error').show().text('请填写创作团队');
-				return false;
-			}
+			// var ckCreater = $('#worksCreater').val();
+			// if(Trim(ckCreater) == ''){
+			// 	$('#error').show().text('请填写创作团队');
+			// 	return false;
+			// }
 			var ckDesp = $('#worksDesp').val();
 			if(Trim(ckDesp) == ''){
 				$('#error').show().text('请填写作品简介');
 				return false;
 			}
-			//var base = worksimage.substr(worksimage.indexOf(",", 1) + 1);
 			var base = worksimage.split(",");
 			var thumb_base = base[1].substr(0,base[1].indexOf(')'));
 			var m_labelCode	   = new Array();  //标签数组
@@ -532,103 +472,6 @@ $(function() {
 		// console.log(e.target.result);
 	 //    }
 	});
-
-	//上传作品文件  待处理
-	function upload_list(){
-		var uploader = new plupload.Uploader({
-		runtimes : 'html5,flash,silverlight,html4',
-		browse_button : 'pickfiles', // 选择文件
-		//file_data_name: 'worksFile',
-		container: document.getElementById('container'), // ... or DOM Element itself
-		url : '#',
-		flash_swf_url : './Moxie.swf',
-		silverlight_xap_url : './Moxie.xap',
-		
-		filters : {
-			max_file_size : '10mb',
-			mime_types: [
-				{title : "Image files", extensions : "jpg,png,mp4,mp3",}
-				//{title : "Zip files", extensions : "zip"}
-			],
-			prevent_duplicates : true //不允许选取重复文件
-		},
-
-		init: {  //初始化
-			//执行完成后触发
-			PostInit: function() {
-				document.getElementById('filelist').innerHTML = '';
-				$('#pickfiles').change(function(){
-					var path = $(this).val();
-					console.log(path);
-				})
-				// document.getElementById('form_submit').onclick = function() {
-				// 	uploader.start(); //开始上传 触发
-				// 	return false;
-				// };
-			},
-
-			FilesAdded: function(up, files) {
-
-				document.getElementById('error').innerHTML = '';
-				plupload.each(files, function(file,i) {
-					//console.log(files[i].type);
-					document.getElementById('filelist').innerHTML += '<div class="img-thumbnail" id="' + file.id + '"><i class="glyphicon glyphicon-remove delete-img"></i><b></b></div>';
-					if(files[i].type == 'video/mp4'){
-						$('#'+files[i].id).prepend('<img src="./view/assets/img/uplay.jpg" /><br/>');
-					}
-					previewImage(files[i],function(imgsrc){
-					$('#'+files[i].id).prepend('<img src="'+ imgsrc +'" /><br/>');
-				})
-				});
-				//清除上传图片
-				$('.delete-img').click(function(){
-					var id = $(this).parent().attr('id');
-					console.log(id);
-					$('#'+id).remove();
-					 for (var i in uploader.files) {
-	                    if (uploader.files[i].id === id) {
-	                        uploader.files.splice(i, 1);
-	                    }
-	                }
-					//console.log(uploader.files);
-				});
-				file_array = new Array();
-				file_array['file'] = uploader.files
-				//uploader.start();  //选择完成文件后 立马触发上传
-			},
-			// UploadProgress: function(up, file) {
-			// 	return false;
-			// 	$('.delete-img').remove(); //关闭图标
-			// 	document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-			// 	document.getElementById('error').innerHTML = '正在上传中....';
-			// },
-			// FileUploaded : function(up,file,cak){
-			// 	return false;
-			// 	// console.log(file);  上传完成一张图片触发
-			// 	$('#'+file['id']+' b').remove();
-			// 	$('#'+file['id']).css('border','1px solid #1CFD01');
-			// 	document.getElementById('error').innerHTML = '';
-			// },
-			// UploadComplete: function(up,file){
-			// 	return false;
-			// 	if(file == ''){
-			// 		layer.msg('没有文件可上传', {icon: 0});
-			// 	}else{
-			// 		layer.msg('上传文件全部完成', {icon: 1});
-			// 	}
-			// },
-			Error: function(up, err) {
-				document.getElementById('error').innerHTML = err.message;
-			}
-		}
-	});
-	uploader.init();
-	uploader.bind('FilesAdded',function(up,files){
-		//console.log(up);
-	})
-	}
-	//upload_list(); //初次打开首页 立即实例化上传作品模块
-
 
 	//上传之前预览封面图片
 	function previewImage(file,callback){//file为plupload事件监听函数参数中的file对象,callback为预览图片准备完成的回调函数

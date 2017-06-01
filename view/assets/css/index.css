@@ -71,7 +71,7 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 #profile .list-img{width:10%;}
 #profile .list-title{width:20%;}
 #profile .list-guanggao{width:17%;}
-#profile .list-pinpai{width:8%;}
+#profile .list-pinpai{width:23%;}
 #profile .list-fenlei{width:20%;}
 #profile .list-user{width:15%;}
 #profile .list-date{width:10%;}
@@ -85,8 +85,9 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 */.detailview:hover{color:#005bac;}
 /*上传表单*/
 #uploadForm b{color:red;}
-#uploadForm .vcenter{border-bottom: 1px solid #e2e2e2;position: absolute;width:60%;left:29%;top:-11px;}
-#uploadForm .uploadhr{margin-left: 16%;font-size:10px;color:#afafaf;}
+#uploadForm .vcenter{border-bottom: 1px dashed #e2e2e2;position: absolute;width:60%;left:33%;top:-9px;}
+#uploadForm .uploadhr{margin-left: 16%;font-size:16px;color:#afafaf;}
+#uploadForm strong{color:#afafaf;}
 /*广告节按钮*/
 .adqueding{margin-left: 5px;}
 .adList{margin-left: 16%;}
@@ -147,7 +148,7 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 .loadingtext{display: none;}
 
 /*列表编辑页面*/
-.oder_img,.oder_mp4{width:100px;padding: 5px;cursor: default;}
+.oder_img,.oder_mp4{width:100px;padding: 5px;/*cursor: default;*/}
 
 /*检索 新增透明*/
 /*#ver_soso{background-color: rgba(255,255,255,0.8) }
@@ -157,3 +158,6 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 .control{position: relative;top:-26px;background-color: #ffffff;border-left: 1px solid #337AB7;border-right: 1px solid #337AB7;}
 .progressTime{display: inline-table;margin-left:5px;}
 .current_modes,.duration_modes,.progressTime{color:#888;}
+
+/*详情页*/
+.pos td{padding:0px 5px 5px 0px;vertical-align: top;}

@@ -48,8 +48,14 @@
                   <dl class="dl-horizontal list-conter worksinfo">
                     <dt>作品名称:</dt>
                     <dd class="workname"></dd>
-                    <dt>创作团队:</dt>
-                    <dd class="wkcreater"></dd>
+                    <dt>公司内 创作团队:</dt>
+                    <dd id="chuangzuo-list">
+                      <!-- ajax -->
+                    </dd>
+                    <dt class="gongsi-dt hide">公司外 制作公司:</dt>
+                    <dd id="gongsi-list">
+                      <!-- ajax -->
+                    </dd>
                     <dt>作品简介:</dt>
                     <dd class="wkdesp"></dd>
                     <dt>所属部门:</dt>
@@ -68,7 +74,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary show-start"><i class="glyphicon glyphicon-heart"></i> 收藏</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
           </div>
         </div>
       </div>
@@ -90,20 +96,40 @@
                 <div class="form-group">
                   <div class="vcenter">&nbsp;</div>
                   <p class="uploadhr">请输入您的作品信息</p>
-                  <label class="lab"><b>*</b>作品名称</label>
+                  <label class="lab"><b>*</b> 作品名称</label>
                   <input type="text" class="form-control" name="worksName" id="up_worksName" placeholder="作品名称">
                 </div>
               </div>
-              <div class="form-inline">
+              <!-- <div class="form-inline">
                 <div class="form-group">
-                  <label class="lab" ><b>*</b>创作团队</label>
-                  <!-- <input type="text" class="form-control" id="worksCreater" name="worksCreater" placeholder="请填写创作者"> -->
+                  <label class="lab" ><b>*</b> 公司内 创作团队</label>
                   <textarea class="form-control" rows="5" style="width:50%;" placeholder="请填写创作团队" id="worksCreater" name="worksCreater"></textarea>
                 </div>
+              </div> -->
+              <div id="chuangzuo-ajax">
+              <!-- ajax -->
+                <!-- <div class="form-inline">
+                  <div class="form-group">
+                    <label class="lab" ><b>*</b> 公司内 创作团队</label>
+                    <input type="text" class="form-control" id="worksName" name="worksName" placeholder="请输入ECD姓名"> <strong>ECD</strong>
+                  </div>
+                </div>
+
+                <div class="form-inline">
+                  <div class="form-group">
+                    <label class="lab" ></label>
+                    <input type="text" class="form-control" id="worksName" name="worksName"  placeholder="请输入GCD姓名"> <strong>GCD</strong>
+                  </div>
+                </div> -->
               </div>
+              <i style="margin-left: 24%;position: relative;top:-14px; color:#afafaf;font-family: '微软雅黑'">若输入多人姓名时请使用半角逗号分隔，例如：Abel.Kid,Tim.Jordan</i>
+              <div id="gongsi-ajax">
+                <!-- ajax -->
+              </div>
+              <i style="margin-left: 24%;position: relative;top:-14px; color:#afafaf;font-family: '微软雅黑'">若输入多家公司时请使用半角逗号分隔，例如：图片中国,北京图片社</i>
               <div class="form-inline">
                 <div class="form-group">
-                  <label class="lab"><b>*</b>作品简介</label>
+                  <label class="lab" style="vertical-align:top"><b>*</b> 作品简介</label>
                   <textarea class="form-control" rows="5" style="width:50%;" placeholder="请填写作品介绍" id="worksDesp" name="worksDesp"></textarea>
                 </div>
               </div>
@@ -111,7 +137,7 @@
                 <div class="form-group">
                 <div class="vcenter">&nbsp;</div>
                 <p class="uploadhr">请选择您的作品分类</p>
-                  <label class="lab"><b>*</b>目前部门</label>
+                  <label class="lab"><b>*</b> 目前部门</label>
                   <select class="form-control selectpicker" data-live-search="true" id="departmment" name="departId">
                     <option value="">所属部门</option>
                   </select>
@@ -119,7 +145,7 @@
               </div>
               <div class="form-inline">
                 <div class="form-group">
-                  <label class="lab"><b>*</b>广告主</label>
+                  <label class="lab"><b>*</b> 广告主</label>
                   <select class="form-control selectpicker" data-live-search="true" id="advertiser" name="advertId">
                     <option value="">请选择广告主</option>
                   </select>
@@ -135,96 +161,17 @@
               </div>
               <div class="form-inline">
                 <div class="form-group">
-                  <label class="lab" style="vertical-align: top;"><b>*</b>多选标签</label>
+                  <label class="lab" style="vertical-align: top;"><b>*</b> 多选标签</label>
                   <div id="select-tag">
                     <!-- ajax 加载 -->
                   </div>
                 </div>
               </div>
-              <!-- <div class="form-inline">
-                <div class="form-group">
-                  <label class="lab">作品名称</label>
-                  <input type="text" class="form-control" name="worksName" id="up_worksName" placeholder="作品名称">
-                </div>
-              </div> -->
-              <!-- <div class="form-inline">
-                <div class="form-group">
-                  <label class="lab">是否获奖</label>&nbsp;
-                  <div class="radio">
-                    <label>
-                      <input type="radio" name="awardFlag" value="0">
-                      未获奖
-                    </label>
-                    <label>
-                      <input type="radio" name="awardFlag" value="1">
-                      已获奖
-                    </label>
-                  </div>
-                </div>
-              </div> -->
-              <!-- <div id="adFestId-show">
-                <div class="form-inline">
-                  <div class="form-group">
-                    <label class="lab">广告节</label>
-                    <select class="form-control selectpicker" data-live-search="true" id="adFestId" disabled>
-                      <option value="">请选择广告节</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-inline">
-                  <div class="form-group">
-                    <label class="lab">广告节年份</label>
-                    <select class="form-control selectpicker" data-live-search="true" id="adFestYearId" disabled>
-                      <option value="">请选择年份</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-inline">
-                  <div class="form-group">
-                    <label class="lab">奖项名称</label>
-                    <select class="form-control selectpicker" data-live-search="true" id="adFestYearId" disabled>
-                      <option value="">请选择奖项名称</option>
-                    </select>
-                  </div>
-                </div>
-              </div> -->
-              <!-- <div class="form-inline">
-                <div class="form-group">
-                  <label class="lab">目前部门</label>
-                  <select class="form-control selectpicker" data-live-search="true" id="departmment" name="departId">
-                    <option value="">所属部门</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-inline">
-                <div class="form-group">
-                  <label class="lab">广告主</label>
-                  <select class="form-control selectpicker" data-live-search="true" id="advertiser" name="advertId">
-                    <option value="">请选择广告主</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-inline">
-                <div class="form-group">
-                  <label class="lab">品牌</label>
-                  <select class="form-control selectpicker" data-live-search="true" id="brandsInfo" name="brandId">
-                    <option value="">请选择品牌</option>
-                  </select>
-                </div>
-              </div> -->
-              <!-- <div class="form-inline">
-                <div class="form-group">
-                  <label class="lab" style="vertical-align: top;">多选标签</label>
-                  <div id="select-tag">
-                    
-                  </div>
-                </div>
-              </div> -->
               <div class="form-inline" style="position: relative;">
                 <div class="form-group" id="container">
                 <div class="vcenter">&nbsp;</div>
                 <p class="uploadhr">请上传您的作品文件</p>
-                  <label class="lab"><b>*</b>上传封面</label>
+                  <label class="lab"><b>*</b> 上传封面</label>
                   <a href="javascript:;" class="a-upload">选择图片
                       <input type="file" name="file" id="file">
                   </a><i> 支持上传格式：png、jpg</i>
@@ -238,7 +185,7 @@
               </div>
               <div class="form-inline">
                 <div class="form-group" id="container">
-                  <label class="lab" ><b>*</b>上传作品</label>
+                  <label class="lab" ><b>*</b> 上传作品</label>
                   <botton class="btn btn-default btn-sm" id="pickfiles">清空并重新选择文件 (多选)<b></b></botton><i>支持上传格式：png、jpg、mp4、mp3</i>
                   <input type="file" id="hiddenFile" style="display: none;" accept=".jpg,.png,.mp3,.mp4" multiple>
                   <div id="filelist">
@@ -252,16 +199,6 @@
                 <p class="uploadhr">请输入您的获奖信息</p>
                   <label class="lab">获奖信息</label>&nbsp;
                   <div class="btn btn-xs btn-default addAd"><i class="glyphicon glyphicon-plus"></i> 增加</div>
-                  <!-- <div class="radio">
-                    <label>
-                      <input type="radio" name="awardFlag" value="0" checked>
-                      未获奖
-                    </label>
-                    <label>
-                      <input type="radio" name="awardFlag" value="1">
-                      已获奖
-                    </label>
-                  </div> -->
                   <ul class="adList">
                     <!-- ajax 加载 -->
                   </ul>
@@ -270,24 +207,12 @@
               <div id="adFestId-show">
                   <!-- show select -->
               </div>
-              <!-- <div class="form-inline">
-                <div class="form-group">
-                  <label class="lab" >创作团队</label>
-                  <textarea class="form-control" rows="5" style="width:50%;" placeholder="请填写创作团队" id="worksCreater" name="worksCreater"></textarea>
-                </div>
-              </div> -->
-             <!--  <div class="form-inline">
-                <div class="form-group">
-                  <label class="lab">作品简介</label>
-                  <textarea class="form-control" rows="5" style="width:50%;" placeholder="请写作品介绍" id="worksDesp" name="worksDesp"></textarea>
-                </div>
-              </div> -->
                <p class="error alert alert-danger" id="error"></p>
                <p class="text-center loadingtext" ><img src="../view/assets/img/loading.gif" /></p>
                <p class="text-center loadingtext" >正在上传中,请不要关闭</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default btn-dis" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default btn-dis" data-dismiss="modal">关闭</button>
             <button type="submit" id="form_submit" class="btn btn-primary btn-dis">完成保存</button>
           </div>
           </form>
@@ -296,7 +221,7 @@
     </div>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-3 left-tab">
+        <!-- <div class="col-xs-3 left-tab">
           <div class="veiw-menu">
             <p>广告相关内容</p>
             <ul class="list-inline">
@@ -427,7 +352,7 @@
               </li>
             </ul>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="row">
         <div class="col-xs-4 col-xs-offset-4 alert-box">
@@ -487,31 +412,10 @@
                   </div>
                   <div role="tabpanel" class="tab-pane " id="profile">
                     <ul class="list-unstyled ajax-newlist">
-                     <!-- <li>
-                        <div class="img pull-left">
-                           <img src="http://placehold.it/150x120" alt="...." data-toggle="modal" data-target="#show-id" class="img-responsive img-rounded" data-id="图片">
-                        </div>
-                        <div class="title pull-right">
-                          <h4 data-toggle="modal" data-target="#show-id" class="detailview" data-id="北京能源集团有限责任公司">北京能源集团有限责任公司</h4>
-                          <p class="text text-muted">上传者：yangsun</p>
-                          <p class="text text-muted">上传日期：2017-01-22</p>
-                          <p class="text text-muted">收藏次数：500</p>
-                        </div>
-                        <div class="clearfix"></div>
-                      </li>-->
+                      <!-- ajax加载 -->
                     </ul>
                     <div class="row ie-width ajax-hotlist">
-                      <!-- <div class="col-xs-4">
-                        <div class="thumbnail">
-                          <img src="http://placehold.it/370x500" alt="...">
-                          <div class="caption thumbnail-title" data-toggle="modal" data-target="#show-id">
-                            <p class="text text-center">北京电通广告</p>
-                            <p class="text text-center"><i class="glyphicon glyphicon-user"></i> sunyang </p>
-                            <p class="text text-center"><i class="glyphicon glyphicon-time"></i> 2016-12-12 </p>
-                            <p class="text text-center"><i class="glyphicon glyphicon-heart"></i> 2256 </p>
-                          </div>
-                        </div>
-                      </div>-->
+                      <!-- ajax加载 -->
                     </div>
                     <p class="text-center">
                     <button class="btn-primary btn loading_list"><span>加载更多</span></button>
