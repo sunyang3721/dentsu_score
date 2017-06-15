@@ -6,7 +6,7 @@ $(function() {
 		     var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus"); //通过XMLHttpRequest取得响应头，sessionstatus，  
 		         if(sessionstatus=="timeout"){ 
 					//如果超时就处理 ，指定要跳转的页面  
-					window.location.replace("../userLoginCheck.do");   
+					window.location.href = "../userLoginCheck.do";   
 		        }   
 		      }   
 		 })

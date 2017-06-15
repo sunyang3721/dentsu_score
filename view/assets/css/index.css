@@ -148,7 +148,7 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 .loadingtext{display: none;}
 
 /*列表编辑页面*/
-.oder_img,.oder_mp4{width:100px;padding: 5px;/*cursor: default;*/}
+.oder_img,.oder_mp3,.oder_mp4{width:100px;padding: 5px;/*cursor: default;*/}
 
 /*检索 新增透明*/
 /*#ver_soso{background-color: rgba(255,255,255,0.8) }

@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0"> 
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>Creative Gallery</title>
 
@@ -19,12 +22,6 @@
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
-    <script type="text/javascript" src="view/assets/js/plupload.full.min.js"></script>
-    <script type="text/javascript" src="view/assets/js/jquery.cookie.js"></script>
-    <script type="text/javascript" src="view/assets/js/skin.js"></script>
-    <script type="text/javascript" src="view/assets/js/bootstrap-select.min.js"></script>
-    <script src="view/assets/js/layer.js"></script>
-    <script type="text/javascript" src="view/assets/js/index_api.js"></script>
   </head>
   <style>
     #usermail{cursor:default;}
@@ -32,6 +29,23 @@
   </style>
   <script type="text/javascript">
       $(function(){
+        //判断登陆
+        //修复不同浏览器登录兼容问题
+        // if(NV.name == 'unkonw' || NV.name == 'ie'){
+        //  // alert('IE浏览器');
+        //     $.ajaxSetup({
+        //      cache:false
+        //    })
+        //  }
+        $.ajaxSetup({
+           contentType:"application/x-www-form-urlencoded;charset=utf-8",   
+           complete:function(XMLHttpRequest,textStatus){ 
+             var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");  
+                 if(sessionstatus=="timeout"){ 
+                window.location.href = "./userLoginCheck.do";   
+                }   
+              }   
+         })
         var height = $(window).height();  //控制不同显示器显示不同高度
         $('iframe,.slide-bg').css('height',height+'px');
          
@@ -151,7 +165,7 @@
               <div class="form-inline">
                 <div class="form-group" id="container">
                   <label class="lab" ><b>*</b> 上传作品</label>
-                  <botton class="btn btn-default btn-sm" id="pickfiles">选择文件 (多选)<b></b></botton><i>支持上传格式：png、jpg、mp4、mp3</i>
+                  <botton class="btn btn-default btn-sm" id="pickfiles">选择文件 (多选)<b></b></botton> <i>支持上传格式：png、jpg、mp4、mp3</i>
                   <input type="file" id="hiddenFile" style="display: none;"  name="worksFile" accept=".jpg,.png,.mp3,.mp4" multiple>
 
                 </div>
@@ -331,6 +345,12 @@
          }
       })
     </script>
+    <script type="text/javascript" src="view/assets/js/plupload.full.min.js"></script>
+    <script type="text/javascript" src="view/assets/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="view/assets/js/skin.js"></script>
+    <script type="text/javascript" src="view/assets/js/bootstrap-select.min.js"></script>
+    <script src="view/assets/js/layer.js"></script>
+    <script type="text/javascript" src="view/assets/js/index_api.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <!-- 裁剪 -->
