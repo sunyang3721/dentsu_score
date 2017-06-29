@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+    <title>预览</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width" />
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0"> 
+    <style type="text/css" media="screen">
+        html, body{ height:100%;background-color:#808080;}
+        body { margin:0; padding:0; overflow:auto; }
+    </style>
+    <script type="text/javascript" src="./assets/flexPaper/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./assets/flexPaper/js/flexpaper.js"></script>
+    <script type="text/javascript" src="./assets/flexPaper/js/flexpaper_handlers.js"></script>
+</head>
+<body>
+
+<div id="documentViewer" style="width:100%;margin:0 auto;"></div>
+
+<script type="text/javascript">
+   
+    var height = $(window).height()-4;  //控制不同显示器显示不同高度
+        $('#documentViewer').css('height',height+'px');
+    
+    function getQueryString(name) { 
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+      var r = window.location.search.substr(1).match(reg); 
+      if (r != null) return decodeURIComponent(r[2]); return null; 
+    }
+    var name = getQueryString('name');
+    
+    $.ajax({
+          url:'../previewWorksFile.do',
+          dataType:'json',
+          async:false, 
+          data:{worksFileId:name},
+          success:function(data){
+            //console.log(data);
+            if(data['status'] == 200){
+              previewPath = data['worksFileInfo']['previewPath'];
+              $('title').text(data['worksFileInfo']['t_fileName']);
+              //console.log(data);
+            }
+            if(data['status'] == 0){
+              alert(data['rtnMsg']);
+              //如果超时就处理 ，指定要跳转的页面  
+             window.location ="../userLogin.do";   
+            }
+          }
+        });
+
+    $('#documentViewer').FlexPaperViewer(
+            { config : {
+
+                SWFFile : escape(previewPath),
+               // PDFFile : 'http://cnbei22apm15.ap.media.global.loc:8082/FileStorage/RanpathN/V1497431667055100006/1497431667055490487.pdf',
+                Scale : 1.2,
+                ZoomTransition : 'easeOut',
+                ZoomTime : 0.5,
+                ZoomInterval : 0.2,
+                FitPageOnLoad : false,
+                FitWidthOnLoad : false,
+        //当设置为true时，单击全拼按钮会打开一个FlexPaper最大化的新窗口而不是全屏，当由于flash播放器因为安全而禁止全屏，而使用flexpaper作为独立的flash播放器的时候设置为true是个优先选择
+                FullScreenAsMaxWindow : false,
+        //当设置为true时，展示文档时不会加载完整个文档，而是逐步加载，但是需要将文档中转化为9以上的版本（使用pdf2swf的时候使用-T 9标签）
+                ProgressiveLoading : true,
+        //设置最小的缩放比例
+                MinZoomSize : 0.2,
+        //设置最大的缩放比例
+                MaxZoomSize : 5,
+        //设置为true时，单击搜索所有符合条件的地方高亮显示
+                SearchMatchAll : false,
+        //设置启动模式如“Portrait”或“TowPage”
+                InitViewMode : 'Portrait',
+
+                RenderingOrder : 'flash,html',
+                StartAtPage : '',
+        //工具栏上是否显示样式选择框
+                ViewModeToolsVisible : true,
+        //工具栏上时候显示缩放工具
+                ZoomToolsVisible : true,
+        //工具栏上是否显示导航工具
+                NavToolsVisible : false,
+        //工具栏上是否显示光标工具
+                CursorToolsVisible : false,
+        //工具栏上是否显示搜索工具
+                SearchToolsVisible : false,
+                WMode : 'window',
+                localeChain: 'zh_CN'
+            }}
+    );
+</script>
+
+</body>
+</html>
