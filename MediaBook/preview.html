@@ -14,6 +14,31 @@
     <script type="text/javascript" src="./assets/flexPaper/js/jquery.min.js"></script>
     <script type="text/javascript" src="./assets/flexPaper/js/flexpaper.js"></script>
     <script type="text/javascript" src="./assets/flexPaper/js/flexpaper_handlers.js"></script>
+    <!-- Piwik -->
+    <script type="text/javascript">
+    var siteId = '';
+    var _paq = _paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+    	//通过访问路径，判断正式/测试环境
+        if (document.location.host.indexOf('cnbei22apm17') >= 0
+      		  || document.location.host.indexOf('10.68.80.104') >= 0) {
+      		//正式环境
+      		siteId = '2';
+        } else {
+      		//测试环境
+      		siteId = '1';
+        }
+        var u="//10.68.80.129:8081/piwik/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', siteId]);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
+    </script>
+    <!-- End Piwik Code -->
 </head>
 <body>
 

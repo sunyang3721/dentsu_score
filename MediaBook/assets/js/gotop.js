@@ -23,7 +23,7 @@
 
     bindEvent('load',
         function() {
-            var css = 'z-index:999;background-color:#000;width:50px;height:50px;position:fixed;right:5px;bottom:5px;border-radius:10px;cursor:pointer;display:none;';
+            var css = 'z-index:999;background-color:#000;width:50px;height:50px;position:fixed;right:25px;bottom:5px;border-radius:10px;cursor:pointer;display:none;';
 
             if (isIE && isIE < 7) {
                 css += '_position:absolute;_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-30-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)))';

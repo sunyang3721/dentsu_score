@@ -9,10 +9,104 @@
     <meta http-equiv="expires" content="0"> 
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>The MediaBook</title>
+	<!-- Piwik -->
+    <script type="text/javascript">
+    var siteId = '';
+    var _paq = _paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+    	//通过访问路径，判断正式/测试环境
+        if (document.location.host.indexOf('cnbei22apm17') >= 0
+      		  || document.location.host.indexOf('10.68.80.104') >= 0) {
+        	//正式环境
+        	siteId = '2';
+        } else {
+        	//测试环境
+        	siteId = '1';
+        }
+    	var u="//10.68.80.129:8081/piwik/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', siteId]);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
+    </script>
+    <!-- End Piwik Code -->
+    <!-- Client Adaption -->
+    <script type="text/javascript">
+		var os = {
+			versions:function(){
+				var o = navigator.platform;
+				return {
+					win: o.indexOf('Win') > -1, //Windows
+					osx: o.indexOf('Mac') > -1 //Mac
+				};
+			}()
+		}
+		var browser = {
+			versions:function(){
+				var u = navigator.userAgent, app = navigator.appVersion;
+				return {
+					trident: u.indexOf('Trident') > -1, //IE内核
+					presto: u.indexOf('Presto') > -1, //opera内核
+					webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+					gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1,//火狐内核
+					mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+					ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+					android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+					iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+					iPad: u.indexOf('iPad') > -1, //是否iPad
+					webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
+					weixin: u.indexOf('MicroMessenger') > -1, //是否微信 （2015-01-22新增）
+					qq: u.match(/\sQQ/i) == " qq" //是否QQ
+				};
+			}(),
+			language:(navigator.browserLanguage || navigator.language).toLowerCase()
+		}
+		/*
+		alert(
+			""
+			+ " / " + "win:" + os.versions.win
+			+ " / " + "mac:" + os.versions.osx
+			+ " / " + "trident:" + browser.versions.trident
+			+ " / " + "presto:" + browser.versions.presto
+			+ " / " + "webKit:" + browser.versions.webKit
+			+ " / " + "gecko:" + browser.versions.gecko
+			+ " / " + "mobile:" + browser.versions.mobile
+			+ " / " + "ios:" + browser.versions.ios
+			+ " / " + "android:" + browser.versions.android
+			+ " / " + "iPhone:" + browser.versions.iPhone
+			+ " / " + "iPad:" + browser.versions.iPad
+			+ " / " + "webApp:" + browser.versions.webApp
+			+ " / " + "weixin:" + browser.versions.weixin
+			+ " / " + "qq:" + browser.versions.qq
+			+ " / " + "language:" + browser.language
+		);
+		*/
+		
+		//判断是否移动端
+		if (browser.versions.mobile) { //alert("Is Mobile");
+			window.location = "./userLogin.do";
+		} else {
+			//is MAC
+			if (os.versions.osx) { //alert("Is MAC");
+				window.location.href = "http://10.68.80.104:8080/MediaBook/userLogin.do";
+			} 
+			//is PC
+			else if (os.versions.win) { //alert("Is PC");
+				window.location = "./userLogin.do";
+			} 
+			//Is another OS
+			else { //alert("Is another OS");
+				window.location = "./userLogin.do";
+			}
+		}
+	</script>
+	<!-- End Client Adaption Code -->
+	
   </head>
-  <script type="text/javascript">
-   window.location = "./userLogin.do";  
-  </script>
 </head>
 <body>
 

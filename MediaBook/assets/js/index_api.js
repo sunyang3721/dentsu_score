@@ -33,6 +33,17 @@
 			//请求前的处理
 		},
 		success:function(data){
+			//默认显示搜索总数量
+			$('#keywork').attr('placeholder','Search form '+data['worksCnt']+' works');
+			// $('[name=a]').click(function(){
+			// 	var id = $(this).val();
+			// 	if(id == 1){
+			// 		$('#keywork').attr('placeholder','Search form '+data['worksCnt']+' works');
+			// 	}else{
+			// 		$('#keywork').attr('placeholder','Search for...');
+			// 	}
+			// })
+			
 			//数据标签 包括产品分类 用途 sunyang
 			$.each(data['worksLabelList'],function(key,value){
 				var html = '<ul class="list-unstyled"><li class="weight">'+value['m_labelName']+'</li><li>';

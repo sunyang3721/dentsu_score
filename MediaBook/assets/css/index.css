@@ -8,6 +8,10 @@ img,li.list-tab,.lihover,h4,#home .detailview:hover,.glyphicon-tasks,.search-aut
 .navbar-right .dropdown-menu{left:0px;}
 /*.navbar-default{background-color: rgba(248,248,248,0.5);}*/
 .navbar{margin-bottom:0px;}
+/*导航usermail*/
+#usermail{cursor:default;}
+#usermail:hover{color: #9d9d9d;}
+.borderNone{border-bottom: none!important;}
 
 .btnupload{position: relative;right: 65px;top:65px;float:right;}
 
@@ -35,11 +39,12 @@ img,li.list-tab,.lihover,h4,#home .detailview:hover,.glyphicon-tasks,.search-aut
 .search-auto li{width:100%!important;background-color: #fff;padding:10px 0px 10px 20px;margin-bottom:0px!important;border-bottom:1px solid #efefef;text-align: left;}
 .search-auto li:hover{background-color: #f7f7f7;}
 /*tab 标签*/
-.tab-pane{border-left:1px solid #ddd;border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;padding:10px;margin-bottom: 30px}
+.tab-pane{border-left:1px solid #ddd;border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;padding-left:5px;margin-bottom: 30px}
 li.list-tab{color:#555;padding:11px;float: right;}
 li.active_tab{color:#428BCA;}
 p.text{margin-top:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .page{text-align: center;}
+.searchnum{float:right!important;padding:11px 10px 0px 0px;color:#757575;font-family:'Microsoft YaHei'}
 /*缩略图 hover*/
 .ie-width .col-xs-4{padding-left:5px;padding-right:5px;}
 .ie-width .thumbnail{width:100%;border:0px;}
@@ -60,15 +65,18 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 /*分页*/
 .pagination{margin:0px;}
 /*列表*/
+#noneHover{padding-top:5px;margin-bottom:5px;padding-left:0px;margin-left:-5px;list-style:none;margin-top:0px;line-height:20px;}
+#noneHover li{float: left;border-bottom:1px solid #e8e8e8;padding:5px 2px;}
+
 #home .list-unstyled >li ,#home .list-inline li{float: left;border-bottom:1px solid #e8e8e8;padding:5px 2px;}
 #home .frist-height{height: 30px!important;/*background-color: #f1f1f1;*/ font-weight: bold;}
 #home .list-inline:hover{background-color: #f1f1f1;transition: 0.3s ease-in-out;}
 #home .list-inline > li{height: 120px;}
 #home .list-inline img{margin-right:1px;}
 #home .list-img{width:10%;}
-#home .list-title{width:20%;}
+#home .list-title{width:30%;}
 #home .list-guanggao{width:17%;}
-#home .list-pinpai{width:8%;}
+#home .list-pinpai{width:18%;}
 #home .list-fenlei{width:20%;}
 #home .list-user{width:15%;}
 #home .list-date{width:10%;}

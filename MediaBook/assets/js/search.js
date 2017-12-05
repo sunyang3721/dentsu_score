@@ -23,22 +23,24 @@
 //
 //               佛祖保佑         永无BUG
 //
-//
-//
 $(function() {
 	//判断登陆
-	$.ajaxSetup({   
-	   contentType:"application/x-www-form-urlencoded;charset=utf-8",   
-	   complete:function(XMLHttpRequest,textStatus){ 
-	     var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus"); //通过XMLHttpRequest取得响应头，sessionstatus，  
-	         if(sessionstatus=="timeout"){ 
-	        	//alert("登录超时,请重新登录！");
-				//如果超时就处理 ，指定要跳转的页面  
-				window.location = "../userLogin.do";   
-				//location.reload();
+	$.ajaxSetup({
+		type:"POST",
+		cache:false,
+		contentType:"application/x-www-form-urlencoded;charset=utf-8",   
+		complete:function(XMLHttpRequest,textStatus){ 
+			var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus"); //通过XMLHttpRequest取得响应头，sessionstatus， 
+			if(sessionstatus != "200"){ 
+				layer.msg('登陆已过期,正在刷新重新登陆...', {icon: 0});
+				setTimeout(function () {
+					//如果超时就处理 ，指定要跳转的页面  
+					window.location = "../userLogin.do";   
+				}, 1000);
 	        }   
-	      }   
-	 })
+	    }   
+	})
+		
 	$.ajax({
 		url:'../findUserInfo.do',
 		dataType:'json',
@@ -80,49 +82,55 @@ $(function() {
 		ajaxpost(1);
 	})
 
-	//列表 缩略图 视图输出
+	/**
+	 * 
+	 * @author:      Yang.Sun@dentsu.com.cn
+	 * @dateTime:    2017-11-02 10:29:49
+	 * @description: 指定分页列表输出
+	 */
 	function ajaxpost(page){
 		var url = '../queryWorksInfoList.do';
 		var param = location.search;
 		var view = $('#view').val();  // 0 为 new 排序  1 为 hot 排序
-		var type = $('#type').val();  // 0 为 列表显示  1 为 缩略图显示
-		//var type = 0;  // 0 为 列表显示  1 为 缩略图显示
-		loading_page('正在加载中，请稍等......');
+		loading_page('Loading ... ...');
 		$.ajax(url+param,{
 			type:'post',
 			dataType:'json',
 			data:{pageNum:page,orderFlag:view,loadCount:numloadCount},
 			success:function(data){
+				//搜索结果数量显示
+				if(data['worksCnt'] !== 0){
+					$('.searchnum').html('共检索出 <b>'+data['worksCnt']+'</b> 条结果');
+				};
+				stop = true;
 				if(data['status'] == -1){
 					layer.msg(data['rtnMsg'], {anim:6});
 					return false;
 				}
-				switch(type){
-					case '0' :
-					if(page == '1'){
-						var html = "<ul class='list-inline'>";
-						    html += "<li class='list-img frist-height'><\/li>\n";
-						    html += "<li class='list-title frist-height'>数据包名称<\/li>\n";
-						    html += "<li class='list-pinpai frist-height'>数据类型<\/li>\n";
-						    html += "<li class='list-guanggao frist-height'>数据标签<\/li>\n";
-						    html += "<li class='list-fenlei frist-height'>广告主/品牌<\/li>\n";
-						    html += "<li class='list-user frist-height'>更新日期<\/li>\n";
-						    html += "<li class='list-date frist-height'>创建日期<\/li>\n";
-						    html += "</ul><div class='clearfix'></div>";
-						$('.ajax-newlist').append(html);
-					}
-					list_view(data);
-					break;
-					case '1' :
-					list_img(data);
-					break;
+				if(page == '1'){
+					var html = "<ul id='noneHover'>";
+					    html += "<li class='list-img frist-height'><\/li>\n";
+					    html += "<li class='list-title frist-height'>数据包名称<\/li>\n";
+					    html += "<li class='list-pinpai frist-height'>数据类型<\/li>\n";
+					    html += "<li class='list-guanggao frist-height'>数据标签<\/li>\n";
+					    // html += "<li class='list-fenlei frist-height'>广告主/品牌<\/li>\n";
+					    html += "<li class='list-user frist-height'>更新日期<\/li>\n";
+					    html += "<li class='list-date frist-height'>创建日期<\/li>\n";
+					    html += "</ul><div class='clearfix'></div>";
+					$('.ajax-newlist').append(html);
 				}
+				list_view(data);
 				info_view(); //查看
 			}
 		});
 	}
 
-	//列表视图输出
+	/**
+	 * 
+	 * @author:      Yang.Sun@dentsu.com.cn
+	 * @dateTime:    2017-11-02 11:39:09
+	 * @description: 列表视图输出 
+	 */
 	function list_view(data){
 		var user = getQueryString("myWorksFlag");  // 空为 不限 ，0 为 我的上传，1 为 我的收藏
 		var keyword = getQueryString("inputKeyWord"); //关键字; 
@@ -143,7 +151,7 @@ $(function() {
 							type:'post',
 							data:{worksId:start_id,collectionFlag:1},
 							success:function(data){
-								layer.msg('收藏取消成功', {icon: 1});
+								layer.msg('取消收藏成功', {icon: 1});
 								$('#'+start_id).removeClass('start_ok').html('<i class="glyphicon glyphicon-star-empty"></i> 收藏');
 							}
 						});
@@ -159,7 +167,6 @@ $(function() {
 							}
 						});
 					}
-					//console.log(start_id);
 				})
 				update_view();
 				del_view();
@@ -195,16 +202,15 @@ $(function() {
 							}
 						});
 					}
-					//console.log(start_id);
 				})
 				update_view();
 				del_view();
 				
 				break;
 				case '1':  //我的收藏
+				$('.show-start').hide();
 				$.each(data['worksInfoList'],function(key,value){
 						var img = '../view/assets/img/file.png';
-						//var img = value['t_worksImagePath'];
 						if(value['worksAndLabelList'].length > 4){
 							var labelall = '...';
 						}
@@ -232,13 +238,13 @@ $(function() {
 							strVar += labelall || '';
 						    strVar += "	<\/p>";
 						    strVar += "<\/li>";
-						    strVar += "<li class='list-fenlei'>"
-						    strVar += "	<p class=\"text-muted\">";
-						    var adver = value['m_advertiserName']?value['m_advertiserName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'无';
-						    var brand = value['m_brandName']?value['m_brandName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'无';
-						    strVar += adver+' / '+brand;
-						    strVar += "	<\/p>";
-						    strVar += "<\/li>";
+						    // strVar += "<li class='list-fenlei'>"
+						    // strVar += "	<p class=\"text-muted\">";
+						    // var adver = value['m_advertiserName']?value['m_advertiserName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'无';
+						    // var brand = value['m_brandName']?value['m_brandName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'无';
+						    // strVar += adver+' / '+brand;
+						    // strVar += "	<\/p>";
+						    // strVar += "<\/li>";
 						    strVar += "<li class='list-user'>";
 						    strVar += "	<p class=\"text-muted\">";
 						    strVar += value['t_updateTimeStr'];
@@ -282,17 +288,23 @@ $(function() {
 			var numLength = data['worksInfoList'].length;
 			if(numloadCount > numLength){
 				$('.loading_list').hide();
-				//layer.msg('已全部加载完成', {icon: 1});
 			}else{
 				loading_page();
 			}
 			
 		}else{
 			$('.loading_list').hide();
+			stop = false;
 			layer.msg('已全部加载完成', {icon: 1});
 		}
 	}
-	//列表输出html
+	
+	/**
+	 * 
+	 * @author:      Yang.Sun@dentsu.com.cn
+	 * @dateTime:    2017-11-02 11:48:35
+	 * @description: 列表视图输出  
+	 */
 	function list_html(keyword,value){
 		if(value['worksAndLabelList'].length > 4){
 			var labelall = '...';
@@ -306,7 +318,6 @@ $(function() {
 		if(getQueryString('searchScope') == 2 && getQueryString('inputKeyWord') !==''){
 		    	var borderNone = 'borderNone';
 		 }
-		//var img = value['t_worksImagePath'];
 		var strVar = "<ul style='position:relative;border-top:1px solid #f1f1f1' class='list-inline del"+value['t_worksId']+"' data-id="+value['t_worksId']+">";
 		    strVar += "<li class='list-img "+borderNone+"'>";
 		    strVar += "	<img style='margin:20% 30%' src="+img+" alt="+value['t_worksName']+" class=\"img-responsive img-rounded detailview\" data-toggle=\"modal\" data-target=\"#show-id\"  data-id="+value['t_worksId']+">";
@@ -318,7 +329,6 @@ $(function() {
 		    strVar += "<li class='list-pinpai "+borderNone+"'>";
 		    strVar += "	<p class=\"text-muted\">";
 		    strVar += file_type(value['worksFileInfoList']);
-		    //strVar += value['m_brandName']?value['m_brandName']:'未填写';
 		    strVar += "	<\/p>";
 		    strVar += "<\/li>";
 		    strVar += "<li class='list-guanggao "+borderNone+"'>"
@@ -329,16 +339,15 @@ $(function() {
 		    		}
 			});
 			strVar += labelall || '';
-		    //strVar += '<span class="label label-success">'+value['worksLabel']+'</span>';
 		    strVar += "	<\/p>";
 		    strVar += "<\/li>";
-		    strVar += "<li class='list-fenlei "+borderNone+"'>";
-		    strVar += "	<p class=\"text-muted\">";
-		    var adver = value['m_advertiserName']?value['m_advertiserName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'无';
-		    var brand = value['m_brandName']?value['m_brandName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'无';
-		    strVar += adver+' / '+brand;
-		    strVar += "	<\/p>";
-		    strVar += "<\/li>";
+		    // strVar += "<li class='list-fenlei "+borderNone+"'>";
+		    // strVar += "	<p class=\"text-muted\">";
+		    // var adver = value['m_advertiserName']?value['m_advertiserName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'无';
+		    // var brand = value['m_brandName']?value['m_brandName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'无';
+		    // strVar += adver+' / '+brand;
+		    // strVar += "	<\/p>";
+		    // strVar += "<\/li>";
 		    strVar += "<li class='list-user "+borderNone+"'>";
 		    strVar += "	<p class=\"text-muted\">";
 		    strVar += value['t_updateTimeStr'];
@@ -351,7 +360,7 @@ $(function() {
 		    if(getQueryString('searchScope') == 2 && getQueryString('inputKeyWord') !==''){
 		    	$.each(value['worksFileInfoList'],function(fk,fvalue){
 		    		strVar += "<li class='keword' style='width:100%;height:auto;border-bottom:none;'>";
-				    strVar += "<div><p class='text-muted'>"+file_info_type(fvalue['t_fileType'])+" <b>"+fvalue['t_fileName']+"</b></p></div>";
+				    strVar += "<div><p class='text-muted'>"+file_info_type(fvalue['t_fileType'])+" <b><a href=./preview.html?name="+fvalue['t_worksFileId']+" target='_blank'>"+fvalue['t_fileName']+"</a></b></p></div>";
 				    strVar += "<div><p class='text-muted textareas'>..."+fvalue['content']+"...</p></div>";
 				    strVar += "</li>";
 		    	})
@@ -367,7 +376,6 @@ $(function() {
 		    if(value['deleteLimit'] == 1){
 		    	strVar += ' <span class="del btn-xs btn-danger btn" data-id='+value['t_worksId']+'><i class="glyphicon glyphicon-trash"></i> 删除</span>';
 		    };
-		    //console.log(value);
 		    if(value['collectionFlag'] == 0){
 		    	strVar += ' <span class="btn-xs btn-info btn btn-start" id='+value['t_worksId']+' data-id='+value['t_worksId']+'><i class="glyphicon glyphicon-star-empty"></i> 收藏</span>';
 		    }else{
@@ -378,7 +386,13 @@ $(function() {
 		    strVar += '</ul>';
 		    return strVar;
 	}
-	//文件类型输出
+	
+	/**
+	 * 
+	 * @author:      Yang.Sun@dentsu.com.cn
+	 * @dateTime:    2017-11-02 11:50:03
+	 * @description: 文件类型输出 去掉重复值 
+	 */
 	function file_type(data){
 		var typearr = new Array();
 		$.each(data,function(key,value){
@@ -424,7 +438,13 @@ $(function() {
 		}
 		return html_img;
  	}
-	//去掉重复
+	
+	/**
+	 * 
+	 * @author:      Yang.Sun@dentsu.com.cn
+	 * @dateTime:    2017-11-02 11:54:22
+	 * @description: 数组中去掉重复，唯一结果 
+	 */
 	Array.prototype.unique = function(){
 	      var newArr=[this[0]]; //数组结果
 	      for(var i = 0, len = this.length; i < len; i++){ 
@@ -446,6 +466,13 @@ $(function() {
 	function info_view(){
 		var keyword = getQueryString("inputKeyWord"); //关键字; 
 		$('.detailview').click(function(){
+			var ty = $(this).hasClass('img-rounded');
+			if(ty){
+				$(this).parent().next().find('.detailview').css('color','#989898'); //已访问样式
+			}else{
+				$(this).css('color','#989898'); //已访问样式
+			}
+			
 			var id = $(this).attr('data-id');  //注意在列表加上data-id属性
 			$('.show-start').attr('data-id',id); //克隆收藏控件
 
@@ -455,11 +482,10 @@ $(function() {
 				dataType:'json',
 				data:{worksId:id},
 				success:function(data){
-					//console.log(data);
 					var workinfo = data['worksInfo'];
 					$('.worksinfo .workname').html(workinfo['t_worksName'].replace(keyword,'<b style="color:red">'+keyword+'</b>')); //作品名称
-					$('.worksinfo .advername').html(workinfo['m_advertiserName']?workinfo['m_advertiserName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'<i>未填写</i>'); //广告主
-					$('.worksinfo .branname').html(workinfo['m_brandName']?workinfo['m_brandName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'<i>未填写</i>'); //品牌
+					//$('.worksinfo .advername').html(workinfo['m_advertiserName']?workinfo['m_advertiserName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'<i>未填写</i>'); //广告主
+					//$('.worksinfo .branname').html(workinfo['m_brandName']?workinfo['m_brandName'].replace(keyword,'<b style="color:red">'+keyword+'</b>'):'<i>未填写</i>'); //品牌
 					$('.worksinfo .labels').html(workinfo['worksLabel']?workinfo['worksLabel']:'<i>未填写</i>');  //作品标签
 					$('.worksinfo .wkdesp').html(workinfo['t_worksDesp']?workinfo['t_worksDesp'].replace(/\r\n/g,"<br>").replace(keyword,'<b style="color:red">'+keyword+'</b>'):'<i>未填写</i>'); // 作品简介
 					$('.worksinfo .createrTime').html(workinfo['t_createTimeStr']?workinfo['t_createTimeStr']:'<i>未填写</i>'); //发表时间
@@ -482,7 +508,7 @@ $(function() {
 						}else{
 							var viewLimit = '<span>[无权限预览]</span>';
 						}
-						var html_list = '<li>'+value['t_fileName']+'&nbsp;&nbsp;&nbsp;&nbsp;'+downloadLimit+'&nbsp;&nbsp;'+viewLimit;
+						var html_list = '<li style="margin-bottom: 10px;">'+value['t_fileName']+'&nbsp;&nbsp;&nbsp;&nbsp;'+downloadLimit+'&nbsp;&nbsp;'+viewLimit;
 						$('.worksinfo .file-list').append(html_list);
 					})
 					if(workinfo['collectionFlag'] == 1 ){
@@ -536,13 +562,13 @@ $(function() {
 			$('.loadingtext').hide(); 
 			$('#filelist').show(); //资源作品展示
 			$('.btn-dis').removeAttr('disabled'); //开启提交状态
+			$('.wordUpList').empty(); //上传预览文件名初始化
 			$.ajax('../selectWorksInfoById.do',{
 				type:'post',
 				cache:false,
 				dataType:'json',
 				data:{worksId:id},
 				success:function(data){
-					//console.log(data);
 					var vinfo = data['worksInfo'];
 					$('#worksName').val(vinfo['t_worksName']); //数据包名称
 					$('#worksDesp').val(vinfo['t_worksDesp']);  //作品简介
@@ -593,93 +619,90 @@ $(function() {
 						}
 					})
 					
-					$.ajax({
-						url:'../initUploadSelectList.do',  //获取广告主列表
-						dataType:'json',
-						type:'post',
-						data:{},
-						success:function(datas){
-							//初始化 广告主 选中状态
-							var adbaohan = new Array();
-							$.each(datas['advertiserList'],function(key,value){
-								adbaohan.push(value['m_advertiserId']);
-							})
-							if(adbaohan.contains(vinfo['m_advertiserId'])){
-								$('#advertiser').append('<option value="'+vinfo['m_advertiserId']+'">'+vinfo['m_advertiserName']+'</option>');
-							}else{
-								$('#advertiser').append('<option value="">请选择广告主</option>');
-							}
-							//初始化 品牌 选择状态
-							if(vinfo['m_brandName']){
-								$('#brandsInfo').append('<option value="'+vinfo['m_brandId']+'">'+vinfo['m_brandName']+'</option>');
-							}else{
-								$('#brandsInfo').append('<option value="">请选择品牌</option>');
-							}
+					// $.ajax({
+					// 	url:'../initUploadSelectList.do',  //获取广告主列表
+					// 	dataType:'json',
+					// 	type:'post',
+					// 	data:{},
+					// 	success:function(datas){
+					// 		//初始化 广告主 选中状态
+					// 		var adbaohan = new Array();
+					// 		$.each(datas['advertiserList'],function(key,value){
+					// 			adbaohan.push(value['m_advertiserId']);
+					// 		})
+					// 		if(adbaohan.contains(vinfo['m_advertiserId'])){
+					// 			$('#advertiser').append('<option value="'+vinfo['m_advertiserId']+'">'+vinfo['m_advertiserName']+'</option>');
+					// 		}else{
+					// 			$('#advertiser').append('<option value="">请选择广告主</option>');
+					// 		}
+					// 		//初始化 品牌 选择状态
+					// 		if(vinfo['m_brandName']){
+					// 			$('#brandsInfo').append('<option value="'+vinfo['m_brandId']+'">'+vinfo['m_brandName']+'</option>');
+					// 		}else{
+					// 			$('#brandsInfo').append('<option value="">请选择品牌</option>');
+					// 		}
 
-							$.each(datas['advertiserList'],function(key,value){
-								//遍历广告主列表
-								if(value['m_advertiserId'] !== vinfo['m_advertiserId']){
-									$('#advertiser').append('<option value='+value['m_advertiserId']+'>'+value['m_advertiserName']+'</option>');
-								}
-							});
-							$('#advertiser,#brandsInfo').selectpicker('refresh'); 
-							//品牌初始化 显示全部
-							$.ajax({
-								url:'../selectBrandsList.do',
-								dataType:'json',
-								type:'post',
-								data:{advertId:vinfo['m_advertiserId']},
-								success:function(brchushi){
-									//console.log(brchushi);
-									if(brchushi.status == '200'){
-										$.each(brchushi['brandsInfoList'],function(key,value){
-											$('#brandsInfo').append('<option value='+value['m_brandId']+'>'+value['m_brandName']+'</option>');
-										});
-									}else{
-										$('#brandsInfo').append('<option value="">没有该广告主的品牌信息</option>');
-									}
-									$('#brandsInfo').selectpicker('refresh');
-								}
-							});
+					// 		$.each(datas['advertiserList'],function(key,value){
+					// 			//遍历广告主列表
+					// 			if(value['m_advertiserId'] !== vinfo['m_advertiserId']){
+					// 				$('#advertiser').append('<option value='+value['m_advertiserId']+'>'+value['m_advertiserName']+'</option>');
+					// 			}
+					// 		});
+					// 		$('#advertiser,#brandsInfo').selectpicker('refresh'); 
+					// 		//品牌初始化 显示全部
+					// 		$.ajax({
+					// 			url:'../selectBrandsList.do',
+					// 			dataType:'json',
+					// 			type:'post',
+					// 			data:{advertId:vinfo['m_advertiserId']},
+					// 			success:function(brchushi){
+					// 				if(brchushi.status == '200'){
+					// 					$.each(brchushi['brandsInfoList'],function(key,value){
+					// 						$('#brandsInfo').append('<option value='+value['m_brandId']+'>'+value['m_brandName']+'</option>');
+					// 					});
+					// 				}else{
+					// 					$('#brandsInfo').append('<option value="">没有该广告主的品牌信息</option>');
+					// 				}
+					// 				$('#brandsInfo').selectpicker('refresh');
+					// 			}
+					// 		});
 
-						}
-					});
+					// 	}
+					// });
 					
 					//触发广告主事件
-					$('#advertiser').on('changed.bs.select',function(){
-						var m_advertiserId = $(this).selectpicker('val'); //获取广告主的值
-						if(m_advertiserId == ''){  //不可初始化品牌
-							$('#brandsInfo').empty().append('<option value="">没有该广告主的品牌信息</option>');
-							$('#brandsInfo').selectpicker('refresh');
-							return false;
-						}
-						$.ajax({
-							url:'../selectBrandsList.do',
-							dataType:'json',
-							type:'post',
-							data:{advertId:m_advertiserId},
-							success:function(brdata){
-								$('#brandsInfo').empty();
-								if(brdata.status == '200'){
-									//alert('ss');
-									$.each(brdata['brandsInfoList'],function(key,value){
-										$('#brandsInfo').append('<option value='+value['m_brandId']+'>'+value['m_brandName']+'</option>');
-									});
-								}else{
-									$('#brandsInfo').append('<option value="">没有该广告主的品牌信息</option>');
-								}
-								$('#brandsInfo').selectpicker('refresh'); //刷新品牌select
-							}
-						});
-					});
+					// $('#advertiser').on('changed.bs.select',function(){
+					// 	var m_advertiserId = $(this).selectpicker('val'); //获取广告主的值
+					// 	if(m_advertiserId == ''){  //不可初始化品牌
+					// 		$('#brandsInfo').empty().append('<option value="">没有该广告主的品牌信息</option>');
+					// 		$('#brandsInfo').selectpicker('refresh');
+					// 		return false;
+					// 	}
+					// 	$.ajax({
+					// 		url:'../selectBrandsList.do',
+					// 		dataType:'json',
+					// 		type:'post',
+					// 		data:{advertId:m_advertiserId},
+					// 		success:function(brdata){
+					// 			$('#brandsInfo').empty();
+					// 			if(brdata.status == '200'){
+					// 				$.each(brdata['brandsInfoList'],function(key,value){
+					// 					$('#brandsInfo').append('<option value='+value['m_brandId']+'>'+value['m_brandName']+'</option>');
+					// 				});
+					// 			}else{
+					// 				$('#brandsInfo').append('<option value="">没有该广告主的品牌信息</option>');
+					// 			}
+					// 			$('#brandsInfo').selectpicker('refresh'); //刷新品牌select
+					// 		}
+					// 	});
+					// });
 
 					$('#hiddenFile').val(''); //上传文件初始化
 					$('#pickfiles b').text(''); // 数据包文件数量初始化
 					//文件列表显示
 					$('.file-list').empty();
-					// console.log(vinfo);	
 					$.each(vinfo['worksFileInfoList'],function(key,value){
-						var file_list = '<li><span>'+value['t_fileName']+'</span> <span class="btn btn-xs file-remove" data-id='+value['t_worksFileId']+'><i class="glyphicon glyphicon-remove text-danger"></i></span></li>';
+						var file_list = '<li style="margin-bottom: 10px;"><span>'+value['t_fileName']+'</span> <span class="btn btn-xs file-remove" data-id='+value['t_worksFileId']+'><i class="glyphicon glyphicon-remove text-danger"></i></span></li>';
 						$('.file-list').append(file_list);
 					});
 					var file_arr_id = new Array();
@@ -687,7 +710,6 @@ $(function() {
 						var file_id = $(this).attr('data-id');
 						$(this).parent().fadeOut();
 						file_arr_id.push(file_id);
-						//console.log(file_arr_id.join(","));
 						$('#delFileParas').val(file_arr_id.join(","));  //赋值 用来删除旧资源文件
 					});
 				}
@@ -744,18 +766,14 @@ $(function() {
 			$('#error').show().text('请选择数据标签');
 			return false;
 		}
-		// if(m_labelCode.length > 5){
-		// 	$('#error').show().text('不能超过5个标签');
-		// 	return false;
-		// }
 		//验证通过之后执行 
 		$('#error').hide(); //隐藏错误提示
 		$('.loadingtext').show(); 
 		$('.btn-dis').attr('disabled','disabled'); //禁止重复提交
 		var wok_id = $('#works_id').val(); //作品id
 
-		var wok_advertiser = $('#advertiser').val(); //广告主
-		var wok_brandsInfo = $('#brandsInfo').val(); //品牌
+		// var wok_advertiser = $('#advertiser').val(); //广告主
+		// var wok_brandsInfo = $('#brandsInfo').val(); //品牌
 
 		var wok_worksDesp = $('#worksDesp').val(); //作品简介
 		//检验
@@ -766,7 +784,6 @@ $(function() {
 				dataType:'json',
 				uploadProgress: function(event, position, total, percentComplete) {
 			        $('.progress-bar').css('width',percentComplete+'%').text(percentComplete+'%');
-					//console.log(event,percentComplete, position, total);
 			    },
 				success:function(data){
 					$('loadingtext').hide();
@@ -797,21 +814,28 @@ $(function() {
 		var file_name_attr = $('#hiddenFile').get(0).files;
 		if(file_name_attr.length !== 0){
 			$('#hiddenFile').attr('name','worksFile');
-			//var imglist = $('#hiddenFile').get(0).files;
-			//console.log(imglist);
 			$('#delFileParas').attr('name','delFileParas');
 
 		}else{
 			$('#hiddenFile,#delFileParas').removeAttr('name');
 		}
 
-		//console.log(m.length);
+		$('.wordUpList').empty();
+		$.each(m,function(key,value){
+			$('.wordUpList').append('<li>'+value['name']+'</li>');
+		})
 	});
-	//判断格式
-	function type_work(pathName){
-		var type = pathName.substring(pathName.lastIndexOf(".")+1,pathName.length);
-		return type.toLowerCase();
-	}
+	
+	/**
+	 * 
+	 * @author:      Yang.Sun@dentsu.com.cn
+	 * @dateTime:    2017-11-06 10:54:00
+	 * @description: 获取格式 
+	 */
+	// function type_work(pathName){
+	// 	var type = pathName.substring(pathName.lastIndexOf(".")+1,pathName.length);
+	// 	return type.toLowerCase();
+	// }
 
 	//封装数组是否包含所在的标签
 	Array.prototype.contains = function ( needle ) {
@@ -822,24 +846,24 @@ $(function() {
 	}
 
 	//切换缩略图
-	$('#large').click(function() {
-		$('.list-tab').removeClass('active_tab');
-		$(this).addClass('active_tab');
+	// $('#large').click(function() {
+	// 	$('.list-tab').removeClass('active_tab');
+	// 	$(this).addClass('active_tab');
 		
-		$('#type').val('1');
-		clear_list();
-		ajaxpost(1);
-	});
+	// 	$('#type').val('1');
+	// 	clear_list();
+	// 	ajaxpost(1);
+	// });
 
 	//切换列表
-	$('#list').click(function() {
-		$('.list-tab').removeClass('active_tab');
-		$(this).addClass('active_tab');
+	// $('#list').click(function() {
+	// 	$('.list-tab').removeClass('active_tab');
+	// 	$(this).addClass('active_tab');
 
-		$('#type').val('0');
-		clear_list();
-		ajaxpost(1);
-	})
+	// 	$('#type').val('0');
+	// 	clear_list();
+	// 	ajaxpost(1);
+	// })
 
 	//加载更多事件触发
 	$('.loading_list').click(function(){
@@ -847,7 +871,20 @@ $(function() {
 		ajaxpost(page);
 		page++;
 		$('#page').val(page);
+	});
+	var stop = true; //触发开关，防止多次调用事件
+	$(window).scroll(function(){
+		if($(this).scrollTop() + $(window).height() + 100 >= $(document).height() && $(this).scrollTop() > 200){
+			if(stop == true){
+				stop = false;
+				var page = $('#page').val();
+				ajaxpost(page);
+				page++;
+				$('#page').val(page);
+			}
+		}
 	})
+
 	// 初始化必须清空数据再继续加载，否则出现重复数据
 	function clear_list(){
 		$('#page').val('2'); //分页初始化

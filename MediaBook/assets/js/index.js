@@ -26,86 +26,6 @@
 //
 //
 $(function() {
-	$.ajax({
-		url:'findUserInfo.do',
-		dataType:'json',
-		success:function(data){
-			// console.log(data);
-			$('#usermail').text(data['userInfo']['m_userEmail']);
-		}
-	}).then(function(data){
-		var uploadLimit = data['userInfo']['uploadLimit'];
-		if(uploadLimit == '' || uploadLimit == 0 || uploadLimit != 1 ){
-			$('.uploadLimit').hide();
-			$('.uploadLimit').attr('data-toggle','').click(function(){
-				layer.msg('您无权限上传文档',{anim:6});
-			});
-		}
-		var selectLimit = data['userInfo']['selectLimit'];
-		if(selectLimit == '' || selectLimit == 0 || selectLimit != 1 ){
-			$('#soso-list').addClass('selectLimit');
-		}
-	});
-	// $('.icon-box').click(function() {
-	// 	$('.left-tab').css('left', '-340px');
-	// 	$('.mask').fadeOut();
-	// })
-
-	//搜索自动提示 事件 待补充
-	// $('#keywork').keyup(function() {
-	// 	$('.fluid_soso').fadeOut(200);
-	// 	var keywork = $(this).val();
-	// 	//console.log(keywork);
-	// 	if (!keywork) {
-	// 		$('.search-auto').hide();
-	// 	} else {
-	// 		$('.search-auto').show();
-	// 		//用ajax来实现输出 ul li
-	// 		//$.ajax();
-	// 	}
-	// })
-	//自动提示关键词 按键上下事件 跟上面ajax内有相关关联
-	//-----------start----------
-	key_down = 0;
-	// $(document).keydown(function(event) {
-	// 	switch (event.keyCode) {
-	// 	case 40:
-	// 		num = $('.search-auto li').size() - 1;
-	// 		$('.search-auto li').css('background-color', '#fff').eq(key_down).css('background-color', '#f7f7f7');
-	// 		var text = $('.search-auto li').eq(key_down).attr('data-key');
-	// 		$('.form-control').val(text);
-	// 		if (key_down < num) {
-	// 			key_down++;
-	// 			key_up = key_down - 1;
-	// 		} else {
-	// 			key_down = 0;
-	// 		}
-	// 		//console.log('下'+key_down+'上'+key_up);
-	// 		break;
-	// 	case 38:
-	// 		if (key_up >= 1) {
-	// 			key_up--;
-	// 			key_down = key_up + 1
-	// 		} else {
-	// 			key_up = num;
-	// 		}
-	// 		$('.search-auto li').css('background-color', '#fff').eq(key_up).css('background-color', '#f7f7f7');
-	// 		var text = $('.search-auto li').eq(key_down).attr('data-key');
-	// 		$('.form-control').val(text);
-	// 		//console.log('下'+key_down+'上'+key_up);
-	// 		break;
-	// 	case 27:
-	// 		key_down = 0;
-	// 		$('.search-auto').remove();
-	// 		break;
-	// 	case 13:
-	// 		key_down = 0;
-	// 		$('.search-auto').remove();
-	// 		break;
-	// 	};
-	// });
-	//--------------end--------------
-
 	//触发输出到input内
 	$('.search-auto li').click(function() {
 		var text = $(this).attr('data-key');  //获取关键字
@@ -153,39 +73,37 @@ $(function() {
 			type:'post',
 			data:{},
 			success:function(data){
-				//console.log(data);
-				
 				//遍历广告主关联
-				$.each(data['advertiserList'],function(key,value){
-					$('#advertiser').append('<option value ='+value['m_advertiserId']+'>'+value['m_advertiserName']+'</option>');
-				});
-				$('#advertiser').selectpicker('refresh');
+				// $.each(data['advertiserList'],function(key,value){
+				// 	$('#advertiser').append('<option value ='+value['m_advertiserId']+'>'+value['m_advertiserName']+'</option>');
+				// });
+				// $('#advertiser').selectpicker('refresh');
 				//选择广告主事件触发
-				$('#advertiser').on('changed.bs.select',function(){
-					var m_advertiserId = $(this).selectpicker('val'); // 广告主id
-					$.ajax({
-						url:'selectBrandsList.do',
-						dataType:'json',
-						type:'post',
-						data:{advertId:m_advertiserId},
-						success:function(brdata){
-							$('#brandsInfo').empty();
-							if(brdata.status == '200'){
-								if(m_advertiserId == ''){
-									$('#brandsInfo').append('<option value="">没有该广告主的品牌信息</option>');
-								}else{
-									$.each(brdata['brandsInfoList'],function(key,value){
-										$('#brandsInfo').append('<option value='+value['m_brandId']+'>'+value['m_brandName']+'</option>');
-									});
-								}
-							}else{
-								$('#brandsInfo').append('<option value="">没有该广告主的品牌信息</option>');
-							}
-							$('#brandsInfo').selectpicker('refresh'); //刷新品牌select
-						}
-					})	
+				// $('#advertiser').on('changed.bs.select',function(){
+				// 	var m_advertiserId = $(this).selectpicker('val'); // 广告主id
+				// 	$.ajax({
+				// 		url:'selectBrandsList.do',
+				// 		dataType:'json',
+				// 		type:'post',
+				// 		data:{advertId:m_advertiserId},
+				// 		success:function(brdata){
+				// 			$('#brandsInfo').empty();
+				// 			if(brdata.status == '200'){
+				// 				if(m_advertiserId == ''){
+				// 					$('#brandsInfo').append('<option value="">没有该广告主的品牌信息</option>');
+				// 				}else{
+				// 					$.each(brdata['brandsInfoList'],function(key,value){
+				// 						$('#brandsInfo').append('<option value='+value['m_brandId']+'>'+value['m_brandName']+'</option>');
+				// 					});
+				// 				}
+				// 			}else{
+				// 				$('#brandsInfo').append('<option value="">没有该广告主的品牌信息</option>');
+				// 			}
+				// 			$('#brandsInfo').selectpicker('refresh'); //刷新品牌select
+				// 		}
+				// 	})	
 					
-				})
+				// })
 				//遍历标签功能
 				$.each(data['worksLabelList'],function(key,value){
 					$('#select-tag').append(function(){
@@ -268,12 +186,10 @@ $(function() {
 					data:{
 						labelList:m_labelCode.join(","),
 						worksName:worksName,
-						// worksImage:thumb_base,
 						resetForm: true  //成功提交后，重置所有表单元素的值 
 					},
 					uploadProgress: function(event, position, total, percentComplete) {
 				        $('.progress-bar').css('width',percentComplete+'%').text(percentComplete+'%');
-						//console.log(event,percentComplete, position, total);
 				    },
 					dataType:'json',
 					success:function(data){
@@ -304,7 +220,12 @@ $(function() {
 		var k = $(this).val();
 		var m = $(this).get(0).files;
 		$('#pickfiles b').text(' '+m.length+'个文件');
-		//console.log(m.length);
+
+		//console.log(m);
+		$('.wordUpList').empty();
+		$.each(m,function(key,value){
+			$('.wordUpList').append('<li>'+value['name']+'</li>');
+		})
 	});
 
 	//粒子特效

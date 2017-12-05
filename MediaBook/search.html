@@ -8,40 +8,42 @@
     <title>The MediaBook 搜索</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
     <link href="./assets/css/bootstrap-select.css" rel="stylesheet">
     <link href="./assets/css/index.css" rel="stylesheet">
-    <!-- <link rel='stylesheet' href='./assets/unitegallery/css/unite-gallery.css' type='text/css' /> -->
-    <!-- <link href="./assets/css/animate.css" rel="stylesheet" /> -->
     <!--[if lt IE 9]>
       <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="./assets/js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="./assets/js/bootstrap-select.min.js"></script>
-    <!-- <script type="text/javascript" src="./assets/js/ckplayer.js" charset="utf-8"></script> -->
     <!-- Piwik -->
     <script type="text/javascript">
-      var _paq = _paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
+    var siteId = '';
+    var _paq = _paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+    	//通过访问路径，判断正式/测试环境
+        if (document.location.host.indexOf('cnbei22apm17') >= 0
+      		  || document.location.host.indexOf('10.68.80.104') >= 0) {
+      		//正式环境
+      		siteId = '2';
+        } else {
+      		//测试环境
+      		siteId = '1';
+        }
         var u="//10.68.80.129:8081/piwik/";
         _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', '1']);
+        _paq.push(['setSiteId', siteId]);
         var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
         g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-      })();
+    })();
     </script>
     <!-- End Piwik Code -->
   </head>
-  <style>
-    #usermail{cursor:default;}
-    #usermail:hover{color: #9d9d9d;}
-    .borderNone{border-bottom: none!important;}
-  </style>
   <body>
   <!-- 遮罩 -->
   <div class="mask"></div>
@@ -49,10 +51,6 @@
     <div class="modal fade bs-example-modal-lg" id="show-id" tabindex="-1" role="dialog" aria-labelledby="mytitle"><!--show-id是变量-->
       <div class="modal-dialog  modal-lg" role="document">
         <div class="modal-content">
-          <!-- <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="mytitle">Changing Room<h4>
-          </div> -->
           <div class="modal-body">
             <div class="row">
                <div class="col-xs-12" id="content">
@@ -79,14 +77,14 @@
                         <p class="uploadhr">数据包分类</p>
                       </div>
                     </div>
-                    <ul class="list-inline">
+                   <!--  <ul class="list-inline">
                       <li class="detail-title-1 text-right">广告主</li>
                       <li class="detail-title-2 advername"></li>
                     </ul>
                     <ul class="list-inline">
                       <li class="detail-title-1 text-right">品牌</li>
                       <li class="detail-title-2 branname"></li>
-                    </ul>
+                    </ul> -->
                     <ul class="list-inline">
                       <li class="detail-title-1 text-right">数据标签</li>
                       <li class="detail-title-2 workslabel">
@@ -145,7 +143,7 @@
                   <textarea class="form-control" rows="5" style="width:50%;" placeholder="请填写数据包说明" id="worksDesp" name="worksDesp"></textarea>
                 </div>
               </div>
-              <div class="form-inline" style="position: relative;">
+              <!-- <div class="form-inline" style="position: relative;">
                 <div class="form-group">
                   <div class="vcenter">&nbsp;</div>
                   <p class="uploadhr">请选择数据包分类</p>
@@ -162,7 +160,7 @@
                     <option value="">请选择品牌</option>
                   </select>
                 </div>
-              </div>
+              </div> -->
               <div class="form-inline">
                 <div class="form-group">
                   <label class="lab" style="vertical-align: top;"><b>*</b> 数据标签</label>
@@ -177,11 +175,14 @@
                   <div class="vcenter">&nbsp;</div>
                   <p class="uploadhr">请上传数据文件</p>
                   <label class="lab" ><b>*</b> 上传文件</label>
-                  <botton class="btn btn-default btn-sm" id="pickfiles">选择文件 (多选)<b></b></botton><i>支持上传格式：doc,docx,xls,xlsx,ppt,pptx,csv,pdf</i>
+                  <botton class="btn btn-default btn-sm" id="pickfiles">选择文件 (多选)<b></b></botton><i>支持文件格式：doc,docx,xls,xlsx,ppt,pptx,csv,pdf</i>
                   <input type="file" id="hiddenFile" style="display: none;"  name="" accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.pdf" multiple>
                   <ul class="list-unstyled file-list" style="margin-left:17%;margin-top:5px;">
                       <!-- <li><a href="#">xxxxxx.doc</a> <span class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i></span></li> -->
-                    </ul>
+                  </ul>
+                  <ul class="list-unstyled wordUpList" style="margin-left:17%;margin-top:5px;">
+                  <!-- ajax -->
+                  </ul>
                 </div>
               </div>
                <p class="error alert alert-danger" id="error"></p>
@@ -191,152 +192,18 @@
                   </div>
                 </div>
                <!-- <p class="text-center loadingtext" ><img src="../view/assets/img/loading.gif" /></p> -->
-               <p class="text-center loadingtext" >正在上传中,请不要关闭</p>
+               <p class="text-center loadingtext" >正在上传中，请不要关闭窗口</p>
             
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default btn-dis" data-dismiss="modal">关闭</button>
-            <button type="submit" id="form_submit" class="btn btn-primary btn-dis">提交保存</button>
+            <button type="submit" id="form_submit" class="btn btn-primary btn-dis">保存</button>
           </div>
           </form>
         </div>
       </div>
     </div>
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-3 left-tab">
-          <div class="veiw-menu">
-            <p>广告相关内容</p>
-            <ul class="list-inline">
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-fire"></i>
-                    </div>
-                    <span>公司标识</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-send"></i>
-                    </div>
-                    <span>消费品</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-tree-deciduous"></i>
-                    </div>
-                    <span>创新设计</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-apple"></i>
-                    </div>
-                    <span>包装设计</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-cloud-download"></i>
-                    </div>
-                    <span>海报</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-stats"></i>
-                    </div>
-                    <span>插图</span>
-                  </a>
-                </div>
-              </li>
-            </ul>
-          </div>
-         <div class="veiw-menu">
-            <p>广告分类</p>
-            <ul class="list-inline">
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-leaf"></i>
-                    </div>
-                    <span>获奖</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-gift"></i>
-                    </div>
-                    <span>礼物</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-magnet"></i>
-                    </div>
-                    <span>惊喜</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-certificate"></i>
-                    </div>
-                    <span>行业</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-globe"></i>
-                    </div>
-                    <span>全球</span>
-                  </a>
-                </div>
-              </li>
-              <li>
-                <div class="icon-box">
-                  <a href="#">
-                    <div class="menu-item">
-                      <i class="menu-item-icon glyphicon glyphicon-flash"></i>
-                    </div>
-                    <span>体验</span>
-                  </a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
       <div class="row">
         <div class="col-xs-4 col-xs-offset-4 alert-box">
           <div class="alert alert-warning" role="alert">顶部提示</div>
@@ -346,26 +213,9 @@
             <div class="navbar-header">
                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> 
                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-               <a class="navbar-brand"><img src="../view/assets/img/logox.png" class="logo" />
-               <!-- <span style="margin-left:160px;">The MediaBook</span> --></a>
+               <a class="navbar-brand"><img src="../view/assets/img/logox.png" class="logo" /></a>
             </div>
-             <!-- <ul class="nav navbar-nav">
-                <li>
-                   <a href="#">趋势研究</a>
-                </li>
-                <li>
-                   <a href="#">竞品分析</a>
-                </li>
-                <li>
-                   <a href="#">消费者分析</a>
-                </li>
-                <li>
-                   <a href="#">媒介策略工具</a>
-                </li>
-                <li>
-                   <a href="#">公司简介</a>
-                </li>
-              </ul> -->
+
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -385,8 +235,7 @@
                 <ul class="nav nav-tabs" role="tablist">
                   <li role="presentation" class="active newlist"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">New</a></li>
                   <li role="presentation" class="hotlist"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Hot</a></li>
-                  <!-- <li class="list-tab" id="large"><i class="glyphicon glyphicon-th-large"></i> 缩略图</li>
-                  <li class="list-tab active_tab" id="list"><i class="glyphicon glyphicon-th-list"></i> 列表</li> -->
+                  <li class="searchnum"></li>
                 </ul>
                 <!-- 0 为列表展示  1 为缩略图展示 -->
                 <input type="hidden" id="type" value="0" />
@@ -406,39 +255,14 @@
                       <!-- ajax 缩略图加载 -->
                     </div>
                     <p class="text-center">
-                    <button class="btn-primary btn loading_list">加载更多</button>
+                    <button class="btn-primary btn loading_list">显示更多内容</button>
                     </p>
                   </div>
                   <div role="tabpanel" class="tab-pane " id="profile">
-                    <ul class="list-unstyled ajax-newlist">
-                     <!-- <li>
-                        <div class="img pull-left">
-                           <img src="http://placehold.it/150x120" alt="...." data-toggle="modal" data-target="#show-id" class="img-responsive img-rounded" data-id="图片">
-                        </div>
-                        <div class="title pull-right">
-                          <h4 data-toggle="modal" data-target="#show-id" class="detailview" data-id="北京能源集团有限责任公司">北京能源集团有限责任公司</h4>
-                          <p class="text text-muted">上传者：yangsun</p>
-                          <p class="text text-muted">上传日期：2017-01-22</p>
-                          <p class="text text-muted">收藏次数：500</p>
-                        </div>
-                        <div class="clearfix"></div>
-                      </li>-->
-                    </ul>
-                    <div class="row ie-width ajax-hotlist">
-                      <!-- <div class="col-xs-4">
-                        <div class="thumbnail">
-                          <img src="http://placehold.it/370x500" alt="...">
-                          <div class="caption thumbnail-title" data-toggle="modal" data-target="#show-id">
-                            <p class="text text-center">北京电通广告</p>
-                            <p class="text text-center"><i class="glyphicon glyphicon-user"></i> sunyang </p>
-                            <p class="text text-center"><i class="glyphicon glyphicon-time"></i> 2016-12-12 </p>
-                            <p class="text text-center"><i class="glyphicon glyphicon-heart"></i> 2256 </p>
-                          </div>
-                        </div>
-                      </div>-->
-                    </div>
+                    <ul class="list-unstyled ajax-newlist"></ul>
+                    <div class="row ie-width ajax-hotlist"></div>
                     <p class="text-center">
-                    <button class="btn-primary btn loading_list"><span>加载更多</span></button>
+                    <button class="btn-primary btn loading_list"><span>显示更多内容</span></button>
                     </p>
                   </div>
                 </div>
@@ -475,19 +299,10 @@
          }
       })
     </script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
     <script src="./assets/js/layer.js"></script>
-    <!-- 轮播 -->
-    <!-- <script type='text/javascript' src='./assets/js/unitegallery.min.js'></script>  
-    <script type='text/javascript' src='./assets/unitegallery/themes/default/ug-theme-default.js'></script> -->
-    <!-- 裁剪 -->
-    <!-- <script src="./assets/js/corp/iscroll-zoom.js"></script>
-    <script src="./assets/js/corp/hammer.js"></script>
-    <script src="./assets/js/corp/jquery.photoClip.min.js"></script> -->
     <script type="text/javascript" src="./assets/js/jquery.scrollbar.js"></script>
     <script src="./assets/js/jquery.form.js"></script>
-     <!-- <script src="./assets/js/preview.min.js"></script> -->
     <script src="./assets/js/search.js"></script> 
     <script src="./assets/js/gotop.js"></script>
   </body>
