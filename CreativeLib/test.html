@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0"> 
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Creative Gallery</title>
+
+    <script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+  </head>
+  <style>
+    #usermail{cursor:default;}
+    #usermail:hover{color: #9d9d9d;}
+  </style>
+  <script type="text/javascript">
+      $(function(){
+        if(NV.name == 'unkonw' || NV.name == 'ie'){
+          alert(NV.name);
+            $.ajaxSetup({
+             cache:false
+           })
+         }
+        //判断登陆
+        $.ajaxSetup({ 
+
+           contentType:"application/x-www-form-urlencoded;charset=utf-8",   
+           complete:function(XMLHttpRequest,textStatus){ 
+             var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus"); //通过XMLHttpRequest取得响应头，sessionstatus，  
+             console.log(XMLHttpRequest['responseJSON']);
+                 if(sessionstatus=="timeout"){ 
+                //如果超时就处理 ，指定要跳转的页面  
+                alert('未登陆');
+                window.location.replace("http://cnbei22apm15.ap.media.global.loc:8081/CreativeGallery/userLoginCheck.do");   
+                }   
+              }   
+         })
+        $.ajax({
+          url:'../findUserInfo.do',
+          dataType:'json',
+          success:function(data){
+            console.log(data['userInfo']['m_userEmail']);
+            alert(data['userInfo']['m_userEmail']);
+           
+          }
+        })
+      });
+
+
+
+       var NV = {};    
+      var UA = navigator.userAgent.toLowerCase();    
+      try    
+      {    
+          NV.name=!-[1,]?'ie':    
+          (UA.indexOf("firefox")>0)?'firefox':    
+          (UA.indexOf("chrome")>0)?'chrome':    
+          window.opera?'opera':    
+          window.openDatabase?'safari':    
+          'unkonw';    
+      }catch(e){};    
+      try    
+      {    
+          NV.version=(NV.name=='ie')?UA.match(/msie ([\d.]+)/)[1]:    
+          (NV.name=='firefox')?UA.match(/firefox\/([\d.]+)/)[1]:    
+          (NV.name=='chrome')?UA.match(/chrome\/([\d.]+)/)[1]:    
+          (NV.name=='opera')?UA.match(/opera.([\d.]+)/)[1]:    
+          (NV.name=='safari')?UA.match(/version\/([\d.]+)/)[1]:    
+          '0';    
+      }catch(e){};     
+      </script>
+  <body>
+  
+  </body>
+</html>

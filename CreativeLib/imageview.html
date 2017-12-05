@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <title>图片查看</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width" />
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0"> 
+    <style type="text/css" media="screen">
+        html, body{background-color:#fff;}
+        #view{width:100%;margin:0 auto;text-align: center}
+    </style>
+    <script type="text/javascript" src="./assets/flexPaper/js/jquery.min.js"></script>
+</head>
+<body onselectstart="return false" oncopy="return false;" oncut="return false;">
+<!-- 网页将不能另存 -->
+<noscript><iframe src=*.html></iframe></noscript>
+<div style="position: fixed;width: 100%;height: 100%;left: 0px;top: 0px;"></div>
+<div id="view">
+  <img src="./assets/img/loading.gif" />
+</div>
+
+<script type="text/javascript">
+   //屏蔽右键
+  function stop(){
+    return false;
+  }
+  document.oncontextmenu=stop;
+    function getQueryString(name) { 
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+      var r = window.location.search.substr(1).match(reg); 
+      if (r != null) return decodeURIComponent(r[2]); return null; 
+    }
+    var url = decodeURI(getQueryString('url'));
+    $('#view img').attr('src',url);
+    
+</script>
+
+</body>
+</html>
