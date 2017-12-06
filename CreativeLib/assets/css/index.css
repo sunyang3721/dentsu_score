@@ -363,6 +363,7 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 
 /*详情页*/
 .pos td{padding:0px 5px 0px 0px;vertical-align: top;}
+.pos .clicklink{cursor:pointer;}
 /*底部*/
 .footer_link{color:#ccc;text-align: center;width:100%;font-size: 12px;position: fixed;bottom:25px}
 .footer_link a{color:#ccc;}

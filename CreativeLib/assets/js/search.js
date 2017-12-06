@@ -585,14 +585,22 @@ $(function() {
 						if(value['m_positionType'] == 1 || value['m_positionType'] == 3){
 							var workslist = value['t_worksCreator'].replace(reg,'/');
 							var worksarr = workslist.split('/');
+							var htmltag = '' ;
 							$.each(worksarr,function(k,v){
-								console.log(v);
-							})
-							chuangzuohtml += '<tr><td>'+value['m_positionName']+'</td><td>'+value['t_worksCreator'].replace(reg,' / ')+'</td></tr>';
-							console.log(chuangzuohtml);
+								if(k !== 0 ){
+									htmltag +=' / ';
+								}
+								htmltag += '<a class="clicklink">'+v+'</a>';
+							});
+							chuangzuohtml += '<tr><td>'+value['m_positionName']+'</td><td>'+htmltag+'</td></tr>';
 						}
 						if(value['m_positionType'] == 2){
-							gongsihtml += '<tr><td>'+value['m_positionName']+'</td><td>'+value['t_worksCreator'].replace(/CO\s*.\s*,\s*LTD/ig,';').replace(reg,'<br/>').replace(/;/g,'CO., LTD')+'</td></tr>';
+							var clicktorlink = '';
+							var creatorlink = value['t_worksCreator'].replace(/CO\s*.\s*,\s*LTD/ig,';').replace(reg,'/').replace(/;/g,'CO., LTD');
+							$.each(creatorlink.split('/'),function(k,v){
+								clicktorlink += '<a class="clicklink">'+v+'</a><br/>';
+							});
+							gongsihtml += '<tr><td>'+value['m_positionName']+'</td><td>'+clicktorlink+'</td></tr>';
 							$('.gongsi-dt').removeClass('hide');
 						}
 					});
@@ -600,7 +608,10 @@ $(function() {
 						gongsihtml += '</tbody></table>';
 						$('#chuangzuo-list').empty().append(chuangzuohtml);
 						$('#gongsi-list').empty().append(gongsihtml);
-
+						$('.clicklink').click(function(){
+								var txt = $(this).text();
+								tagLink(txt);
+						});
 					$('.worksinfo .workname').html(workinfo['t_worksName']); //作品名称
 					$('.worksinfo .deparname').html(workinfo['m_departmentName']?workinfo['m_departmentName']:'<i>未填写</i>'); //所属部门
 
@@ -702,7 +713,7 @@ $(function() {
 						$('.show-start').addClass('btn-default').removeClass('btn-primary').text('我要收藏');
 					}
 				}
-			})
+			});
 		});
 
 		//业务团队内部人员标签增加跳转链接
