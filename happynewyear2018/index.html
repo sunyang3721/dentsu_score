@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>2018北京电通温暖流浪犬活动</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Link Swiper's CSS -->
+  <link rel="stylesheet" href="./dist/css/swiper.min.css">
+  <link rel="stylesheet" href="./dist/css/animate.css">
+  <!-- Demo styles -->
+  <style>
+    html, body {
+      position: relative;
+      height: 100%;
+    }
+    body {
+      font-family: 'Microsoft YaHei', Helvetica, Arial, sans-serif;
+      background-color: #f4f4f4;
+      font-size: 14px;
+      color:#000;
+      margin: 0;
+      padding: 0;
+    }
+    #index{width:100%;height:100%;background:url('./dist/bg-repet.jpg');background-size:6px;  }
+    .swiper-container {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+    }
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+
+      /* Center slide text vertically */
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+    }
+    .swiper-slide{background: none;}
+    .imgshows{display:block;width:100%;height:100%;padding-top:258px;/*background-color: #c3ffc5;*/}
+    .imgshows span{color:#fff;margin-left:5%;font-size: 14px;}
+    .imgshows .imagepic{width:auto;height: 160px;border-radius:20px;}
+    .buttonlist{padding:0 26%;margin-top:30px;}
+    .share{font-family: 'Microsoft YaHei', Helvetica, Arial, sans-serif;width:100%;color:rgb(255, 255, 255);font-size:14px;padding-top:10px;padding-bottom:10px;padding-left:25px;padding-right:25px;border-width:1px;border-color:rgb(197, 229, 145);border-style:solid;border-radius:5px;background-color:rgb(120, 195, 0);margin-bottom: 5px;}
+    .needbutton{background-image: url('./dist/juanzhu.png');}
+    .bybutton{background-image: url('./dist/lingyang.png');}
+    .sharebutton{background-image:url('./dist/sharebtn.png');}
+    .bybutton,.needbutton,.sharebutton{width:100%;height:46px; background-repeat:no-repeat;background-size: 100% 100%;border: 0px;margin-bottom:10px;border-radius: 18px;}
+    .iframe{overflow-y:auto;width:92%;position:fixed;height:100%;padding:0 16px;background: rgba(136, 136, 136, 0.5); z-index:20;border-radius: 5px;}
+    .payimg{width:100%;}
+    .back{width:100%;color:rgb(173, 173, 173);font-size:14px;padding-top:10px;padding-bottom:10px;padding-left:25px;padding-right:25px;border-width:1px;border-color:rgb(219, 219, 219);border-style:solid;border-radius:5px;background-color:rgb(247, 247, 247);}
+    .swiper-button-next, .swiper-button-prev{top:222px;height:33px;}
+    .swiper-button-prev{background-image: url(./dist/left.svg);left:30px;}
+    .swiper-button-next{background-image: url(./dist/right.svg);right:30px;}
+    #index{text-align: center;position:fixed;z-index: 100;}
+    #index p{color:#fff;margin-top: 30%;}
+    #yindao{display: none;}
+    #bg-header{text-align: center;padding-top:12px;background: url('./dist/index.jpg');background-repeat: no-repeat;background-size: 100% 330px;width:100%;height: 100%;position: fixed;}
+    #bg-header img{height: 70px}
+    #bg-footer{width:100%;height: 100%;position: fixed;background: url('./dist/bg-footer.jpg');background-repeat: no-repeat;background-size:50%; background-position: 52% 98%;}
+    #bg-juanzhu{width:100%;height: 45px;background: url('./dist/bg-juanzhu.png');background-repeat: no-repeat;background-size: 100%;margin-top:10px;}
+    .list{width:100%;height: 90%;overflow-y:auto; background-image: url('./dist/bg-repet.jpg');background-size: 6px;background-position-x:2px;text-align: center;border-top:1px solid #c92419;}
+    .fanhui{position: absolute;right:10px;z-index:200;top:10px;}
+    .fanhui img{width:40px;}
+    .txt{padding:0;margin:0;font-size: 18px;color:#fff;font-family: 'Microsoft YaHei'}
+    .txt-14{font-size: 14px;}
+    .jieshao{padding-left:15%;margin-top: 20px}
+    .headpic{width:100px;float:left;}
+    .headlist{height: 95px;display: inline-block;float:left;text-align:left;padding-left:30px;}
+    .txt-right{padding:0;margin:5px 0 0 0;color:#fff;}
+    .clear{clear:both; float:none;}
+    .comment{width:86%;color:#fff;text-align: left;}
+    .juanzhuren{color:#fff;text-align: left;padding-left:16%;margin:5px 0;}
+    .juanzhuren b{width:58px;display:inline-block;text-align:left;}
+  </style>
+</head>
+<body>
+  <div id="index">
+    <img src="./dist/bg-index.png" style="width:100%" />
+    <p>2018年北京电通温暖流浪犬活动</p>
+    <img src="./dist/2018-bai.png" style="width:60%" />
+    <br/>
+    <img src="./dist/txt-dog.png" style="width:30%;margin: 30% 0;" />
+    <br/>
+    <img src="./dist/logo-bai.png" style="width:56%" />
+  </div>
+  <img src="./dist/yindao.png" id="yindao" style="width:100%;position: fixed;z-index: 20" />
+  <div id="bg-header">
+    <img src="./dist/2018.png" />
+  </div>
+  <div id="bg-footer"></div>
+  <!-- Swiper -->
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+    <!-- Add Arrows -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+  <img style="display: none" src='./dist/erweima.png' />
+  <img style="display: none" src='./dist/bg-repet.jpg' />
+  <img style="display: none" src='./dist/bg-juanzhu.png' />
+  <script src="./dist/js/swiper.min.js"></script>
+  <script src="https://unpkg.com/zepto@1.2.0/dist/zepto.min.js"></script>
+  <script>
+  $('#yindao').on('click',function(){
+    $(this).remove();
+  })
+  $('#index').on('click',function(){
+   $('#index').addClass('animated fadeOutDown');
+     setTimeout("$('#index').remove()",1000);
+     $('#yindao').show(800);
+  });
+ setTimeout("showloading()",3000);
+  function showloading(){
+    $('#index').addClass('animated fadeOutDown');
+     setTimeout("$('#index').hide()",1000);
+     $('#yindao').show(800);
+  }
+    var swiper = new Swiper('.swiper-container', {
+        loop:true,
+      pagination: {
+
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      on:{
+        slideChange:function(){
+
+        },
+      },
+      lazy:{
+        loadPrevNext:true,
+         loadOnTransitionStart: true,
+      },
+    });
+
+    $.getJSON('./data/petdata.json',function(data){
+      var html ='';
+      $.each(data['petlist'],function(key,value){
+          html += '<div class="swiper-slide">';
+          html += '<div class="imgshows">';
+          html += '<div><img class="imagepic swiper-lazy" data-src='+value['headpic']+' /><div class="swiper-lazy-preloader"></div><br/>';
+          html += '<span>编号：'+value['no']+'</span><span>宝名：'+value['name']+'</span><span>性别：'+value['sex']+'</span>';
+          html +='</div>';
+          html += '<div class="buttonlist  ">';
+          html += '<button class="needbutton" data-id='+key+'></button>';
+          html += '<button class="bybutton" data-id='+key+'></button>';
+          html += '<button class="sharebutton"></button>';
+          html += '</div></div></div>';
+      });
+      swiper.appendSlide(html);
+      var height = $(window).height(); 
+      if(height  < 553){  
+        $('.buttonlist').css('margin-top','18px');
+        $('.bybutton,.needbutton,.sharebutton').css('height','35px').css('margin-bottom','5px');
+      }
+      swiper.lazy.load();
+      $('.sharebutton').on('click',function(){
+                $('body').prepend('<div class="closed"><img src="./dist/share.png" style="width:100%;position:fixed;z-index:30" /></div>');
+                $('.closed').on('click',function(){
+                    $(this).remove();
+                })
+              })
+      // 捐款按钮
+      $('.needbutton').on('click',function(){
+         var id = $(this).data('id');
+         $.getJSON('./data/petdata.json',function(data){
+            var info = data['petlist'][id];
+            var html = '';
+                html +='<div id="bg-juanzhu"></div>';
+                html +='<div class="list">';
+                html += '<p class="txt">"'+info['name']+'"感谢您的温暖</p>';
+                html += '<img src="./dist/erweima.png" />';
+                html += '<p class="txt txt-14">长按即可扫描二维码捐款</p>';
+                html += '<div class="jieshao"><img class="headpic" src="'+info['headpic']+'" />';
+                html += '<div class="headlist"><p class="txt-right">编号：'+info['no']+'</p><p class="txt-right">犬名：'+info['name']+'</p><p class="txt-right">性别：'+info['sex']+'</p></div>';
+                html += '<div class="clear"></div>';
+                html += '<p class="comment">'+info['comment']+'</p>';
+                html += '</div><br/><br/>';
+                html += '</div>';
+                iframes(html);
+            $('.fanhui').on('click',function(){
+              $('.iframe,.fanhui').remove();
+            });
+         })
+      });
+      // 收养按钮
+      $('.bybutton').on('click',function(e){
+         var id = $(this).data('id');
+         $.getJSON('./data/petdata.json',function(data){
+              var info = data['petlist'][id];
+              var html = '';
+                  html +='<div id="bg-juanzhu"></div>';
+                  html +='<div class="list">';
+                  html += '<p class="juanzhuren"><b style="width:80px">领养联系人</b></p>';
+                  html += '<p class="juanzhuren"><b>姓&nbsp;&nbsp;&nbsp;&nbsp;名：</b>'+info['salvor']['salvor_name']+'</p>';
+                  html += '<p class="juanzhuren"><b>微信号：</b>'+info['salvor']['salvor_mobile']+'</p>';
+                  html += '<p class="juanzhuren" href="tel:'+info['salvor']['salvor_mobile']+'"><b>手&nbsp;&nbsp;&nbsp;&nbsp;机：</b>'+info['salvor']['salvor_mobile']+'</p>';
+                  html += '<p class="juanzhuren"><b>E-mail：</b>'+info['salvor']['salvor_email']+'</p>';
+                  html += '<div class="jieshao"><img class="headpic" src="'+info['headpic']+'" />';
+                  html += '<div class="headlist"><p class="txt-right">编号：'+info['no']+'</p><p class="txt-right">犬名：'+info['name']+'</p><p class="txt-right">性别：'+info['sex']+'</p></div>';
+                  html += '<div class="clear"></div>';
+                  html += '<p class="comment">'+info['comment']+'</p>';
+                  html += '<p class="juanzhuren" style="padding-left:0"><b>领养要求</b></p>';
+                  html += '<p class="juanzhuren" style="padding-left:0;width:86%">'+info['salvor']['salvor_requirement']+'</p>';
+                  html += '</div><br/><br/>';
+              iframes(html);
+              $('.fanhui').on('click',function(){
+                $('.iframe,.fanhui').remove();
+              });
+          });
+      })
+    });
+    function iframes(html){
+      var html = '<div class="iframe animated fadeIn">'+html; //bounceIn
+          html +='<div class="fanhui animated fadeIn"><img src="./dist/fanhui.png" /></div>';
+          html += '</div>';
+          $('body').prepend(html);
+    }
+
+  </script>
+</body>
+</html>
