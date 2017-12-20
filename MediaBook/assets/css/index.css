@@ -94,7 +94,7 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 #profile .list-user{width:15%;}
 #profile .list-date{width:10%;}
 .btn-post{width:20%;position: absolute;top:73px;left:10%;}
-.detailview:hover{color:#005bac;}
+.detailview:hover{color:#005bac;cursor:pointer;}
 
 #home .list-guanggao .label,#profile .list-guanggao .label{padding:3px;display:inline-table;border-radius: 0px;}
 /*上传表单*/

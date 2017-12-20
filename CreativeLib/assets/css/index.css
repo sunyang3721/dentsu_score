@@ -279,7 +279,7 @@ p.text.text-center.img-button{position: absolute;top:250px;left:1.4%;width: 97.5
 
 
 .btn-post{width:10%;position: absolute;top:88px;left:10%;}
-.detailview:hover{color:#005bac}
+.detailview:hover{color:#005bac;cursor:pointer;}
 /*发布日期*/
 .dateAdd .bootstrap-select{width:15%!important}
 /*上传表单*/

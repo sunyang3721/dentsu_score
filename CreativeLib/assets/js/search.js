@@ -579,7 +579,7 @@ $(function() {
 					//console.log(workinfo);
 					var chuangzuohtml = '<table class="pos"><tbody>';  //创作团队
 					var gongsihtml = '<table class="pos"><tbody>'; //公司制作
-					var reg = new RegExp("[,，|\r\n]","g");//g,表示全部替换。
+					var reg = new RegExp("[,，、|\r\n]","g");//g,表示全部替换。由，、,等3个符号替换为 ‘/’
 					$('.gongsi-dt').addClass('hide');  //制作公司 默认隐藏
 					$.each(workinfo['tWorksCreatorInfoList'],function(key,value){
 						if(value['m_positionType'] == 1 || value['m_positionType'] == 3){
@@ -718,7 +718,7 @@ $(function() {
 
 		//业务团队内部人员标签增加跳转链接
 		function tagLink(tag){
-			window.open('search.html?inputKeyWord='+tag+'&myWorksFlag=');
+			window.open('search.html?inputKeyWord='+encodeURIComponent(tag)+'&myWorksFlag=');
 		}
 	}
 	
