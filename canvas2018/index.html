@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=0.5,target-densitydpi=device-dpi,user-scalable=no,minimum-scale=0.5, maximum-scale=0.5">
+<title>2018年狗年祝福贺卡</title>
+<link rel="icon" href="canvas2018/assets/logo.ico" type="image/x-icon"/> 
+<link rel="shortcut icon" href="canvas2018/assets/logo.ico" type="image/x-icon"/> 
+
+<script src="canvas2018/js/easeljs-0.7.1.min.js"></script>
+<script src="canvas2018/js/tweenjs-0.5.1.min.js"></script>
+<script src="canvas2018/js/movieclip-0.7.1.min.js"></script>
+<script src="canvas2018/js/canvas2image.js"></script>
+<script src="canvas2018/js/jquery-1.7.1.min.js"></script>
+
+<script src="canvas2018/js/cards.js"></script>
+<script src="canvas2018/js/isPC.js"></script>
+<!-- <script src="canvas2018/js/initTools.js"></script> -->
+
+<!-- <script src="canvas2018/js/share.js"></script> -->
+<!-- <script src="canvas2018/js/weixin.js"></script> -->
+
+
+</head>
+<style type="text/css">
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-color: #A70022; 
+	background-repeat: repeat-x repeat-y ;
+	font-family: '微软雅黑';
+}
+p{margin:0;}
+.top-caidan{margin:0;position: absolute;z-index:5;color:#fff;font-size: 50px;width: 100%;padding:5px 0px;}
+.top-caidan li{list-style-type: none;}
+.top-caidan img{width: 40%;}
+.top-input,.bottom-input{background-color: rgba(255,0,0,0);border-left: 0;border-right: 0;border-top: 0;border-bottom:3px solid #fff;font-size:40px;width:30%;color:#fff;text-align: center}
+.top-caidan .top-left-to{float: left;padding-left:56px;padding-top:30px;width: 50%}
+.bottom-left-to{text-align: right;position: relative;top:-45px;font-size: 30px;color:#fff;}
+.top-caidan .top-right-caidan{float: right;text-align: right;}
+.selectColorDiv{background-color: #A70022;}
+.selectColorDiv p{text-align: center;font-size: 85px;color:#fff;}
+.selectColorDiv ul {margin:0;padding:0;}
+.selectColorDiv ul li{display: table; list-style-type: none;border-radius: 100%;margin:2% auto;border:4px solid #fff}
+.selectColorDiv ul li div{width:100px;height: 100px;border-radius: 100%;margin:5px;}
+.btnClick{border:4px solid #fff;}
+.btnMouse{border:4px solid rgba(255,255,255,0);}
+canvas { 
+	display: block; 
+}
+.header{top:0;z-index:5;right:0;font-size: 40px;color:#fff;background-color: rgba(128,128,128,0.7);margin-top: 12%;display: none}
+.header p{padding:10px 30px;}
+.tools{
+	bottom:30px;
+}
+.tools ul{margin:0;}
+.tools ul li{list-style-type: none;float:left;border:4px solid #fff;border-radius: 100%;text-align:center;}
+.tools ul li div{width:90%;height: 90%;border-radius: 100%;margin:5% auto;}
+.tools ul .colorBtn div{/*background-color: blue;*/}
+.tools .penBtn div{background-repeat: no-repeat;background-size: contain}
+.range{
+	transform:rotate(-90deg);
+    -webkit-transform:rotate(-90deg);
+    -moz-transform:rotate(-90deg);
+    -o-transform:rotate(-90deg);
+    -ms-transform:rotate(-90deg);
+    position: absolute;
+    right:55%;
+    bottom:48%;
+    width:80%;
+}
+.jian{
+	transform:rotate(-90deg);
+    -webkit-transform:rotate(-90deg);
+    -moz-transform:rotate(-90deg);
+    -o-transform:rotate(-90deg);
+    -ms-transform:rotate(-90deg);
+}
+.range img{width:35px;border:3px solid #fff;border-radius: 100%;}
+.weight{ /*设置滑块下面那条线的样式*/
+    outline: none; /*去掉点击时出现的外边框*/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; /*这三个是去掉那条线原有的默认样式，划重点！！*/
+    width: 75%;
+    height: 40px;
+    border-radius: 15px;
+    background: orange;
+    margin:0 10px;
+    /*这三个是设置滑块下面那条线的样式*/
+}
+input[type="range"]::-webkit-slider-thumb {
+    /*::-webkit-slider-thumb是代表给滑块的样式进行变更*/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; /*//这三个是去掉滑块原有的默认样式，划重点！！*/
+    -webkit-box-shadow:0 0 2px ; /*设置滑块的阴影*/
+    width: 35px;
+    height:40px;
+    background: url("./canvas2018/assets/slide.png");
+    background-size: cover;
+    /*//这几个是设置滑块的样式*/
+}
+</style>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="background-color:#A70022"  onload="init();">
+	<div class="selectColorDiv">
+		<p><img src="./canvas2018/assets/title.png" style="width:60%" /></p>
+		<ul>
+			<li class="btnList"><div style="background-color: #ea2e23"></div></li>
+			<li class="btnList"><div style="background-color: #c1c1c1"></div></li>
+			<li class="btnList"><div style="background-color: #f4ef5d"></div></li>
+			<li class="btnList"><div style="background-color: #bbe5cd"></div></li>
+			<li class="btnList"><div style="background-color: #ff9891"></div></li>
+			<li class="btnList"><div style="background-color: #cfe4f7"></div></li>
+			<li class="btnList"><div style="background-color: #d5c5ae"></div></li>
+		</ul>
+	</div>
+	<div class="hiddenBox" style="display:none;">
+		<ul class="top-caidan">
+			<li class="top-left-to">To: <input type=text value="他的名字" class="top-input" maxlength="10" style="width:50%"></li>
+			<li class="top-right-caidan"><img src="./canvas2018/assets/caidan.svg"></li>
+		</ul>
+		<span class="header">
+			<p class="bgcolors" style="border-bottom: 1px solid #fff">切换底色</p>
+			<p class="clearall" style="border-bottom:1px solid #fff">清空重画</p>
+			<p class="outcard">生成贺卡</p>
+		</span>
+		<canvas id="canvas" width="640" height="850" style="background-color:#A70022"></canvas>
+		<div class="range">
+			<img class="jian" src="./canvas2018/assets/jian.svg"><input type="range" class="weight" min="10" max="40" value="15"><img src="./canvas2018/assets/add.svg" class="add">
+		</div>
+		<div class="tools">
+		<p class="bottom-left-to">FROM: <input type=text value="你的名字" class="bottom-input" maxlength="10"></p>
+			<ul>
+				<li class="colorBtn">
+					<div style="background-color: #ff9891"></div>
+				</li>
+				<li class="colorBtn">
+					<div style="background-color: #fff"></div>
+				</li>
+				<li class="colorBtn">
+					<div style="background-color: #f4ef5d"></div>
+				</li>
+				<li class="penBtn">
+				 	<div style="background-image: url('./canvas2018/assets/xiangpi.png');"></div>
+				</li>
+				<li class="penBtn">
+					<div style="background-image: url('./canvas2018/assets/bishua.png');"></div>
+				</li>
+				<li class="penBtn">
+					<div style="background-image: url('./canvas2018/assets/pen.png');"></div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<span id="canvasImage"></span>
+</body>
+<script>
+document.body.addEventListener('touchmove', function(e){e.preventDefault()}, false); //兼容安卓系统禁止页面下拉查看网址
+var canvas, stage, mc;
+var sw,sh,sx;
+var scaleNum;
+var offset;
+var leftLine;
+var rightLine;
+function init() {
+	sh=window.innerHeight;
+	if(IsPC()==true){
+		sw=Math.round(64*sh/85);
+		//alert('请在手机或微信客户端访问');
+	}else{
+		sw=window.innerWidth;
+	}
+	// sw=Math.round(64*sh/85);//window.innerWidth;
+	// scaleNum=sh/850;
+	// sx=0;//parseInt((sw-640*scaleNum)/2);
+
+	canvas = document.getElementById("canvas");
+	stage = new createjs.Stage(canvas);
+	stage.enableMouseOver(10);
+	
+	stage.canvas.width = canvas.width=sw;
+	stage.canvas.height = canvas.height=sh;
+	
+	offset=(window.innerWidth-sw)/2;
+	canvas.style.position="absolute";
+	canvas.style.left=offset+"px";//(window.innerWidth-sw)/2+"px";
+	// var foo= document.getElementById("foo");
+	// foo.style.left=offset+"px";
+	// var loadImg=document.getElementById("loadImg");
+	// loadImg.style.left=offset+"px";
+	
+	cavasInit();
+	$('.selectColorDiv').css({'height':sh+'px','width':sw+'px'});
+	var	toolsWidth = parseInt(sw/6) - 20;
+	$('.tools ul li').css({'width':toolsWidth+'px','height':toolsWidth+'px'});
+	$('.header,.tools').css('position','absolute');
+	//背景色选择页面div
+	var selectDiv = parseInt(sh/14);
+	$('.selectColorDiv p').css({'padding-top':selectDiv+'px','padding-bottom':selectDiv-45+'px'});
+	$('.selectColorDiv ul li div').css({'width':selectDiv+'px','height':selectDiv+'px'});
+	//$('.selectColorDiv ul li').eq(0).css('border','solid #fff 4px');
+	$('.btnList').on('click',function(){
+		var id = $(this).index();
+		var col = $(this).children().css('background-color');
+		bgColor(id,col);
+		// console.log(col); 
+	})
+}
+function bgColor(id,col){ //背景色切换
+	$('.selectColorDiv').fadeOut();
+	$('.hiddenBox').show();
+	var ss = canvas.getContext("2d");
+		// ss.rect(50,50,100,100);
+		// ss.fillStyle = '#fff';
+		// ss.fill();
+	$('#canvas').css('background-color',col);
+	switch(id){
+		case 0:
+			$('.colorBtn').eq(1).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#ff9891');
+			$('.colorBtn').eq(2).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#f4ef5d');
+			break;
+		case 1:
+			$('.colorBtn').eq(1).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#ff9891');
+			$('.colorBtn').eq(2).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#f4ef5d');
+			break;
+		case 2:
+			$('.colorBtn').eq(1).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#ff9891');
+			$('.colorBtn').eq(2).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#c1c1c1');
+			break;
+		case 3:
+			$('.colorBtn').eq(1).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#ff9891');
+			$('.colorBtn').eq(2).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#f4ef5d');
+			break;
+		case 4:
+			$('.colorBtn').eq(1).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#A70022');
+			$('.colorBtn').eq(2).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#f4ef5d');
+			break;
+		case 5:
+			$('.colorBtn').eq(1).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#bbe5cd');
+			$('.colorBtn').eq(2).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#f4ef5d');
+			break;
+		case 6:
+			$('.colorBtn').eq(1).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#ff9891');
+			$('.colorBtn').eq(2).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#bbe5cd');
+			break;
+		default:
+			$('.colorBtn').eq(1).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#ff9891');
+			$('.colorBtn').eq(2).css('border','4px solid rgba(255, 255, 255, 0)').children().css('background-color','#f4ef5d');
+	}
+	//全局
+	$('.colorBtn').eq(0).css('border','4px solid #fff').children().css('background-color','#fff');
+	$('.penBtn').css('border','4px solid rgba(255, 255, 255, 0)').children().css('border-radius','0');
+	$('.penBtn').eq(2).css('border','4px solid #fff').children().css('border-radius','100%');
+}
+</script>
+</html>
