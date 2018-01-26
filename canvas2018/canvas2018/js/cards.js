@@ -20,7 +20,9 @@ var startY;
 var imgs;
 var head_title;
 var erweima;
-
+var saowo;
+var logos;
+var red_head_title;
 var endX;
 var endY;
 
@@ -212,55 +214,80 @@ function setCaidan(){
 	$('.outcard').on('click',function(){
 		var topname = $('.top-input').val();
 		var bottomname = $('.bottom-input').val();
-		if(topname =='他的名字' || bottomname == '你的名字' || !topname || !bottomname){
+		if(topname =='你的名字' || !topname){
 			alert('请填写名字');
 			return false;
 		}else{
 			ctx.globalCompositeOperation = "destination-over";  //顺序不能乱
+
+			//背景填充
+			var bgcolor_canvas = $('#canvas').css('background-color');
 			ctx.save();
-			ctx.fillStyle = "#ccc";
+			ctx.fillStyle = bgcolor_canvas;
 			ctx.fillRect(0,0,sw,sh);
 			ctx.restore();
-			
 			ctx.globalCompositeOperation = "source-over";
-
-			head_title = new Image();
-			// head_title.src = $('.head_title').attr('src');
-			head_title.src = './canvas2018/assets/head_title.png';
-			var headbili = 500/47;
-			var contheight = parseInt(sh/headbili);
-			head_title.onload = function(e){
-				ctx.drawImage(head_title,0,10,sw,contheight);
+			if(bgcolor_canvas == '#ea2e23' || bgcolor_canvas == 'rgb(234, 46, 35)' || bgcolor_canvas == 'rgb(255, 152, 145)'){
+				head_title = new Image();
+				// head_title.src = $('.head_title').attr('src');
+				head_title.src = './canvas2018/assets/head_title.png';
+				var headbili = 500/47;
+				var contheight = parseInt(sh/headbili);
+				head_title.onload = function(){
+					ctx.drawImage(head_title,0,10,sw,contheight);
+				}
+			}else{
+				red_head_title = new Image();
+				red_head_title.src = './canvas2018/assets/red_head_title.png';
+				var headbili = 500/47;
+				var contheight = parseInt(sh/headbili);
+				red_head_title.onload = function(){
+					ctx.drawImage(red_head_title,0,10,sw,contheight);
+				}
 			}
-			
+
 			erweima = new Image();
 			erweima.src = './canvas2018/assets/erweima.png';
-			var imgbottom = sh - 200;
-			erweima.onload = function(e){
+			var imgbottom = sh - 175;
+			erweima.onload = function(){
 				ctx.drawImage(erweima,25,imgbottom,150,150);
 			}
+			saowo = new Image();
+			saowo.src = './canvas2018/assets/saowo.png';
+			var imgsaowo = sh - 68;
+			saowo.onload = function(){
+				ctx.drawImage(saowo,200,imgsaowo,200,43);
+			}
 
-			ctx.font = "bold 40px Arial";
+			logos = new Image();
+			logos.src = './canvas2018/assets/logos.png';
+			var imglogos = sh - 100;
+			var imgrightlogos = sw - 225;
+			logos.onload = function(){
+				ctx.drawImage(logos,imgrightlogos,imglogos,200,75);
+			}
+
+			ctx.font = "bold 38px Arial";
 			ctx.fillStyle = "#fff";
 			var txtwidth = parseInt(sw/2);
-			ctx.fillText('To:'+topname,30,contheight+50);
-			ctx.fillText('FROM:'+bottomname,txtwidth-10,sh-50);
+			ctx.fillText('来自 '+topname+' 的祝福',30,contheight+50);
+			//ctx.fillText('FROM:'+bottomname,txtwidth-10,sh-50);
 
 		    //绘制线段 TO
-			ctx.beginPath();
-		    ctx.moveTo(80,contheight+60);
-		    ctx.lineTo(300,contheight+60);
-		    ctx.lineWidth = 3;
-		    ctx.strokeStyle = "#fff";
-		    ctx.stroke();
+			// ctx.beginPath();
+		 //    ctx.moveTo(80,contheight+60);
+		 //    ctx.lineTo(300,contheight+60);
+		 //    ctx.lineWidth = 3;
+		 //    ctx.strokeStyle = "#fff";
+		 //    ctx.stroke();
 
 		    //绘制线段 FROM
-		    ctx.beginPath();
-		    ctx.moveTo(txtwidth+110,sh-40);
-		    ctx.lineTo(txtwidth+300,sh-40);
-		    ctx.lineWidth = 3;
-		    ctx.strokeStyle = "#fff";
-		    ctx.stroke();
+		    // ctx.beginPath();
+		    // ctx.moveTo(txtwidth+110,sh-40);
+		    // ctx.lineTo(txtwidth+300,sh-40);
+		    // ctx.lineWidth = 3;
+		    // ctx.strokeStyle = "#fff";
+		    // ctx.stroke();
 
 		}
 
@@ -280,9 +307,8 @@ function setCaidan(){
 		},1000);
 		//生成贺卡
 		 setTimeout(function(){
-		 	console.log(c);
 		 	var cutnum = sh/sw;
-			var images = Canvas2Image.saveAsPNG(canvas,true,500,parseInt(500*cutnum));  //生成图片并设置比例大小
+			var images = Canvas2Image.saveAsPNG(canvas,true,600,parseInt(600*cutnum));  //生成图片并设置比例大小
 			$('#canvasImage').append(images);
 			var data = $('#canvasImage img').attr('src');
 			$.ajax({ 
@@ -294,7 +320,7 @@ function setCaidan(){
 				//alert('Error'); 
 			}, 
 			success: function(msg){ //成功 
-				console.log(msg);
+				//console.log(msg);
 				window.location.href = msg['address'];
 				//console.log( "Data Saved: " + msg );
 				//activityLink=msg.address;
@@ -318,7 +344,6 @@ function setCaidan(){
 			//alert('Error'); 
 		}, 
 		success: function(msg){ //成功 
-			console.log(msg);
 			window.location.href = msg['address'];
 			//console.log( "Data Saved: " + msg );
 			//activityLink=msg.address;

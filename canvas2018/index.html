@@ -36,11 +36,11 @@ p{margin:0;}
 
 .loading{position: fixed;z-index: 10;background-color: rgba(0,0,0,0.5);display: none;top:0;}
 .loading p{text-align: center;color:#fff;font-weight: bold;font-size: 40px;position: relative;top:50%;}
-.top-caidan{margin:0;position: absolute;z-index:5;color:#fff;font-size: 50px;width: 100%;padding:5px 0px;}
+.top-caidan{margin:0;position: absolute;z-index:5;color:#fff;font-size: 32px;width: 100%;padding:5px 0px;}
 .top-caidan li{list-style-type: none;}
 .top-caidan img{width: 40%;}
-.top-input,.bottom-input{background-color: rgba(255,0,0,0);border-left: 0;border-right: 0;border-top: 0;border-bottom:3px solid #fff;font-size:40px;width:30%;color:#fff;text-align: center}
-.top-caidan .top-left-to{float: left;padding-left:56px;padding-top:30px;width: 50%}
+.top-input,.bottom-input{background-color: rgba(255,0,0,0);border-left: 0;border-right: 0;border-top: 0;border-bottom:3px solid #fff;font-size:40px;width:30%;color:#ffc8c4;text-align: center}
+.top-caidan .top-left-to{float: left;padding-left:56px;padding-top:30px;width: 60%}
 .bottom-left-to{text-align: right;position: relative;top:-45px;font-size: 30px;color:#fff;}
 .top-caidan .top-right-caidan{float: right;text-align: right;}
 .selectColorDiv{background-color: #A70022;}
@@ -122,7 +122,7 @@ input[type="range"]::-webkit-slider-thumb {
 	</div>
 	<div class="hiddenBox" style="display:none;">
 		<ul class="top-caidan">
-			<li class="top-left-to">To: <input type=text value="他的名字" class="top-input" maxlength="8" style="width:50%"></li>
+			<li class="top-left-to">来自<input type=text class="top-input" value="" maxlength="5" style="width:50%">的祝福</li>
 			<li class="top-right-caidan"><img src="./canvas2018/assets/caidan.svg"></li>
 		</ul>
 		<span class="header">
@@ -135,7 +135,7 @@ input[type="range"]::-webkit-slider-thumb {
 			<img class="jian" src="./canvas2018/assets/jian.svg"><input type="range" class="weight" min="10" max="40" value="15"><img src="./canvas2018/assets/add.svg" class="add">
 		</div>
 		<div class="tools">
-		<p class="bottom-left-to">FROM: <input type=text value="你的名字" class="bottom-input" maxlength="8"></p>
+		<!-- <p class="bottom-left-to">FROM: <input type=text  class="bottom-input" maxlength="8"></p> -->
 			<ul>
 				<li class="colorBtn">
 					<div style="background-color: #ff9891"></div>
@@ -174,7 +174,7 @@ function init() {
 	sh=window.innerHeight;
 	if(IsPC()==true){
 		sw=Math.round(64*sh/85);
-		//alert('请在手机或微信客户端访问');
+		alert('请在手机或微信客户端访问');
 	}else{
 		sw=window.innerWidth;
 	}
