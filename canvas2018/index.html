@@ -33,6 +33,9 @@ body {
 	font-family: '微软雅黑';
 }
 p{margin:0;}
+
+.loading{position: fixed;z-index: 10;background-color: rgba(0,0,0,0.5);display: none;top:0;}
+.loading p{text-align: center;color:#fff;font-weight: bold;font-size: 40px;position: relative;top:50%;}
 .top-caidan{margin:0;position: absolute;z-index:5;color:#fff;font-size: 50px;width: 100%;padding:5px 0px;}
 .top-caidan li{list-style-type: none;}
 .top-caidan img{width: 40%;}
@@ -119,7 +122,7 @@ input[type="range"]::-webkit-slider-thumb {
 	</div>
 	<div class="hiddenBox" style="display:none;">
 		<ul class="top-caidan">
-			<li class="top-left-to">To: <input type=text value="他的名字" class="top-input" maxlength="10" style="width:50%"></li>
+			<li class="top-left-to">To: <input type=text value="他的名字" class="top-input" maxlength="8" style="width:50%"></li>
 			<li class="top-right-caidan"><img src="./canvas2018/assets/caidan.svg"></li>
 		</ul>
 		<span class="header">
@@ -132,7 +135,7 @@ input[type="range"]::-webkit-slider-thumb {
 			<img class="jian" src="./canvas2018/assets/jian.svg"><input type="range" class="weight" min="10" max="40" value="15"><img src="./canvas2018/assets/add.svg" class="add">
 		</div>
 		<div class="tools">
-		<p class="bottom-left-to">FROM: <input type=text value="你的名字" class="bottom-input" maxlength="10"></p>
+		<p class="bottom-left-to">FROM: <input type=text value="你的名字" class="bottom-input" maxlength="8"></p>
 			<ul>
 				<li class="colorBtn">
 					<div style="background-color: #ff9891"></div>
@@ -155,7 +158,9 @@ input[type="range"]::-webkit-slider-thumb {
 			</ul>
 		</div>
 	</div>
+<!-- 	<img src = "./canvas2018/assets/head_title.png" style="display: none" class="head_title" /> -->
 	<span id="canvasImage"></span>
+	<div class="loading"><p>开始制作...</p></div>
 </body>
 <script>
 document.body.addEventListener('touchmove', function(e){e.preventDefault()}, false); //兼容安卓系统禁止页面下拉查看网址
@@ -193,7 +198,7 @@ function init() {
 	// loadImg.style.left=offset+"px";
 	
 	cavasInit();
-	$('.selectColorDiv').css({'height':sh+'px','width':sw+'px'});
+	$('.selectColorDiv,.loading').css({'height':sh+'px','width':sw+'px'});
 	var	toolsWidth = parseInt(sw/6) - 20;
 	$('.tools ul li').css({'width':toolsWidth+'px','height':toolsWidth+'px'});
 	$('.header,.tools').css('position','absolute');
