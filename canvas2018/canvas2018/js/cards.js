@@ -3,6 +3,7 @@ function cavasInit(){
 	//jquery
 /*
  * $(selector).action()
+ * http://blog.csdn.net/u014607184/article/details/51746384
  */
 //当前是否在画
 var draw = true;
@@ -15,7 +16,11 @@ var color = "#fff";
 var startX;
 var weight = 5;
 var startY;
+
 var imgs;
+var head_title;
+var erweima;
+
 var endX;
 var endY;
 
@@ -41,17 +46,13 @@ function setPixel(){
 	offtop = parseInt(sh/2) - parseInt(260);
 	ctx = canvas.getContext("2d");
 	//ctx.globalAlpha = '0.5';
-	//ctx.globalCompositeOperation = "destination-over";
+
 	imgs = new Image();
 	imgs.src = './canvas2018/assets/dog.png';
 	imgs.onload = function(){
 		ctx.drawImage(imgs,offleft,offtop,300,261);
-		// var patt = ctx.createPattern(imgs,"repeat");	
-		// ctx.fillStyle = patt;
-		// ctx.strokeStyle="#fff"; 
-		// ctx.fillRect(600, 100, 200,200);
-  //       ctx.strokeRect(600, 100, 200,200);
 	}
+	
 	// canvas.width = window.innerWidth;
 	
 	// canvas.height = window.innerHeight;
@@ -60,11 +61,7 @@ function setPixel(){
 function readyToDraw(){
 	//为canvas添加监听
 	$(canvas).bind("touchstart touchmove touchend",function(event){
-		$('.header').hide();
-
-		// ctx.rect(250,250,300,300);
-		// ctx.fillStyle = '#fff';
-		// ctx.fill();
+		$('.header').hide(); //触摸时 自动隐藏菜单
 		
 		//判断事件类型
 		switch(event.type){
@@ -85,7 +82,6 @@ function readyToDraw(){
 			endX = event.originalEvent.targetTouches[0].clientX;
 			endY = event.originalEvent.targetTouches[0].clientY;
 			if(draw == 5){
-				//ctx.globalCompositeOperation = "destination-over";
 			    ctx.beginPath();
 			    ctx.lineCap = "round";
 				ctx.lineJoin = "round";
@@ -98,7 +94,6 @@ function readyToDraw(){
 			    startX = endX;
 			    startY = endY;
 			}else if(draw == 4){
-				//ctx.globalCompositeOperation = "source-over";
 				ctx.beginPath();
 				ctx.lineCap = "butt";
 				ctx.lineJoin = "bevel";
@@ -132,7 +127,6 @@ function readyToDraw(){
 			}
 			break;
 			case "touchend":
-			//$(".era").removeClass("show").addClass("hidden");
 			$('.top-caidan,.range,.tools').fadeIn();
 			//console.log(ctx);
 			break;
@@ -172,14 +166,7 @@ function setColors(){
 		draw = $(this).index();
 
 	})
-	// $(".eraser").click(function(){
-	// 	draw = !draw;
-	// 	if(draw){
-	// 		$(".eraser").html("橡皮擦");
-	// 	}else{
-	// 		$(".eraser").html("画笔");
-	// 	}
-	// })
+
 }
 
 function setWeight(){
@@ -229,18 +216,98 @@ function setCaidan(){
 			alert('请填写名字');
 			return false;
 		}else{
-			ctx.font = "bold 30px Arial";
+			ctx.globalCompositeOperation = "destination-over";  //顺序不能乱
+			ctx.save();
+			ctx.fillStyle = "#ccc";
+			ctx.fillRect(0,0,sw,sh);
+			ctx.restore();
+			
+			ctx.globalCompositeOperation = "source-over";
+
+			head_title = new Image();
+			// head_title.src = $('.head_title').attr('src');
+			head_title.src = './canvas2018/assets/head_title.png';
+			var headbili = 500/47;
+			var contheight = parseInt(sh/headbili);
+			head_title.onload = function(e){
+				ctx.drawImage(head_title,0,10,sw,contheight);
+			}
+			
+			erweima = new Image();
+			erweima.src = './canvas2018/assets/erweima.png';
+			var imgbottom = sh - 200;
+			erweima.onload = function(e){
+				ctx.drawImage(erweima,25,imgbottom,150,150);
+			}
+
+			ctx.font = "bold 40px Arial";
 			ctx.fillStyle = "#fff";
-			ctx.textAlign = "left";
-			ctx.fillText(topname,30,200);
+			var txtwidth = parseInt(sw/2);
+			ctx.fillText('To:'+topname,30,contheight+50);
+			ctx.fillText('FROM:'+bottomname,txtwidth-10,sh-50);
+
+		    //绘制线段 TO
+			ctx.beginPath();
+		    ctx.moveTo(80,contheight+60);
+		    ctx.lineTo(300,contheight+60);
+		    ctx.lineWidth = 3;
+		    ctx.strokeStyle = "#fff";
+		    ctx.stroke();
+
+		    //绘制线段 FROM
+		    ctx.beginPath();
+		    ctx.moveTo(txtwidth+110,sh-40);
+		    ctx.lineTo(txtwidth+300,sh-40);
+		    ctx.lineWidth = 3;
+		    ctx.strokeStyle = "#fff";
+		    ctx.stroke();
+
 		}
 
-		var cutnum = sh/sw;
-		var images = Canvas2Image.saveAsPNG(canvas,true,500,parseInt(500*cutnum));
-		$('#canvasImage').append(images);
-		postData();
+		$('.header').hide();
+		$('.top-caidan,.range,.tools').hide();
+		$('.loading').show();
+		//开始倒计时
+		var c = 6;
+		setInterval(function(){
+			c=c-1;
+			$('.loading p').html('正在制作中，还有'+c+'秒');
+			if(c < 0){
+				$('.loading p').html('您的网络不稳定,请耐心等待');
+				c = 10;
+				postData();
+			};
+		},1000);
+		//生成贺卡
+		 setTimeout(function(){
+		 	console.log(c);
+		 	var cutnum = sh/sw;
+			var images = Canvas2Image.saveAsPNG(canvas,true,500,parseInt(500*cutnum));  //生成图片并设置比例大小
+			$('#canvasImage').append(images);
+			var data = $('#canvasImage img').attr('src');
+			$.ajax({ 
+			url:'./canvas2018/saveCard.php', 
+			type:'post', 
+			dataType:'json', 
+			data:{pic:data},
+			error: function(){ 
+				//alert('Error'); 
+			}, 
+			success: function(msg){ //成功 
+				console.log(msg);
+				window.location.href = msg['address'];
+				//console.log( "Data Saved: " + msg );
+				//activityLink=msg.address;
+				//msgData=msg.pic; 
+				//successGo();
+			} 
+			}); 
+		 },5000);
 	});
 	function postData(){
+		var cutnum = sh/sw;
+		var images = Canvas2Image.saveAsPNG(canvas,true,500,parseInt(500*cutnum));  //生成图片并设置比例大小
+		$('#canvasImage').append(images);
 		var data = $('#canvasImage img').attr('src');
 		$.ajax({ 
 		url:'./canvas2018/saveCard.php', 
@@ -252,6 +319,7 @@ function setCaidan(){
 		}, 
 		success: function(msg){ //成功 
 			console.log(msg);
+			window.location.href = msg['address'];
 			//console.log( "Data Saved: " + msg );
 			//activityLink=msg.address;
 			//msgData=msg.pic; 
