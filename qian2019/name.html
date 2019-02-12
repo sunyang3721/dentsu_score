@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>2019 金猪敛财</title>
+    <meta name="viewport"  content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="360-fullscreen" content="true"/>
+    <link rel="stylesheet" type="text/css" href="./assets/css/animate.min.css" />
+    <!-- <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script> -->
+    <script type="text/javascript" src="./launcher/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="./assets/js/end.js"></script>
+    <script type="text/javascript" src="./assets/js/jquery-cookie.js"></script>
+</head>
+<style type="text/css">
+html,body{margin:0;padding:0;}
+body{background: url('./assets/img/bg_all.jpg') no-repeat;}
+.clear{clear:both;}
+.logo,.happy,.new,.btn,.happy input{text-align: center}
+.logo{margin-top: 40%;}
+.logo img{width:30%;}
+.happy input{width:60%;height:50px;font-size:30px;margin-top:5%;border:2px solid #d61623;}
+.new img{width:60%;margin-top: 5%;}
+.btn{padding:0 5%;margin-top: 10%}
+.btn img{width:50%;}
+</style>
+<body>
+<div class="logo wow bounceInUp" data-wow-delay="0.2s"><img src="./assets/img/logo-black.png" /></div>
+<div class="new wow bounceInUp" data-wow-delay="0.4s"><img src="./assets/img/name.png" /></div>
+<div class="happy wow bounceInUp" data-wow-delay="0.6s"><input maxlength="8" type="text" id="name" autocomplete="off" ><br/><p class="tip"></p></div>
+<div class="btn wow bounceInUp" data-wow-delay="1s">
+    <span class="btn_start"><img src="./assets/img/btn_start.png" /></span>
+</div>
+</body>
+<script src="./assets/js/wow.min.js"></script>
+<script type="text/javascript">
+    var cookie_name = $.cookie("name");
+    if(cookie_name){
+      window.location.href="./game.html"; 
+    }
+
+    new WOW().init();
+    var w_height = $(window).height();
+    $('body').css('background-size','100%'+' '+w_height+'px');
+    $('#name').focus(function(){
+      $('.tip').empty();
+    })
+    // $('#name').keyup(function(){
+    //   $('.btn_start').click();
+    // })
+    $('.btn_start').on('click',function(){
+      var name = $('#name').val();
+      if(name){
+        $.ajax({
+          url:'./data.php',
+          data:{name:name},
+          type:'GET',
+          success:function(data){
+            console.log(data);
+            if(data == '409'){
+              $('.tip').empty().text('- 名字有重复 -');
+              return false;
+            }
+            if(data == 'success'){
+              $.cookie("name", name, { expires: 60 });
+              window.location.href="./game.html"; 
+            }
+          }
+        })
+      }else{
+        $('.tip').empty().text('- 请输入芳名 -');
+      }
+    })
+
+
+</script>
+</html>

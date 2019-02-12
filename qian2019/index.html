@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>2019 金猪敛财</title>
+    <meta name="viewport"  content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="360-fullscreen" content="true"/>
+    <link rel="stylesheet" type="text/css" href="./assets/css/animate.min.css" />
+    <!-- <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script> -->
+    
+    <script type="text/javascript" src="./launcher/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="./assets/js/end.js"></script>
+    <script type="text/javascript" src="./assets/js/jquery-cookie.js"></script>
+    <script type="text/javascript" src="./assets/js/canvas.js"></script>
+</head>
+<style type="text/css">
+html,body{margin:0;padding:0;}
+body{background: url('./assets/img/bg_all.jpg') no-repeat;}
+.clear{clear:both;}
+.logo,.happy,.new,.btn_play,.btn_px{text-align: center}
+.logo{margin-top: 36%;}
+.logo img{width:30%;}
+.happy img{width:40%;margin-top:5%;}
+.new img{width:60%;margin-top: 5%;}
+.btn{padding:0 5%;margin-top: 5%}
+.btn_play,.btn_px{width:50%;}
+.btn_play img,.btn_px img{width:90%;}
+.btn_play{float: left}
+.btn_px{float: right}
+
+canvas{width:100%;width: 100%;position: absolute;top: 0px;}
+</style>
+<body>
+<div class="block-audio" style="display: none">
+  <!-- <audio class="exp" src="m/exp1.mp3" controls></audio>
+  <audio class="exp" src="m/exp1.mp3" controls></audio>
+  <audio class="exp" src="m/exp1.mp3" controls></audio>
+  <audio class="exp" src="m/exp2.mp3" controls></audio>
+  <audio class="exp" src="m/exp2.mp3" controls></audio>
+  <audio class="exp" src="m/exp2.mp3" controls></audio>
+  <audio class="exp" src="m/exp3.mp3" controls></audio>
+  <audio class="exp" src="m/exp3.mp3" controls></audio>
+  <audio class="exp" src="m/exp3.mp3" controls></audio>
+  <audio class="exp" src="m/exp4.mp3" controls></audio>
+  <audio class="exp" src="m/exp4.mp3" controls></audio>
+  <audio class="exp" src="m/exp4.mp3" controls></audio>
+  <audio class="exp" src="m/exp5.mp3" controls></audio>
+  <audio class="exp" src="m/exp5.mp3" controls></audio>
+  <audio class="exp" src="m/exp5.mp3" controls></audio>
+  <audio class="exp" src="m/exp6.mp3" controls></audio>
+  <audio class="exp" src="m/exp6.mp3" controls></audio>
+  <audio class="exp" src="m/exp6.mp3" controls></audio>
+  <audio class="exp" src="m/exp7.mp3" controls></audio>
+  <audio class="exp" src="m/exp7.mp3" controls></audio>
+  <audio class="exp" src="m/exp7.mp3" controls></audio>
+  <audio class="exp" src="m/exp8.mp3" controls></audio>
+  <audio class="exp" src="m/exp8.mp3" controls></audio>
+  <audio class="exp" src="m/exp8.mp3" controls></audio>
+  <audio class="launch" src="m/launch1.mp3" controls></audio>
+  <audio class="launch" src="m/launch1.mp3" controls></audio>
+  <audio class="launch" src="m/launch2.mp3" controls></audio>
+  <audio class="launch" src="m/launch2.mp3" controls></audio>
+  <audio class="launch" src="m/launch3.mp3" controls></audio>
+  <audio class="launch" src="m/launch3.mp3" controls></audio>
+  <audio class="launch" src="m/launch4.mp3" controls></audio>
+  <audio class="launch" src="m/launch4.mp3" controls></audio>
+  <audio class="launch" src="m/launch5.mp3" controls></audio>
+  <audio class="launch" src="m/launch5.mp3" controls></audio> -->
+</div>
+<canvas id="canvas"></canvas>
+<div class="logo wow bounceInUp" data-wow-delay="0.2s"><img src="./assets/img/logo-black.png" /></div>
+<div class="happy wow bounceInUp" data-wow-delay="0.4s"><img src="./assets/img/happy-red.png" /></div>
+<div class="new wow bounceInUp" data-wow-delay="0.6s"><img src="./assets/img/new.png" /></div>
+<div class="btn">
+    <span class="btn_play wow bounceInLeft" data-wow-delay="1s"><img src="./assets/img/btn_plays.png" /></span>
+    <span class="btn_px wow bounceInRight" data-wow-delay="1s"><img src="./assets/img/btn_pxs.png" /></span>
+    <span class="clear"></span>
+</div>
+</body>
+<script src="./assets/js/wow.min.js"></script>
+<script type="text/javascript">
+    new WOW().init();
+    var w_height = $(window).height();
+    $('body').css('background-size','100%'+' '+w_height+'px');
+    $('#canvas').css('height',w_height+'px');
+    $('.btn_play').on('click',function(){
+        var name = $.cookie("name");
+        if(name){
+            window.location.href="./game.html"; 
+        }else{
+            window.location.href="./name.html"; 
+        }
+    });
+    $('.btn_px').on('click',function(){
+        window.location.href="./paihang.html"; 
+    })
+</script>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>2019 金猪敛财</title>
+    <meta name="viewport"  content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="360-fullscreen" content="true"/>
+    <link rel="stylesheet" type="text/css" href="./assets/css/animate.min.css" />
+    <!-- <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script> -->
+    <script type="text/javascript" src="./launcher/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="./assets/js/jquery-cookie.js"></script>
+</head>
+<style type="text/css">
+html,body,h3,h5,h2{margin:0;padding:0;}
+body{background: url('./assets/img/bg_all.jpg') no-repeat;font-family: '微软雅黑';}
+.clear{clear:both;}
+.logo,.new,.btn,.happy input{text-align: center}
+.logo{margin-top: 30%;}
+.logo img{width:30%;}
+.new{position: relative;}
+.new img{width:65%;margin-top: 5%;}
+.txt{position: absolute;left:33%;bottom:50%;}
+.btn{width:100%;position: relative;top:10px;}
+.btn img{width:30%;}
+h3,h2,.px{color:red;}
+.name_happy b{font-size: 18px;color:red;}
+.share_tip{width:100%;position: absolute;top:0;background: url('./assets/img/share.png') no-repeat;display: none;}
+</style>
+<body>
+<div class="logo wow bounceInUp" data-wow-delay="0.1s"><img src="./assets/img/logo-black.png" /></div>
+<div class="new wow bounceIn" data-wow-delay="0.4s">
+  <img src="./assets/img/over_pig.png" />
+  <div class="txt">
+    <h3>祝您新年快乐!</h3>
+    <h5 class="name_happy">恭喜xxxx获得最高分为</h5>
+    <h3 class="count">$0.00</h3>
+    <h5 class="paiming">第 <b class="px">N</b> 名</h5>
+  </div>
+</div>
+<div class="btn wow bounceIn" data-wow-delay="0.8s">
+    <span><img class="share_btn" src="./assets/img/share_btn.png" /></span>
+    <span><img class="restart_btn" src="./assets/img/restart_btn.png" /></span>
+</div>
+<div class="share_tip"></div>
+</body>
+<script src="./assets/js/wow.min.js"></script>
+<script type="text/javascript">
+    var cookie_name = $.cookie("name");
+    if(cookie_name){
+      $('.name_happy').html('恭喜 <b>'+cookie_name+'</b> 最高为');
+    }else{
+      window.location.href="./index.html"; 
+    }
+    new WOW().init();
+    var w_height = $(window).height();
+    $('body').css('background-size','100%'+' '+w_height+'px');
+    $('.share_tip').css('background-size','100%'+' '+w_height+'px');
+    $('.share_tip').css('height',w_height+'px');
+    //ajax 获取
+    $.ajax({
+          url:'./over.php',
+          data:{name:cookie_name},
+          type:'GET',
+          dataType:'json',
+          success:function(data){
+            console.log(data);
+            if(data == -1){
+              $.removeCookie('name'); 
+              window.location.href="./index.html"; 
+            }else{
+              var bestScore =  Number(data['moeny']['nums']);
+              $('.count').text(bestScore+'元'); //分数
+              $('.px').text(data['id']); //排行
+
+              var shareTitle;
+  
+               if(bestScore ==0){
+                  shareTitle = "新年快乐，猪年大吉！遗憾没赢到红包，试试你的手气～";
+              }else if(bestScore >0){
+                shareTitle = "新年快乐，猪年大吉！一年之初我就捡到"+bestScore+"元！一起来迎好运！";
+              }
+              // else if(bestScore >= 100&& bestScore < 150){
+              //   shareTitle = "人品大爆发捡到"+bestScore+"元，今天不用坐公交了!";
+              // }else if(bestScore >= 150 && bestScore < 250){
+              //   shareTitle = "区区"+bestScore+"元，手到擒来~!";
+              // }else if(bestScore >= 250 && bestScore < 400){
+              //   shareTitle = "捡钱捡到手抽筋，轻轻一数，"+bestScore+"元~";
+              // }
+              // else {
+              //   shareTitle = "财神爷附身，不小心捡到了"+bestScore+"元，真心不是故意的！！";
+              // }
+              $('title').text(shareTitle);
+            }
+          }
+        })
+    //分享按钮
+    $('.share_btn').on('click',function(){
+      $('.share_tip').fadeIn();
+    });
+    $('.share_tip').on('click',function(){
+      $(this).fadeOut();
+    });
+    //不服再来 按钮
+    $('.restart_btn').on('click',function(){
+      window.location.href = './game.html';
+    })
+</script>
+</html>

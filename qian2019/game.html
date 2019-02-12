@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>2019 金猪敛财</title>
+    <meta name="viewport"  content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="360-fullscreen" content="true"/>
+    <script type="text/javascript" src="./launcher/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="./assets/js/end.js"></script>
+    <script type="text/javascript" src="./assets/js/jquery-cookie.js"></script>
+    <style>
+        body {
+            text-align: center;
+            background: #ffffff;
+            padding: 0;
+            border: 0;
+            margin: 0;
+            height: 100%;
+        }
+        html {
+            -ms-touch-action: none; /* Direct all pointer events to JavaScript code. */
+            overflow: hidden;
+        }
+        canvas {
+            display:block;
+            position:absolute;
+            margin: 0 auto;
+            padding: 0;
+            border: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        var cookie_name = $.cookie("name");
+        haveShare=1;
+        haveGamelist=1;
+        resourceCDN = '';
+        function cb_start(){
+            $('.pig').hide();
+        }
+        function cb_gameover(score){
+            //ajax 传�?
+            $.ajax({
+                  url:'./game.php',
+                  data:{name:cookie_name,nums:score},
+                  type:'GET',
+                  //dataType:'json',
+                  success:function(data){
+                    //直接计算结果
+                  }
+                })
+            
+        }
+        function cb_finishload(){
+            $('#gameDiv').append('<img class="pig" style="position:relative;top:25%;width:40%" src="./resource/assets/pig.png">');
+            //判断cookie是否存在,不存在返回主�?
+            if(!cookie_name){
+              window.location.href="./index.html";
+            }else{
+                $.ajax({
+                  url:'./game.php',
+                  data:{name:cookie_name,nums:score},
+                  type:'GET',
+                  //dataType:'json',
+                  success:function(data){
+                    //console.log(data);
+                    if(data == 'no'){
+                        $.removeCookie('name'); 
+                        window.location.href="./name.html"; 
+                    }
+                    // if(data == ''){
+                    //   $.removeCookie('name'); 
+                    //   window.location.href="./index.html"; 
+                    // }else{
+                     
+                    // }
+                  }
+                })
+            }
+        }
+        function cb_restart(){
+           
+        }
+        function cb_share(){
+           window.location.href="./over.html"; 
+        }
+        function cb_more(){
+           window.location.href="./paihang.html";
+            //clickMore();
+        }
+    </script>
+    <script type="text/javascript" src="./launcher/dentsu_sdk.js"></script>
+    <script language="javascript" type="text/javascript" src="./launcher/dentsu.js"></script>
+</head>
+<body onLoad="updateShare(0)";>
+
+<div style="position:relative;" id="gameDiv"></div>
+<script>var document_class = "Main";</script>
+
+<script src="./launcher/egret_require.js"></script>
+<script src="./launcher/egret_loader.js"></script>
+<script src="./launcher/game-min.js"></script>
+<script src="./launcher/meiriq_loading.js"></script>
+<script>
+    var support = [].map && document.createElement("canvas").getContext;
+    if (support) {
+        egret_h5.startGame();
+        function start(){
+            restartGame();
+        }
+    }
+    else {
+        alert("Egret 不支持您当前的浏览器")
+    }
+</script>
+<script language=javascript>
+      
+        // function goHome(){
+        //    // Play68.goHome();//更多游戏
+        // }
+        // function clickMore(){
+        //      //Play68.goHome();//更多游戏
+        // }
+        // function dp_share(){
+        //     alert('sjsj');
+        // }
+        // function dp_Ranking(){
+        //    // Play68.goHome();//更多游戏
+        // }
+
+        
+        // function dp_submitScore(score){
+        //     console.log('sdfs');
+        // }
+    </script>
+    
+</body>
+</html>

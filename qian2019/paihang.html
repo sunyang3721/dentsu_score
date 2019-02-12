@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>2019 金猪敛财</title>
+    <meta name="viewport"  content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="360-fullscreen" content="true"/>
+    <link rel="stylesheet" type="text/css" href="./assets/css/animate.min.css" />
+    <script type="text/javascript" src="./launcher/jquery-1.8.3.min.js"></script>
+</head>
+<style type="text/css">
+html,body,h3,h5,h2{margin:0;padding:0;}
+body{background: url('./assets/img/bg_out.jpg') no-repeat;font-family: '微软雅黑';}
+.clear{clear:both;}
+.haoyun{margin-top: 20%;}
+.haoyun img{width:40%;}
+.haoyun,.logo,.new,table tr td,.btn_pick{text-align: center}
+.logo img{width:20%;}
+.new{border:1px solid #f5ea58;overflow-y:scroll;padding:5px 5%;background-color: rgba(252,247,212,0.3);}
+table{width:100%;font-weight: bold;}
+table tr{height:50px;}
+.new .id{width: 28%;background: url('./assets/img/radio.png') no-repeat;background-position: 50% 45%;background-size: 35%;}
+.new .id img{width: 60%}
+.new .name{width: 40%;}
+.num b{color:#d61623;font-size:20;}
+/*.id span{color:red;border:3px solid red;border-radius: 100px;padding:5px;width:20px;height:20px;display: block;margin:0 auto;background-color: #f5ca23;}*/
+.btn_pick{margin-top:10px;}
+.btn_pick img{width:30%;}
+</style>
+<body>
+<div class="haoyun wow bounceIn" data-wow-delay="0.1s"><img src="./assets/img/haoyun.png" /></div>
+<div class="logo wow bounceIn" data-wow-delay="0.2s"><img src="./assets/img/logo-black.png" /></div>
+<div class="new wow bounceInUp" data-wow-delay="0.4s">
+  <table>
+    <!-- ajax -->
+  </table>
+</div>
+<div class="btn_pick wow bounceIn" data-wow-delay="1.5s"><img src="./assets/img/btn_pick.png" /></div>
+</body>
+<script src="./assets/js/wow.min.js"></script>
+<script type="text/javascript">
+    new WOW().init();
+    var w_height = $(window).height();
+    $('body').css('background-size','100%'+' '+w_height+'px');
+    $('.new').css('height',w_height*50/100+'px');
+    //ajax 获取数据
+    $.ajax({
+          url:'./game.php',
+          data:{start:1},
+          type:'GET',
+          dataType:'json',
+          success:function(data){
+            var html = '';
+            //$('html').empty();
+            $.each(data['moeny'],function(key,value){
+              //console.log(value['name']);
+            //$('html').append(value['nums']+'<br/>');
+              if(key == 0){
+                var img = '<img src="./assets/img/num1.png">';
+              }else if(key == 1){
+                var img = '<img src="./assets/img/num2.png">';
+              }else if(key == 2){
+                var img = '<img src="./assets/img/num3.png">';
+              }else{
+                var img = '<b>'+(key+1)+'</b>';
+              }
+              html += '<tr>';
+              html += '<td class="id">'+img+'</td>';
+              html += '<td class="name">'+value['name']+'</td>';
+              html += '<td class="num">获得 <b>'+value['nums']+'</b> 元</td>'
+              html += '</tr>';
+            })
+            $('table').empty().html(html);
+          }
+        });
+    $('.btn_pick').on('click',function(){
+        window.location.href="./game.html"; 
+    })
+</script>
+</html>
